@@ -1,8 +1,3 @@
-#' @importFrom data.table fread setnames
-#' @importFrom utils str
-#' 
-NULL
-
 #' Read the experiment information of mass spectrometry data.
 #'
 #' Load the data from the experimentalDesign.txt file in MaxQuantOutput and create an ExperimentInfo object.
