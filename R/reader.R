@@ -99,16 +99,18 @@ ReadProteinGroups = function(
 }
 
 #' @rdname print
+#' @export
 #' @method print ExperimentList
 #'
-print.ExperimentInfo = function(x) {
+print.ExperimentList = function(x) {
   cat(sprintf('An object of class %s\n\n', class(x)[1]))
   utils::str(x)
   invisible(x)
 }
 
 #' @rdname print
-#' @method print ExperimentTable
+#' @export
+#' @method print ExperimentAssay
 #'
 print.ExperimentAssay = function(x) {
   cat(sprintf('An object of class %s\n\n', class(x)[1]))
