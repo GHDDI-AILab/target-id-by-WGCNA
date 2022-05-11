@@ -113,8 +113,17 @@ print.ExperimentList = function(x) {
 #' @method print ExperimentAssay
 #'
 print.ExperimentAssay = function(x) {
+  samples = attr(x, 'experiments')
   cat(sprintf('An object of class %s\n\n', class(x)[1]))
-  cat(sprintf('%d assay(s):\n', length(x)))
+  cat(sprintf('%d Experiment(s): ', length(samples)))
+  if (length(samples) > 3) {
+    cat(sprintf('"%s", "%s", "%s", ...\n', 
+                samples[1], samples[2], samples[3]))
+  } else {
+    cat(sprintf('"%s"\n', paste(samples, collapse = '", "')))
+  }
+  cat(sprintf('%d Assay(s): "%s"\n', 
+              length(x), paste(names(x), collapse = '", "')))
   for (i in 1:length(x)) {
     cat(sprintf('\t%d features across %d samples within assay %d.\n',
                 nrow(x[[i]]), length(attr(x, 'experiments')), i))
