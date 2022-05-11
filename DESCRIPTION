@@ -6,8 +6,7 @@ Authors@R:
 Description: Target identification is an essential first step in drug 
     discovery. This package implements convenient functions for performing 
     target identification tasks on gene expression data using the WGCNA method.
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
