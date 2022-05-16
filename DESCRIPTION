@@ -16,3 +16,8 @@ Imports:
     magrittr,
     org.Hs.eg.db,
     WGCNA
+Collate: 
+    'generics.R'
+    'util.R'
+    'preprocessing.R'
+    'targetIDbyWGCNA-package.R'
