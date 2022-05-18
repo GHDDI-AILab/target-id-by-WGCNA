@@ -3,11 +3,14 @@
 \name{QC}
 \alias{QC}
 \alias{QC.ProteinGroups}
+\alias{QC.default}
 \title{Perform quality control for assays.}
 \usage{
 QC(object, ...)
 
 \method{QC}{ProteinGroups}(object, min.unique.peptides = 2, min.fraction = 0.5)
+
+\method{QC}{default}(object, ...)
 }
 \arguments{
 \item{object}{An object of class ProteinGroups.}

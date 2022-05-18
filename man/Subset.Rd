@@ -3,11 +3,14 @@
 \name{Subset}
 \alias{Subset}
 \alias{Subset.ExperimentAssay}
+\alias{Subset.default}
 \title{Subset assays.}
 \usage{
 Subset(object, ...)
 
 \method{Subset}{ExperimentAssay}(object, samples)
+
+\method{Subset}{default}(object, ...)
 }
 \arguments{
 \item{object}{An object of class ExperimentAssay.}

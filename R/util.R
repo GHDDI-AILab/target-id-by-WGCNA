@@ -2,15 +2,16 @@
 #' 
 #' @param x The object to display.
 #' @return The input.
-#' @export
 #' @examples
+#' \dontrun{
 #' data.dir = '/path/to/dir'
 #' Show(data.dir)
+#' }
 #' 
 Show = function(x) {
   name = as.character(substitute(x))
-  cat(paste(name, '='))
-  str(x)
+  repr = capture.output(dput(x))
+  cat(sprintf("%s = %s\n", name, repr))
   invisible(x)
 }
 
@@ -20,14 +21,15 @@ Show = function(x) {
 #' 
 #' @param x The object for checking.
 #' @return The first element of the input.
-#' @export
 #' @examples
+#' \dontrun{
 #' data.dir = '.'
 #' Show(data.dir)
 #' assert_length_1(data.dir)
 #' data.dir = c('.', '/path/to/dir')
 #' Show(data.dir)
 #' assert_length_1(data.dir)
+#' }
 #' 
 assert_length_1 = function(x) {
   if (length(x) < 1) {

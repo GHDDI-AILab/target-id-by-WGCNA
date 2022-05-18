@@ -99,8 +99,8 @@ ReadProteinGroups = function(
 }
 
 #' @rdname print
-#' @export
 #' @method print ExperimentList
+#' @export
 #'
 print.ExperimentList = function(x) {
   cat(sprintf('An object of class %s\n\n', class(x)[1]))
@@ -109,8 +109,8 @@ print.ExperimentList = function(x) {
 }
 
 #' @rdname print
-#' @export
 #' @method print ExperimentAssay
+#' @export
 #'
 print.ExperimentAssay = function(x) {
   samples = attr(x, 'experiments')
@@ -139,7 +139,6 @@ print.ExperimentAssay = function(x) {
 #' 
 #' @rdname Subset
 #' @method Subset ExperimentAssay
-#' @export
 #' @examples
 #' \dontrun{
 #' new.Assay = Subset(old.Assay, samples = c("sample_1", "sample_2", "sample_3"))
@@ -159,6 +158,17 @@ Subset.ExperimentAssay = function(object, samples) {
   return(new.object)
 }
 
+#' @rdname Subset
+#' @method Subset default
+#' @export
+Subset.default = function(object, ...) {
+  if (inherits(object, "ExperimentAssay")) {
+    Subset.ExperimentAssay(object, ...)
+  } else {
+    stop("This method is associated with class ExperimentAssay.")
+  }
+}
+
 #' Quality control of MS-based proteomics data.
 #' 
 #' @param object An object of class ProteinGroups.
@@ -169,7 +179,6 @@ Subset.ExperimentAssay = function(object, samples) {
 #' 
 #' @rdname QC
 #' @method QC ProteinGroups
-#' @export
 #' @examples
 #' \dontrun{
 #' new.Assay = QC(old.Assay)
@@ -227,5 +236,16 @@ QC.ProteinGroups = function(
 		 vapply(new.object, nrow, integer(1))]
   attr(new.object, "QC") = feature.counts[]
   return(new.object)
+}
+
+#' @rdname QC
+#' @method QC default
+#' @export
+QC.default = function(object, ...) {
+  if (inherits(object, "ProteinGroups")) {
+    QC.ProteinGroups(object, ...)
+  } else {
+    stop("This method is associated with class ExperimentAssay.")
+  }
 }
 

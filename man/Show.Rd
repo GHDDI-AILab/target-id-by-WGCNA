@@ -16,7 +16,9 @@ The input.
 Show the variable name and the value.
 }
 \examples{
+\dontrun{
 data.dir = '/path/to/dir'
 Show(data.dir)
+}
 
 }

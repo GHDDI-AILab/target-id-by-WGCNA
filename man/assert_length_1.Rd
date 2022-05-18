@@ -16,11 +16,13 @@ The first element of the input.
 Execute an error if the length of the input is 0 and execute a warning if the length of the input is bigger than 1. Return the first element of the input.
 }
 \examples{
+\dontrun{
 data.dir = '.'
 Show(data.dir)
 assert_length_1(data.dir)
 data.dir = c('.', '/path/to/dir')
 Show(data.dir)
 assert_length_1(data.dir)
+}
 
 }
