@@ -3,12 +3,57 @@
 #' 
 NULL
 
+#' The ExperimentInfo class.
+#' 
+#' The experiment information of assay data.
+#' 
+#' @docType class
+#' @name ExperimentInfo-class
+#' @rdname ExperimentInfo-class
+#' 
+NULL
+
+#' The ProteinGroups class.
+#' 
+#' The protein-level mass spectrometry data.
+#' 
+#' @docType class
+#' @name ProteinGroups-class
+#' @rdname ProteinGroups-class
+#' 
+NULL
+
+#' The ExpAssayTable class.
+#' 
+#' A list of data.tables of experiment data, whose rows correspond
+#'   to genes.
+#' 
+#' @docType class
+#' @name ExpAssayTable-class
+#' @rdname ExpAssayTable-class
+#' 
+NULL
+
+#' The ExpAssayFrame class.
+#' 
+#' A list of matrices of experiment data, whose rows correspond
+#'   to samples and columns to genes.
+#' 
+#' @docType class
+#' @name ExpAssayFrame-class
+#' @rdname ExpAssayFrame-class
+#' 
+NULL
+
 #' Read the experiment information of mass spectrometry data.
 #'
-#' Load the data from the experimentalDesign.txt file in MaxQuantOutput/ and create an ExperimentInfo object.
+#' Load the data from the experimentalDesign.txt file in 
+#' MaxQuantOutput/ and create an ExperimentInfo object.
 #'
-#' @param data.dir (A length-1 character) Directory containing the MaxQuantOutput data.
-#' @return (An ExperimentInfo object) A list containing the experiment information.
+#' @param data.dir (length-1 character vector) 
+#'   Directory containing the MaxQuantOutput data.
+#' @return (An ExperimentInfo object) 
+#'   A list containing the experiment information.
 #' @export
 #' @examples
 #' \dontrun{
@@ -31,6 +76,7 @@ ReadExperimentalDesign = function(
   if (! nrow(DT) || ! 'Experiment' %in% names(DT)) {
     stop('Empty or invalid experimentalDesign file!')
   }
+  ## Create an object
   structure(
     list(experiments = unique(sort(DT$Experiment)), table = DT),
     filename = normalizePath(infile),
@@ -40,11 +86,15 @@ ReadExperimentalDesign = function(
 
 #' Read the protein-level mass spectrometry data.
 #'
-#' Load the data from the proteinGroups.txt file in MaxQuantOutput/ and create a ProteinGroups object.
+#' Load the data from the proteinGroups.txt file in 
+#' MaxQuantOutput/ and create a ProteinGroups object.
 #'
-#' @param data.dir Directory containing the MaxQuantOutput data.
-#' @param column.prefix A character vector with the prefixes of the expression columns to extract.
-#' @return A list of data.tables containing the expression data.
+#' @param data.dir (length-1 character vector) 
+#'   Directory containing the MaxQuantOutput data.
+#' @param column.prefix A character vector with 
+#'   the prefixes of the expression columns to extract.
+#' @return (An ProteinGroups object) 
+#'   A list of data.tables containing the expression data.
 #' @export
 #' @examples
 #' \dontrun{
@@ -70,14 +120,15 @@ ReadProteinGroups = function(
     stop('Empty or invalid proteinGroups file!')
   }
   ## Find the columns that are not sample-specific
-  sample_cols = lapply(info$experiments, function(i) grep(i, names(DT)))
-  non_samples = setdiff(1:ncol(DT), unlist(sample_cols))
+  sample_cols = lapply(info$experiments, 
+                       function(i) grep(i, names(DT))) %>% unlist()
+  non_samples = setdiff(1:ncol(DT), sample_cols)
   ## Find the columns that are sample-specific with the given prefixes
   Assays = list()
   for (prefix in column.prefix) {
     ## There may be no column with the prefix, so we need to check:
     sample_cols = lapply(paste(prefix, info$experiments),
-                         function(i) which(i == names(DT))) %>% unlist
+                         function(i) which(i == names(DT))) %>% unlist()
     if (length(sample_cols)) {
       Assays[[prefix]] = cbind(
         DT[, non_samples, with = FALSE],
@@ -89,12 +140,14 @@ ReadProteinGroups = function(
         )
     }
   }
+  ## Remove the original data table from memory
   rm(DT)
+  ## Create an object
   structure(
     Assays,
     experiments = info$experiments,
     filename = normalizePath(infile),
-    class = c('ProteinGroups', 'ExperimentAssay', 'list')
+    class = c('ProteinGroups', 'ExpAssayTable', 'list')
     )
 }
 
@@ -109,12 +162,14 @@ print.ExperimentList = function(x) {
 }
 
 #' @rdname print
-#' @method print ExperimentAssay
+#' @method print ExpAssayTable
 #' @export
 #'
-print.ExperimentAssay = function(x) {
-  samples = attr(x, 'experiments')
+print.ExpAssayTable = function(x) {
+  ## Print the class
   cat(sprintf('An object of class %s\n\n', class(x)[1]))
+  ## Print the attribute 'experiments'
+  samples = attr(x, 'experiments')
   cat(sprintf('%d Experiment(s): ', length(samples)))
   if (length(samples) > 3) {
     cat(sprintf('"%s", "%s", "%s", ...\n', 
@@ -122,6 +177,7 @@ print.ExperimentAssay = function(x) {
   } else {
     cat(sprintf('"%s"\n', paste(samples, collapse = '", "')))
   }
+  ## Print the dimensions of each assay
   cat(sprintf('%d Assay(s): "%s"\n', 
               length(x), paste(names(x), collapse = '", "')))
   for (i in 1:length(x)) {
@@ -131,27 +187,26 @@ print.ExperimentAssay = function(x) {
   invisible(x)
 }
 
-#' Subsetting an ExperimentAssay object.
+#' Subsetting an ExpAssayTable object.
 #' 
-#' @param object An object of class ExperimentAssay.
-#' @param samples (A character vector) The samples for subsetting.
-#' @return A new object of class ExperimentAssay.
+#' @param object An object of class ExpAssayTable.
+#' @param samples (character) The samples for subsetting.
+#' @return A new object of class ExpAssayTable.
 #' 
 #' @rdname Subset
-#' @method Subset ExperimentAssay
+#' @method Subset ExpAssayTable
 #' @examples
 #' \dontrun{
 #' new.Assay = Subset(old.Assay, samples = c("sample_1", "sample_2", "sample_3"))
 #' }
 #' 
-Subset.ExperimentAssay = function(object, samples) {
+Subset.ExpAssayTable = function(object, samples) {
   if (!is.character(samples)) {
     stop("Invalid input samples!")
   }
   new.object = data.table::copy(object)
-  experiments = attr(new.object, "experiments")
   for (i in 1:length(new.object)) {
-    non_samples = setdiff(names(new.object[[i]]), experiments)
+    non_samples = setdiff(names(new.object[[i]]), attr(new.object, "experiments"))
     new.object[[i]] = new.object[[i]][, c(non_samples, samples), with = FALSE]
   }
   attr(new.object, "experiments") = samples
@@ -162,19 +217,22 @@ Subset.ExperimentAssay = function(object, samples) {
 #' @method Subset default
 #' @export
 Subset.default = function(object, ...) {
-  if (inherits(object, "ExperimentAssay")) {
-    Subset.ExperimentAssay(object, ...)
+  if (inherits(object, "ExpAssayTable")) {
+    Subset.ExpAssayTable(object, ...)
+  } else if (inherits(object, "ExpAssayFrame")) {
+    Subset.ExpAssayFrame(object, ...)
   } else {
-    stop("This method is associated with class ExperimentAssay.")
+    stop("This method is associated with class ExpAssayTable and ExpAssayFrame.")
   }
 }
 
-#' Quality control of MS-based proteomics data.
+#' Perform quality control of MS-based proteomics data.
 #' 
 #' @param object An object of class ProteinGroups.
-#' @param min.unique.peptides A threshold for the number of unique peptides.
-#' @param min.fraction A minimum fraction of non-missing samples for a gene 
-#'    to be considered good.
+#' @param min.unique.peptides (numeric) A threshold for the number 
+#'   of unique peptides.
+#' @param min.fraction (numeric) A minimum fraction of non-missing 
+#'   samples for a gene to be considered good.
 #' @return A new object of class ProteinGroups.
 #' 
 #' @rdname QC
@@ -245,7 +303,82 @@ QC.default = function(object, ...) {
   if (inherits(object, "ProteinGroups")) {
     QC.ProteinGroups(object, ...)
   } else {
-    stop("This method is associated with class ExperimentAssay.")
+    stop("This method is associated with class ExpAssayTable.")
+  }
+}
+
+#' Reshape tables of an expression assay.
+#' 
+#' Extract only the expression levels and reshape the rows and 
+#' columns for further analysis.
+#' 
+#' @param object An object of class ProteinGroups.
+#' @return An object of class ExpAssayFrame, whose rows correspond 
+#'   to samples and columns to genes.
+#' 
+#' @rdname Reshape
+#' @method Reshape ProteinGroups
+#' @examples
+#' \dontrun{
+#' assay = ReadProteinGroups('.')
+#' frame.list = Reshape(assay)
+#' }
+#' 
+Reshape.ProteinGroups = function(object) {
+## @param index A length-1 character or numeric vector specifying 
+##   the data.table in the object.
+  new.object = data.table::copy(object)
+  for (i in 1:length(new.object)) {
+    new.object[[i]] = object[[i]][, attr(object, "experiments"), with = FALSE
+				  ] %>% t() %>% as.data.frame()
+    colnames(new.object[[i]]) = object[[i]][["Gene names"]]
+  }
+  class(new.object) = c("ExpAssayFrame", "list")
+  return(new.object)
+}
+
+#' @rdname Reshape
+#' @method Reshape default
+#' @export
+#' 
+Reshape.default = function(object, ...) {
+  if (inherits(object, "ProteinGroups")) {
+    Reshape.ProteinGroups(object, ...)
+  } else {
+    stop("This method is associated with class ProteinGroups.")
+  }
+}
+
+#' Perform log normalization of an expression profile.
+#' 
+#' @param object An object of class ExpAssayFrame.
+#' @param inverse (logical) Compute log2 (FALSE) or -log2 (TRUE).
+#' @return A new object of class ExpAssayFrame.
+#' @rdname LogNorm
+#' @method LogNorm ExpAssayFrame
+#' @examples
+#' \dontrun{
+#' new.framelist = LogNorm(old.framelist)
+#' }
+#' 
+LogNorm.ExpAssayFrame = function(object, inverse = TRUE) {
+  new.object = data.table::copy(object)
+  for (i in 1:length(new.object)) {
+    new.object[[i]] = 
+      if (inverse) -log2(new.object[[i]]) else log2(new.object[[i]])
+  }
+  return(new.object)
+}
+
+#' @rdname LogNorm
+#' @method LogNorm default
+#' @export
+#' 
+LogNorm.default = function(object, ...) {
+  if (inherits(object, "ExpAssayFrame")) {
+    LogNorm.ExpAssayFrame(object, ...)
+  } else {
+    stop("This method is associated with class ExpAssayFrame.")
   }
 }
 

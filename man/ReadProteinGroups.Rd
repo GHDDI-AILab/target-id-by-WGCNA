@@ -10,15 +10,19 @@ ReadProteinGroups(
 )
 }
 \arguments{
-\item{data.dir}{Directory containing the MaxQuantOutput data.}
+\item{data.dir}{(length-1 character vector)
+Directory containing the MaxQuantOutput data.}
 
-\item{column.prefix}{A character vector with the prefixes of the expression columns to extract.}
+\item{column.prefix}{A character vector with
+the prefixes of the expression columns to extract.}
 }
 \value{
+(An ProteinGroups object)
 A list of data.tables containing the expression data.
 }
 \description{
-Load the data from the proteinGroups.txt file in MaxQuantOutput/ and create a ProteinGroups object.
+Load the data from the proteinGroups.txt file in
+MaxQuantOutput/ and create a ProteinGroups object.
 }
 \examples{
 \dontrun{

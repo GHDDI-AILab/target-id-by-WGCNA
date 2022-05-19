@@ -2,7 +2,7 @@
 % Please edit documentation in R/util.R
 \name{Show}
 \alias{Show}
-\title{Show the variable name and the value.}
+\title{Print the name and the value of a variable.}
 \usage{
 Show(x)
 }
@@ -10,10 +10,10 @@ Show(x)
 \item{x}{The object to display.}
 }
 \value{
-The input.
+The input variable.
 }
 \description{
-Show the variable name and the value.
+Print the name and the value of a variable.
 }
 \examples{
 \dontrun{

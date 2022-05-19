@@ -2,30 +2,30 @@
 % Please edit documentation in R/generics.R, R/preprocessing.R
 \name{Subset}
 \alias{Subset}
-\alias{Subset.ExperimentAssay}
+\alias{Subset.ExpAssayTable}
 \alias{Subset.default}
 \title{Subset assays.}
 \usage{
 Subset(object, ...)
 
-\method{Subset}{ExperimentAssay}(object, samples)
+\method{Subset}{ExpAssayTable}(object, samples)
 
 \method{Subset}{default}(object, ...)
 }
 \arguments{
-\item{object}{An object of class ExperimentAssay.}
+\item{object}{An object of class ExpAssayTable.}
 
 \item{...}{further arguments to be passed to or from other methods.}
 
-\item{samples}{(A character vector) The samples for subsetting.}
+\item{samples}{(character) The samples for subsetting.}
 }
 \value{
-A new object of class ExperimentAssay.
+A new object of class ExpAssayTable.
 }
 \description{
 Subset assays.
 
-Subsetting an ExperimentAssay object.
+Subsetting an ExpAssayTable object.
 }
 \examples{
 \dontrun{

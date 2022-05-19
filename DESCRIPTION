@@ -12,12 +12,15 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Imports: 
     data.table,
+    dynamicTreeCut,
+    fastcluster,
     ggplot2,
     magrittr,
     org.Hs.eg.db,
     WGCNA
 Collate: 
     'generics.R'
+    'plots.R'
     'util.R'
     'preprocessing.R'
     'targetIDbyWGCNA-package.R'

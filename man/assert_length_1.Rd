@@ -13,7 +13,9 @@ assert_length_1(x)
 The first element of the input.
 }
 \description{
-Execute an error if the length of the input is 0 and execute a warning if the length of the input is bigger than 1. Return the first element of the input.
+Execute an error if the length of the input is 0 and
+execute a warning if the length of the input is bigger
+than 1. Return the first element of the input.
 }
 \examples{
 \dontrun{

@@ -1,7 +1,7 @@
-#' Show the variable name and the value.
+#' Print the name and the value of a variable.
 #' 
 #' @param x The object to display.
-#' @return The input.
+#' @return The input variable.
 #' @examples
 #' \dontrun{
 #' data.dir = '/path/to/dir'
@@ -17,7 +17,9 @@ Show = function(x) {
 
 #' Assert a length-1 vector.
 #' 
-#' Execute an error if the length of the input is 0 and execute a warning if the length of the input is bigger than 1. Return the first element of the input.
+#' Execute an error if the length of the input is 0 and 
+#' execute a warning if the length of the input is bigger 
+#' than 1. Return the first element of the input.
 #' 
 #' @param x The object for checking.
 #' @return The first element of the input.
@@ -41,3 +43,4 @@ assert_length_1 = function(x) {
   }
   return(x[[1]])
 }
+

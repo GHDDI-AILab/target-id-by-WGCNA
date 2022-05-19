@@ -17,10 +17,11 @@ QC(object, ...)
 
 \item{...}{further arguments to be passed to or from other methods.}
 
-\item{min.unique.peptides}{A threshold for the number of unique peptides.}
+\item{min.unique.peptides}{(numeric) A threshold for the number
+of unique peptides.}
 
-\item{min.fraction}{A minimum fraction of non-missing samples for a gene
-to be considered good.}
+\item{min.fraction}{(numeric) A minimum fraction of non-missing
+samples for a gene to be considered good.}
 }
 \value{
 A new object of class ProteinGroups.
@@ -28,7 +29,7 @@ A new object of class ProteinGroups.
 \description{
 Perform quality control for assays.
 
-Quality control of MS-based proteomics data.
+Perform quality control of MS-based proteomics data.
 }
 \examples{
 \dontrun{

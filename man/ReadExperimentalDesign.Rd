@@ -7,13 +7,16 @@
 ReadExperimentalDesign(data.dir = ".")
 }
 \arguments{
-\item{data.dir}{(A length-1 character) Directory containing the MaxQuantOutput data.}
+\item{data.dir}{(length-1 character vector)
+Directory containing the MaxQuantOutput data.}
 }
 \value{
-(An ExperimentInfo object) A list containing the experiment information.
+(An ExperimentInfo object)
+A list containing the experiment information.
 }
 \description{
-Load the data from the experimentalDesign.txt file in MaxQuantOutput/ and create an ExperimentInfo object.
+Load the data from the experimentalDesign.txt file in
+MaxQuantOutput/ and create an ExperimentInfo object.
 }
 \examples{
 \dontrun{
