@@ -22,12 +22,12 @@ Classes:
 \item \code{ExperimentList-class}
 \itemize{
 \item \code{ExperimentInfo-class}
-}
 \item \code{ExpAssayTable-class}
 \itemize{
 \item \code{ProteinGroups-class}
 }
 \item \code{ExpAssayFrame-class}
+}
 }
 
 S3 methods:

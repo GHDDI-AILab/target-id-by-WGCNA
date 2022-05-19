@@ -13,7 +13,7 @@ SampleTree(object, ...)
 \method{SampleTree}{default}(object, ...)
 }
 \arguments{
-\item{object}{An ExpAssay Frame object.}
+\item{object}{An ExpAssayFrame object.}
 
 \item{...}{further arguments to be passed to or from other methods.}
 

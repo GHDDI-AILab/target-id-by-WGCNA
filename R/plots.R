@@ -1,9 +1,10 @@
 #' Make a plot of sample clustering using an expression profile.
 #' 
-#' @param object An ExpAssay Frame object.
+#' @param object An ExpAssayFrame object.
 #' @param file A length-1 character naming the file to draw the plot.
 #' @rdname SampleTree
 #' @method SampleTree ExpAssayFrame
+#' @export
 #' 
 SampleTree.ExpAssayFrame = function(
   object, 

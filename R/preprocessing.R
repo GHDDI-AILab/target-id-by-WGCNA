@@ -3,6 +3,16 @@
 #' 
 NULL
 
+#' The ExperimentList class.
+#' 
+#' A list of experiment data.
+#' 
+#' @docType class
+#' @name ExperimentList-class
+#' @rdname ExperimentList-class
+#' 
+NULL
+
 #' The ExperimentInfo class.
 #' 
 #' The experiment information of assay data.
@@ -10,16 +20,6 @@ NULL
 #' @docType class
 #' @name ExperimentInfo-class
 #' @rdname ExperimentInfo-class
-#' 
-NULL
-
-#' The ProteinGroups class.
-#' 
-#' The protein-level mass spectrometry data.
-#' 
-#' @docType class
-#' @name ProteinGroups-class
-#' @rdname ProteinGroups-class
 #' 
 NULL
 
@@ -31,6 +31,16 @@ NULL
 #' @docType class
 #' @name ExpAssayTable-class
 #' @rdname ExpAssayTable-class
+#' 
+NULL
+
+#' The ProteinGroups class.
+#' 
+#' The protein-level mass spectrometry data.
+#' 
+#' @docType class
+#' @name ProteinGroups-class
+#' @rdname ProteinGroups-class
 #' 
 NULL
 
@@ -147,7 +157,7 @@ ReadProteinGroups = function(
     Assays,
     experiments = info$experiments,
     filename = normalizePath(infile),
-    class = c('ProteinGroups', 'ExpAssayTable', 'list')
+    class = c('ProteinGroups', 'ExpAssayTable', 'ExperimentList', 'list')
     )
 }
 
@@ -195,6 +205,7 @@ print.ExpAssayTable = function(x) {
 #' 
 #' @rdname Subset
 #' @method Subset ExpAssayTable
+#' @export
 #' @examples
 #' \dontrun{
 #' new.Assay = Subset(old.Assay, samples = c("sample_1", "sample_2", "sample_3"))
@@ -237,6 +248,7 @@ Subset.default = function(object, ...) {
 #' 
 #' @rdname QC
 #' @method QC ProteinGroups
+#' @export
 #' @examples
 #' \dontrun{
 #' new.Assay = QC(old.Assay)
@@ -265,7 +277,7 @@ QC.ProteinGroups = function(
   get_genename_from_fasta_header = function(x) {
     ifelse(grepl("OS=Homo .+GN=", x),
       yes = strsplit(x, "GN=") %>%
-        lapply(., function(v) sub(" .*$", "", v[-1])) %>%
+        lapply(., function(v) sub("\\b.*$", "", v[-1])) %>%
         vapply(., function(v) paste(unique(v), collapse = ";"), character(1)),
       no = character(1)
       )
@@ -318,6 +330,7 @@ QC.default = function(object, ...) {
 #' 
 #' @rdname Reshape
 #' @method Reshape ProteinGroups
+#' @export
 #' @examples
 #' \dontrun{
 #' assay = ReadProteinGroups('.')
@@ -333,7 +346,7 @@ Reshape.ProteinGroups = function(object) {
 				  ] %>% t() %>% as.data.frame()
     colnames(new.object[[i]]) = object[[i]][["Gene names"]]
   }
-  class(new.object) = c("ExpAssayFrame", "list")
+  class(new.object) = c("ExpAssayFrame", "ExperimentList", "list")
   return(new.object)
 }
 
@@ -356,6 +369,7 @@ Reshape.default = function(object, ...) {
 #' @return A new object of class ExpAssayFrame.
 #' @rdname LogNorm
 #' @method LogNorm ExpAssayFrame
+#' @export
 #' @examples
 #' \dontrun{
 #' new.framelist = LogNorm(old.framelist)

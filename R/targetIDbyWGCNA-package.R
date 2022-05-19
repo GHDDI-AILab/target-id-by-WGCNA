@@ -11,9 +11,9 @@
 #' Classes:
 #' - `ExperimentList-class`
 #'   - `ExperimentInfo-class`
-#' - `ExpAssayTable-class`
-#'   - `ProteinGroups-class`
-#' - `ExpAssayFrame-class`
+#'   - `ExpAssayTable-class`
+#'     - `ProteinGroups-class`
+#'   - `ExpAssayFrame-class`
 #' 
 #' S3 methods:
 #' - `Subset()`
