@@ -21,13 +21,18 @@
 #' - `Reshape()`
 #' - `LogNorm()`
 #' 
-#' @importFrom utils str capture.output
-#' @importFrom stats dist as.dist
-#' @importFrom data.table data.table as.data.table fread fwrite setnames ":=" copy
+#' @importFrom graphics abline par
+#' @importFrom grDevices dev.off pdf
+#' @importFrom utils capture.output head str
+#' @importFrom stats as.dist dist setNames
+#' @importFrom data.table ":=" .SD as.data.table copy data.table fread fwrite setnames
 #' @importFrom magrittr "%>%" "%T>%" "%<>%"
-#' @importFrom WGCNA adjacency TOMsimilarity labels2colors moduleEigengenes mergeCloseModules plotDendroAndColors standardColors pickSoftThreshold intramodularConnectivity cor corPvalueStudent labeledHeatmap verboseScatterplot
+#' @importFrom ggplot2 aes geom_histogram ggplot ggsave
+#' @importFrom WGCNA TOMsimilarity adjacency labels2colors moduleEigengenes mergeCloseModules plotDendroAndColors standardColors pickSoftThreshold intramodularConnectivity cor corPvalueStudent labeledHeatmap verboseScatterplot
 #' @importFrom fastcluster hclust
 #' @importFrom dynamicTreeCut cutreeDynamic
+#' @importFrom org.Hs.eg.db org.Hs.eg.db
+#' @importFrom AnnotationDbi select
 #' 
 #' @docType package
 #' @keywords internal

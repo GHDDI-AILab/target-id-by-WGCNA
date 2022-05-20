@@ -224,6 +224,32 @@ Subset.ExpAssayTable = function(object, samples) {
   return(new.object)
 }
 
+#' Subsetting an ExpAssayFrame object.
+#' 
+#' @param object An object of class ExpAssayFrame.
+#' @param samples (character) The samples for subsetting.
+#' @return A new object of class ExpAssayFrame.
+#' 
+#' @rdname Subset
+#' @method Subset ExpAssayFrame
+#' @export
+#' @examples
+#' \dontrun{
+#' new.Assay = Subset(old.Assay, samples = c("sample_1", "sample_2", "sample_3"))
+#' }
+#' 
+Subset.ExpAssayFrame = function(object, samples) {
+  if (!is.character(samples)) {
+    stop("Invalid input samples!")
+  }
+  new.object = data.table::copy(object)
+  for (i in 1:length(new.object)) {
+    new.object[[i]] = new.object[[i]][samples, ]
+  }
+  attr(new.object, "experiments") = samples
+  return(new.object)
+}
+
 #' @rdname Subset
 #' @method Subset default
 #' @export

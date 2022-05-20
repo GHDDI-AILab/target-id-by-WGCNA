@@ -3,6 +3,7 @@
 \name{Subset}
 \alias{Subset}
 \alias{Subset.ExpAssayTable}
+\alias{Subset.ExpAssayFrame}
 \alias{Subset.default}
 \title{Subset assays.}
 \usage{
@@ -10,10 +11,12 @@ Subset(object, ...)
 
 \method{Subset}{ExpAssayTable}(object, samples)
 
+\method{Subset}{ExpAssayFrame}(object, samples)
+
 \method{Subset}{default}(object, ...)
 }
 \arguments{
-\item{object}{An object of class ExpAssayTable.}
+\item{object}{An object of class ExpAssayFrame.}
 
 \item{...}{further arguments to be passed to or from other methods.}
 
@@ -21,13 +24,21 @@ Subset(object, ...)
 }
 \value{
 A new object of class ExpAssayTable.
+
+A new object of class ExpAssayFrame.
 }
 \description{
 Subset assays.
 
 Subsetting an ExpAssayTable object.
+
+Subsetting an ExpAssayFrame object.
 }
 \examples{
+\dontrun{
+new.Assay = Subset(old.Assay, samples = c("sample_1", "sample_2", "sample_3"))
+}
+
 \dontrun{
 new.Assay = Subset(old.Assay, samples = c("sample_1", "sample_2", "sample_3"))
 }

@@ -11,6 +11,7 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Imports: 
+    AnnotationDbi,
     data.table,
     dynamicTreeCut,
     fastcluster,
@@ -20,7 +21,8 @@ Imports:
     WGCNA
 Collate: 
     'generics.R'
-    'plots.R'
+    'network.R'
+    'plotting.R'
     'util.R'
     'preprocessing.R'
     'targetIDbyWGCNA-package.R'
