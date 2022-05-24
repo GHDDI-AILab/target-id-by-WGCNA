@@ -1,3 +1,8 @@
+#' @include util.R
+#' @include generics.R
+#' 
+NULL
+
 #' @rdname PickThreshold
 #' @method PickThreshold ExpAssayFrame
 #' @export

@@ -21,8 +21,8 @@ Imports:
     WGCNA
 Collate: 
     'generics.R'
+    'util.R'
     'network.R'
     'plotting.R'
-    'util.R'
     'preprocessing.R'
     'targetIDbyWGCNA-package.R'

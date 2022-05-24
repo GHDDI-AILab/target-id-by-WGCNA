@@ -283,7 +283,7 @@ Subset.default = function(object, ...) {
 QC.ProteinGroups = function(
   object, 
   min.unique.peptides = 2, 
-  min.fraction = 0.5
+  min.fraction = 0.2
 ) {
   ## Create a new object
   new.object = data.table::copy(object)
@@ -308,12 +308,18 @@ QC.ProteinGroups = function(
       no = character(1)
       )
   }
-  for (i in 1:length(new.object)) {
-    genes = new.object[[i]][, get_genename_from_fasta_header(`Fasta headers`)]
-    new.object[[i]][, `Gene names` := ifelse(nzchar(genes), genes, `Gene names`)]
-    new.object[[i]] = new.object[[i]][nzchar(`Gene names`), ]
+  if ("Gene names" %in% names(new.object[[1]])) {
+    for (i in 1:length(new.object)) {
+      genes = new.object[[i]][, get_genename_from_fasta_header(`Fasta headers`)]
+      new.object[[i]][, "Gene names" := ifelse(nzchar(genes), genes, `Gene names`)]
+      new.object[[i]] = new.object[[i]][nzchar(`Gene names`), ]
+    }
+    feature.counts[, "With gene names" := vapply(new.object, nrow, integer(1))]
+  } else {
+    for (i in 1:length(new.object)) {
+      new.object[[i]][, "Gene names" := `Fasta headers`]
+    }
   }
-  feature.counts[, "With gene names" := vapply(new.object, nrow, integer(1))]
   ## Check unique peptides
   for (i in 1:length(new.object)) {
     new.object[[i]] = new.object[[i]][`Unique peptides` >= min.unique.peptides, ]
@@ -325,7 +331,7 @@ QC.ProteinGroups = function(
   for (i in 1:length(new.object)) {
     nSamples = length(experiments)
     mat = as.matrix(new.object[[i]][, experiments, with = FALSE])
-    non.NA.fraction = rowSums(!is.na(mat)) / nSamples
+    non.NA.fraction = rowSums(!is_missing_value(mat)) / nSamples
     new.object[[i]] = new.object[[i]][non.NA.fraction >= min.fraction, ]
   }
   feature.counts[, paste("goodGenes, min.fraction >=", min.fraction) := 

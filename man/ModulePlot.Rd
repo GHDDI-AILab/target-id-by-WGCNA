@@ -16,6 +16,17 @@ ModulePlot(object, ...)
 \item{object}{An object.}
 
 \item{...}{further arguments to be passed to or from other methods.}
+
+\item{assay}{An ExpAssayFrame object.}
+
+\item{file.prefix}{(A length-1 character) A prefix for the name of output file.}
+
+\item{plot.width}{(A length-1 numeric) Set the plot width.}
+
+\item{plot.height}{(A length-1 numeric) Set the plot height.}
+}
+\value{
+Path to the output file.
 }
 \description{
 Plot a gene tree..

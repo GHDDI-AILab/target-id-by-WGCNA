@@ -26,7 +26,18 @@ SampleTree(object, ...)
 
 \item{assay}{An ExpAssayFrame object.}
 
-\item{file}{A length-1 character naming the file to draw the plot.}
+\item{file}{(A length-1 character vector) File path to save the plot.}
+
+\item{title}{(A length-1 character vector) Title for the plot.}
+
+\item{hline}{(A length-1 numeric) Set the position of a red horizontal line.}
+
+\item{plot.width}{(A length-1 numeric) Set the plot width.}
+
+\item{plot.height}{(A length-1 numeric) Set the plot height.}
+}
+\value{
+Path to the output file.
 }
 \description{
 Perform sample clustering.

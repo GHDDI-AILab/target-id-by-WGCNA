@@ -6,6 +6,19 @@
 \usage{
 get_geneinfo(d.t, remove_dup = TRUE)
 }
+\arguments{
+\item{d.t}{A data.table.}
+
+\item{remove_dup}{(A length-1 logical) Remove duplicate genes or not.}
+}
+\value{
+A data.table.
+}
 \description{
-A dict with previous and current gene names.
+Get the gene information from org.Hs.eg.db.
+}
+\examples{
+d.t = data.table::data.table(gene = "ATP5A1")
+d.t = get_geneinfo(d.t)
+
 }

@@ -8,15 +8,42 @@
 \usage{
 DistributionPlot(object, ...)
 
-\method{DistributionPlot}{ExpAssayFrame}(assay, samples, file)
+\method{DistributionPlot}{ExpAssayFrame}(
+  object,
+  samples,
+  genes,
+  index = 1,
+  file,
+  plot.width = NA,
+  plot.height = NA
+)
 
 \method{DistributionPlot}{default}(object, ...)
 }
 \arguments{
-\item{object}{An object.}
+\item{object}{An ExpAssayFrame object.}
 
 \item{...}{further arguments to be passed to or from other methods.}
+
+\item{samples}{A character vector specifying the samples of interest.}
+
+\item{genes}{A character vector specifying the genes of interest.}
+
+\item{index}{A length-1 numeric or character vector specifying the frame.}
+
+\item{file}{(A length-1 character vector) File path to save the plot.}
+
+\item{plot.width}{(A length-1 numeric) Set the plot width.
+If not supplied, use the size of current graphics device.}
+
+\item{plot.height}{(A length-1 numeric) Set the plot height.
+If not supplied, use the size of current graphics device.}
+}
+\value{
+Path to the output file.
 }
 \description{
 Draw the distribution.
+
+Plot the distribution of expression levels in the assay.
 }

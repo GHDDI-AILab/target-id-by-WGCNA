@@ -26,9 +26,9 @@
 #' @importFrom utils capture.output head str
 #' @importFrom stats as.dist dist setNames
 #' @importFrom data.table ":=" .SD as.data.table copy data.table fread fwrite setnames
-#' @importFrom magrittr "%>%" "%T>%" "%<>%"
+#' @importFrom magrittr "%>%" "%T>%"
 #' @importFrom ggplot2 aes geom_histogram ggplot ggsave
-#' @importFrom WGCNA TOMsimilarity adjacency labels2colors moduleEigengenes mergeCloseModules plotDendroAndColors standardColors pickSoftThreshold intramodularConnectivity cor corPvalueStudent labeledHeatmap verboseScatterplot
+#' @importFrom WGCNA TOMsimilarity adjacency cor corPvalueStudent intramodularConnectivity labeledHeatmap labels2colors moduleEigengenes mergeCloseModules plotDendroAndColors pickSoftThreshold standardColors verboseScatterplot
 #' @importFrom fastcluster hclust
 #' @importFrom dynamicTreeCut cutreeDynamic
 #' @importFrom org.Hs.eg.db org.Hs.eg.db

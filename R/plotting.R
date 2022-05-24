@@ -1,26 +1,60 @@
+#' @include util.R
+#' @include generics.R
+#' 
+NULL
+
+#' Plot the distribution of expression levels in the assay.
+#' 
+#' @param object An ExpAssayFrame object.
+#' @param samples A character vector specifying the samples of interest.
+#' @param genes A character vector specifying the genes of interest.
+#' @param index A length-1 numeric or character vector specifying the frame.
+#' @param file (A length-1 character vector) File path to save the plot.
+#' @param plot.width (A length-1 numeric) Set the plot width. 
+#'   If not supplied, use the size of current graphics device.
+#' @param plot.height (A length-1 numeric) Set the plot height.
+#'   If not supplied, use the size of current graphics device.
+#' @return Path to the output file.
+#' 
 #' @rdname DistributionPlot
 #' @method DistributionPlot ExpAssayFrame
 #' @export
 #' 
 DistributionPlot.ExpAssayFrame = function(
-  assay, 
+  object, 
   samples, 
-  file
+  genes, 
+  index = 1, 
+  file, 
+  plot.width = NA, 
+  plot.height = NA
 ) {
   if (missing(file)) {
     file = format(Sys.Date(), "Plots_%Y%m%d/LevelDistribution.pdf")
+  } else if (is.character(file) && length(file) > 0) {
+    file = file[[1]]
+  } else {
+    stop("The given file was invalid!")
   }
-  if (!missing(samples) && length(samples)) {
-    assay = Subset(assay, samples)
+  if (length(index) == 1) {
+    assay = object[[index]]
+  } else {
+    stop("The given index was invalid!")
   }
-  assay = assert_length_1(assay)
-  d.f = data.frame(unlist(assay[[1]], use.names = FALSE))
+  if (!missing(samples) && length(samples) > 0 && !any(is.na(samples))) {
+    assay = assay[samples, ]
+  }
+  if (!missing(genes) && length(genes) > 0 && !any(is.na(genes))) {
+    assay = assay[, genes]
+  }
+  d.f = data.frame(unlist(assay, use.names = FALSE))
   names(d.f) = "Level"
   p = ggplot2::ggplot(d.f, ggplot2::aes(x = Level)) +   
     ggplot2::geom_histogram(ggplot2::aes(y = ..count..), binwidth = 0.05, 
-                            alpha = .3, position = "identity")
-  dir.create(dirname(file), showWarnings = FALSE)
-  ggplot2::ggsave(file, p)
+                            alpha = 0.3, position = "identity")
+  dir.create(dirname(file), showWarnings = FALSE, recursive = TRUE)
+  ggplot2::ggsave(file, p, width = plot.width, height = plot.height)
+  invisible(file)
 }
 
 #' @rdname DistributionPlot
@@ -38,7 +72,13 @@ DistributionPlot.default = function(object, ...) {
 #' Make a plot of sample clustering using an expression profile.
 #' 
 #' @param assay An ExpAssayFrame object.
-#' @param file A length-1 character naming the file to draw the plot.
+#' @param file (A length-1 character vector) File path to save the plot.
+#' @param title (A length-1 character vector) Title for the plot.
+#' @param hline (A length-1 numeric) Set the position of a red horizontal line.
+#' @param plot.width (A length-1 numeric) Set the plot width.
+#' @param plot.height (A length-1 numeric) Set the plot height.
+#' @return Path to the output file.
+#' 
 #' @rdname SampleTree
 #' @method SampleTree ExpAssayFrame
 #' @export
@@ -51,15 +91,15 @@ SampleTree.ExpAssayFrame = function(
   plot.width = 20, 
   plot.height = 12
 ) {
-  tree = assay %>% 
-    assert_length_1() %>% 
-    .[[1]] %>% 
-    stats::dist() %>% 
+  d.f = assert_length_1(assay)[[1]]
+  tree = stats::dist(d.f) %>% 
     fastcluster::hclust(., method = "average")
   if (missing(file)) {
     file = format(Sys.Date(), "Plots_%Y%m%d/SampleClustering.pdf")
+  } else {
+    file = file[[1]]
   }
-  dir.create(dirname(file), showWarnings = FALSE)
+  dir.create(dirname(file), showWarnings = FALSE, recursive = TRUE)
   pdf(file = file, width = plot.width, height = plot.height)
   par(cex = 0.6)
   par(mar = c(5, 10, 10, 0))
@@ -67,6 +107,7 @@ SampleTree.ExpAssayFrame = function(
        cex.lab = 2, cex.axis = 2, cex.main = 4)
   abline(h = hline, col = "red")
   dev.off()
+  invisible(file)
 }
 
 #' @rdname SampleTree
@@ -82,6 +123,12 @@ SampleTree.default = function(object, ...) {
 }
 
 #' Plot the gene tree.
+#' 
+#' @param assay An ExpAssayFrame object.
+#' @param file.prefix (A length-1 character) A prefix for the name of output file.
+#' @param plot.width (A length-1 numeric) Set the plot width.
+#' @param plot.height (A length-1 numeric) Set the plot height.
+#' @return Path to the output file.
 #' 
 #' @rdname ModulePlot
 #' @method ModulePlot ExpAssayFrame
@@ -102,9 +149,9 @@ ModulePlot.ExpAssayFrame = function(
   }
   net = attr(assay, "Network") %>% assert_length_1() %>% .[[1]]
   dir = format(Sys.Date(), "Plots_%Y%m%d")
-  filename = sprintf("%s/%sGeneTree.power%s.pdf", dir, file.prefix, net$power)
-  dir.create(dirname(filename), showWarnings = FALSE, recursive = TRUE)
-  pdf(filename, width = plot.width, height = plot.height)
+  file = sprintf("%s/%sGeneTree.power%s.pdf", dir, file.prefix, net$power)
+  dir.create(dirname(file), showWarnings = FALSE, recursive = TRUE)
+  pdf(file = file, width = plot.width, height = plot.height)
   WGCNA::plotDendroAndColors(
     dendro = net$geneTree, colors = cbind(net$unmergedColors, net$moduleColors), 
     groupLabels = c("Dynamic Tree Cut", "Module colors"),
@@ -114,7 +161,7 @@ ModulePlot.ExpAssayFrame = function(
     main = "Gene dendrogram and module colors"
     )
   dev.off()
-  invisible(filename)
+  invisible(file)
 }
 
 #' @rdname ModulePlot

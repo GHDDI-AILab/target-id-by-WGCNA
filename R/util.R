@@ -35,23 +35,29 @@ Show = function(x) {
 #' 
 assert_length_1 = function(x) {
   if (length(x) < 1) {
-    name = as.character(substitute(x))
-    stop(sprintf('No %s was found!', name))
+    stop(sprintf('No %s was found!', as.character(substitute(x))))
   } else if (length(x) > 1) {
-    name = as.character(substitute(x))
-    warning(sprintf('More than one %s!', name))
+    warning(sprintf('More than one %s!', as.character(substitute(x))))
   }
   return(x[1])  ## `[` won't change the type. 
 }
 
 #' Get the gene information from org.Hs.eg.db.
 #' 
+#' @param d.t A data.table.
+#' @param remove_dup (A length-1 logical) Remove duplicate genes or not.
+#' @return A data.table.
+#' @export
+#' @examples
+#' d.t = data.table::data.table(gene = "ATP5A1")
+#' d.t = get_geneinfo(d.t)
+#' 
 get_geneinfo = function(
   d.t, 
   remove_dup = TRUE
 ) {
 
-#' A dict with previous and current gene names.
+## A dict with previous and current gene names.
 GENES_DICT = c(
   # previous / approved names
   "AARS"   = "AARS1", 
@@ -64,7 +70,7 @@ GENES_DICT = c(
   )
 
   d.t[gene %in% names(GENES_DICT), gene := GENES_DICT[gene]]
-  select(org.Hs.eg.db::org.Hs.eg.db, 
+  AnnotationDbi::select(org.Hs.eg.db::org.Hs.eg.db, 
     keys = d.t[, gene], columns = c("ENSEMBL","GENENAME"), keytype = "SYMBOL"
     ) %>% 
   suppressMessages() %>% 
@@ -74,5 +80,20 @@ GENES_DICT = c(
     c("ensembl", "fullname", "gene")) %>% 
   {if (remove_dup) .[, head(.SD, 1), by = "gene"] else .} %>% 
   .[d.t, on = "gene"]
+}
+
+#' Check missing values.
+#' 
+#' Check if the values are missing 
+#' (NA in labelled MS data, and 0 in label-free MS data).
+#' @param x A numeric vector.
+#' @return A logical vector.
+#' @examples
+#' \dontrun{
+#' is_missing_value(c(1, 0, 0, 1))
+#' }
+#' 
+is_missing_value = function(x) {
+  is.na(x) | x == 0
 }
 
