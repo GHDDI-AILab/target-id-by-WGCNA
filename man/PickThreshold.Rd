@@ -16,7 +16,17 @@ PickThreshold(object, ...)
 \item{object}{An object.}
 
 \item{...}{further arguments to be passed to or from other methods.}
+
+\item{assay}{An ExpAssayFrame object.}
+
+\item{powerVector}{A numeric vector of candidate soft thresholding powers for which
+the scale free topology fit indices are to be calculated.}
+}
+\value{
+A new ExpAssayFrame object.
 }
 \description{
 Pick a soft threshold.
+
+Pick a soft-thresholding power for correlation network construction.
 }

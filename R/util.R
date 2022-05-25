@@ -47,27 +47,28 @@ assert_length_1 = function(x) {
 #' @param d.t A data.table.
 #' @param remove_dup (A length-1 logical) Remove duplicate genes or not.
 #' @return A data.table.
-#' @export
 #' @examples
+#' \dontrun{
 #' d.t = data.table::data.table(gene = "ATP5A1")
 #' d.t = get_geneinfo(d.t)
+#' }
 #' 
 get_geneinfo = function(
   d.t, 
   remove_dup = TRUE
 ) {
 
-## A dict with previous and current gene names.
-GENES_DICT = c(
-  # previous / approved names
-  "AARS"   = "AARS1", 
-  "ATP5A1" = "ATP5F1A", 
-  "ATP5B"  = "ATP5F1B", 
-  "ATP5F1" = "ATP5PB", 
-  "GARS"   = "GARS1", 
-  "H1F0"   = "H1-0", 
-  "WARS"   = "WARS1"
-  )
+  ## A dict with previous and current gene names.
+  GENES_DICT = c(
+    # previous / approved names
+    "AARS"   = "AARS1", 
+    "ATP5A1" = "ATP5F1A", 
+    "ATP5B"  = "ATP5F1B", 
+    "ATP5F1" = "ATP5PB", 
+    "GARS"   = "GARS1", 
+    "H1F0"   = "H1-0", 
+    "WARS"   = "WARS1"
+    )
 
   d.t[gene %in% names(GENES_DICT), gene := GENES_DICT[gene]]
   AnnotationDbi::select(org.Hs.eg.db::org.Hs.eg.db, 

@@ -16,11 +16,11 @@ NULL
 #'   If not supplied, use the size of current graphics device.
 #' @return Path to the output file.
 #' 
-#' @rdname DistributionPlot
-#' @method DistributionPlot ExpAssayFrame
+#' @rdname Histogram
+#' @method Histogram ExpAssayFrame
 #' @export
 #' 
-DistributionPlot.ExpAssayFrame = function(
+Histogram.ExpAssayFrame = function(
   object, 
   samples, 
   genes, 
@@ -57,13 +57,13 @@ DistributionPlot.ExpAssayFrame = function(
   invisible(file)
 }
 
-#' @rdname DistributionPlot
-#' @method DistributionPlot default
+#' @rdname Histogram
+#' @method Histogram default
 #' @export
 #' 
-DistributionPlot.default = function(object, ...) {
+Histogram.default = function(object, ...) {
   if (inherits(object, "ExpAssayFrame")) {
-    DistributionPlot.ExpAssayFrame(object, ...)
+    Histogram.ExpAssayFrame(object, ...)
   } else {
     stop("This method is associated with class ExpAssayFrame.")
   }
@@ -122,7 +122,7 @@ SampleTree.default = function(object, ...) {
   }
 }
 
-#' Plot the gene tree.
+#' Plot the gene tree of a gene co-expression network.
 #' 
 #' @param assay An ExpAssayFrame object.
 #' @param file.prefix (A length-1 character) A prefix for the name of output file.

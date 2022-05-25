@@ -3,6 +3,13 @@
 #' 
 NULL
 
+#' Pick a soft-thresholding power for correlation network construction.
+#' 
+#' @param assay An ExpAssayFrame object.
+#' @param powerVector A numeric vector of candidate soft thresholding powers for which 
+#'   the scale free topology fit indices are to be calculated.
+#' @return A new ExpAssayFrame object.
+#' 
 #' @rdname PickThreshold
 #' @method PickThreshold ExpAssayFrame
 #' @export
@@ -32,11 +39,18 @@ PickThreshold.default = function(object, ...) {
   }
 }
 
-#' @rdname GetNetwork
-#' @method GetNetwork ExpAssayFrame
+#' Construct a correlation network by the gene expression profiles.
+#' 
+#' @param assay An ExpAssayFrame object.
+#' @param power (A length-1 numeric) Soft thresholding power 
+#'   for the adjacency function in WGCNA analysis.
+#' @return A CorrelationNetwork object.
+#' 
+#' @rdname AddNetwork
+#' @method AddNetwork ExpAssayFrame
 #' @export
 #' 
-GetNetwork.ExpAssayFrame = function(
+AddNetwork.ExpAssayFrame = function(
   assay, 
   power
 ) {
@@ -90,18 +104,64 @@ GetNetwork.ExpAssayFrame = function(
 
   }
   names(attr(net, "Network")) = names(net)
+  class(net) = c("CorrelationNetwork", class(net))
   return(net)
 }
 
-#' @rdname GetNetwork
-#' @method GetNetwork default
+#' @rdname AddNetwork
+#' @method AddNetwork default
 #' @export
 #'
-GetNetwork.default = function(object, ...) {
+AddNetwork.default = function(object, ...) {
   if (inherits(object, "ExpAssayFrame")) {
-    GetNetwork.ExpAssayFrame(object, ...)
+    AddNetwork.ExpAssayFrame(object, ...)
   } else {
     stop("This method is associated with class ExpAssayFrame.")
+  }
+}
+
+#' Calculate the connectivity values for genes.
+#' 
+#' @param object A CorrelationNetwork object.
+#' @return A new CorrelationNetwork object.
+#' 
+#' @rdname AddConnectivity
+#' @method AddConnectivity CorrelationNetwork
+#' @export
+#' 
+AddConnectivity.CorrelationNetwork = function(
+  object
+) {
+  GENE = "gene"
+  #MODULE = "module"
+  new.object = data.table::copy(object)
+  attr(new.object, "connectivity") = list()
+  for (i in 1:length(new.object)) {
+    network = attr(new.object, "Network")[[i]]
+    module_labels = network$moduleLabels %>% 
+      data.table::as.data.table(., keep.rownames = TRUE) %>% 
+      data.table::setnames(., c(GENE, "module"))
+    attr(new.object, "connectivity")[[i]] = 
+      WGCNA::intramodularConnectivity(network$adjacency, network$moduleLabels) %>% 
+      data.table::as.data.table(., keep.rownames = TRUE) %>% 
+      data.table::setnames(., "rn", GENE) %>% 
+      .[module_labels, on = c(GENE)] %>% 
+      .[order(module, -kWithin)] %>% 
+      get_geneinfo()
+  }
+  names(attr(new.object, "connectivity")) = names(new.object)
+  return(new.object)
+}
+
+#' @rdname AddConnectivity
+#' @method AddConnectivity default
+#' @export
+#' 
+AddConnectivity.default = function(object, ...) {
+  if (inherits(object, "CorrelationNetwork")) {
+    AddConnectivity.CorrelationNetwork(object, ...)
+  } else {
+    stop("This method is associated with class CorrelationNetwork.")
   }
 }
 

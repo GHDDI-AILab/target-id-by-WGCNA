@@ -38,6 +38,16 @@ LogNorm = function(object, ...) {
   UseMethod("LogNorm")
 }
 
+#' Draw the distribution.
+#' 
+#' @param object An object.
+#' @param ... further arguments to be passed to or from other methods.
+#' @export
+#' 
+Histogram = function(object, ...) {
+  UseMethod("Histogram")
+}
+
 #' Perform sample clustering.
 #' 
 #' @param object An object.
@@ -46,16 +56,6 @@ LogNorm = function(object, ...) {
 #' 
 SampleTree = function(object, ...) {
   UseMethod("SampleTree")
-}
-
-#' Draw the distribution.
-#' 
-#' @param object An object.
-#' @param ... further arguments to be passed to or from other methods.
-#' @export
-#' 
-DistributionPlot = function(object, ...) {
-  UseMethod("DistributionPlot")
 }
 
 #' Pick a soft threshold.
@@ -74,17 +74,34 @@ PickThreshold = function(object, ...) {
 #' @param ... further arguments to be passed to or from other methods.
 #' @export
 #' 
-GetNetwork = function(object, ...) {
-  UseMethod("GetNetwork")
+AddNetwork = function(object, ...) {
+  UseMethod("AddNetwork")
 }
 
 #' Plot a gene tree..
 #' 
+#' @aliases GeneTree
 #' @param object An object.
 #' @param ... further arguments to be passed to or from other methods.
 #' @export
 #' 
 ModulePlot = function(object, ...) {
   UseMethod("ModulePlot")
+}
+
+#' @export
+#' 
+GeneTree = function(...) {
+  ModulePlot(...)
+}
+
+#' Calculate the connectivity values of genes.
+#' 
+#' @param object An object.
+#' @param ... further arguments to be passed to or from other methods.
+#' @export
+#' 
+AddConnectivity = function(object, ...) {
+  UseMethod("AddConnectivity")
 }
 

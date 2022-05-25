@@ -18,7 +18,9 @@ A data.table.
 Get the gene information from org.Hs.eg.db.
 }
 \examples{
+\dontrun{
 d.t = data.table::data.table(gene = "ATP5A1")
 d.t = get_geneinfo(d.t)
+}
 
 }

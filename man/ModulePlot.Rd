@@ -2,6 +2,7 @@
 % Please edit documentation in R/generics.R, R/plotting.R
 \name{ModulePlot}
 \alias{ModulePlot}
+\alias{GeneTree}
 \alias{ModulePlot.ExpAssayFrame}
 \alias{ModulePlot.default}
 \title{Plot a gene tree..}
@@ -31,5 +32,5 @@ Path to the output file.
 \description{
 Plot a gene tree..
 
-Plot the gene tree.
+Plot the gene tree of a gene co-expression network.
 }
