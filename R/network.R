@@ -145,7 +145,7 @@ AddConnectivity.CorrelationNetwork = function(
   GENE = "gene"
   #MODULE = "module"
   if (length(object) != length(attr(object, ATTR_NET))) {
-    stop("Invalid correlation network in the input!")
+    stop("Invalid correlation network was given!")
   }
   new.object = data.table::copy(object)
   attr(new.object, ATTR_CON) = list()
@@ -155,10 +155,13 @@ AddConnectivity.CorrelationNetwork = function(
       data.table::as.data.table(., keep.rownames = TRUE) %>% 
       data.table::setnames(., c(GENE, "module"))
   
+    ## WGCNA::intramodularConnectivity() may not return the gene names 
+    ## when the input includes gene names with a dash '-', like HLA-A.
     connectivity = 
       WGCNA::intramodularConnectivity(network$adjacency, network$moduleLabels) %>% 
       data.table::as.data.table(., keep.rownames = TRUE) %>% 
       data.table::setnames(., "rn", GENE) %>% 
+      .[, (GENE) := module_labels[[GENE]]] %>% 
       .[module_labels, on = c(GENE)] %>% 
       .[order(module, -kWithin)]
     
