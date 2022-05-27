@@ -23,6 +23,7 @@ Collate:
     'generics.R'
     'util.R'
     'network.R'
+    'objects.R'
     'plotting.R'
     'preprocessing.R'
     'targetIDbyWGCNA-package.R'
