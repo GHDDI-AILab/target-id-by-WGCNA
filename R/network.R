@@ -18,12 +18,14 @@ PickThreshold.ExpAssayFrame = function(
   assay, 
   powerVector = c(1:10, seq(12, 20, 2))
 ) {
+  ATTR_POW = "powerEstimate"
   new.assay = data.table::copy(assay)
-  attr(new.assay, "powerEstimate") = list()
-  for (name in names(assay)) {
-    fit = WGCNA::pickSoftThreshold(assay[[name]], powerVector = powerVector)
-    attr(new.assay, "powerEstimate")[[name]] = fit$powerEstimate
+  attr(new.assay, ATTR_POW) = list()
+  for (i in 1:length(assay)) {
+    fit = WGCNA::pickSoftThreshold(assay[[i]], powerVector = powerVector)
+    attr(new.assay, ATTR_POW)[[i]] = fit$powerEstimate
   }
+  names(attr(new.assay, ATTR_POW)) = names(assay)
   return(new.assay)
 }
 
