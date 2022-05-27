@@ -14,12 +14,20 @@
 #'   - `ExpAssayTable-class`
 #'     - `ProteinGroups-class`
 #'   - `ExpAssayFrame-class`
+#'     - `CorrelationNetwork-class`
 #' 
 #' S3 methods:
 #' - `Subset()`
 #' - `QC()`
 #' - `Reshape()`
 #' - `LogNorm()`
+#' - `Histogram()`
+#' - `SampleTree()`
+#' - `PickThreshold()`
+#' - `AddNetwork()`
+#' - `ModulePlot()`
+#' - `AddConnectivity()`
+#' - `GetHubGenes()`
 #' 
 #' @importFrom graphics abline par
 #' @importFrom grDevices dev.off pdf

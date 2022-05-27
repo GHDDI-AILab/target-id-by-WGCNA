@@ -27,6 +27,9 @@ Classes:
 \item \code{ProteinGroups-class}
 }
 \item \code{ExpAssayFrame-class}
+\itemize{
+\item \code{CorrelationNetwork-class}
+}
 }
 }
 
@@ -36,6 +39,13 @@ S3 methods:
 \item \code{QC()}
 \item \code{Reshape()}
 \item \code{LogNorm()}
+\item \code{Histogram()}
+\item \code{SampleTree()}
+\item \code{PickThreshold()}
+\item \code{AddNetwork()}
+\item \code{ModulePlot()}
+\item \code{AddConnectivity()}
+\item \code{GetHubGenes()}
 }
 }
 \author{
