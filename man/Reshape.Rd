@@ -27,8 +27,8 @@ columns for further analysis.
 }
 \examples{
 \dontrun{
-assay = ReadProteinGroups('.')
-frame.list = Reshape(assay)
+Assay = ReadProteinGroups('.')
+assay = Reshape(Assay)
 }
 
 }

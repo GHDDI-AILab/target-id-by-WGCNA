@@ -25,8 +25,8 @@ NULL
 
 #' The ExpAssayTable class.
 #' 
-#' A list of data.tables of experiment data, whose rows correspond
-#'   to genes.
+#' A list of data.tables of experiment data, whose 
+#'   rows correspond to genes.
 #' 
 #' @docType class
 #' @name ExpAssayTable-class
@@ -46,12 +46,23 @@ NULL
 
 #' The ExpAssayFrame class.
 #' 
-#' A list of matrices of experiment data, whose rows correspond
-#'   to samples and columns to genes.
+#' A list of data frames of experiment data, whose 
+#'   rows correspond to samples and columns to genes.
 #' 
 #' @docType class
 #' @name ExpAssayFrame-class
 #' @rdname ExpAssayFrame-class
+#' 
+NULL
+
+#' The CorrelationNetwork class.
+#' 
+#' A list of data frames of experiment data, with 
+#'   a list of corresponding correlation networks.
+#' 
+#' @docType class
+#' @name CorrelationNetwork-class
+#' @rdname CorrelationNetwork-class
 #' 
 NULL
 
@@ -211,7 +222,10 @@ print.ExpAssayTable = function(x) {
 #' new.Assay = Subset(old.Assay, samples = c("sample_1", "sample_2", "sample_3"))
 #' }
 #' 
-Subset.ExpAssayTable = function(object, samples) {
+Subset.ExpAssayTable = function(
+  object, 
+  samples
+) {
   if (!is.character(samples)) {
     stop("Invalid input samples!")
   }
@@ -235,10 +249,13 @@ Subset.ExpAssayTable = function(object, samples) {
 #' @export
 #' @examples
 #' \dontrun{
-#' new.Assay = Subset(old.Assay, samples = c("sample_1", "sample_2", "sample_3"))
+#' new.assay = Subset(old.assay, samples = c("sample_1", "sample_2", "sample_3"))
 #' }
 #' 
-Subset.ExpAssayFrame = function(object, samples) {
+Subset.ExpAssayFrame = function(
+  object, 
+  samples
+) {
   if (!is.character(samples)) {
     stop("Invalid input samples!")
   }
@@ -365,13 +382,13 @@ QC.default = function(object, ...) {
 #' @export
 #' @examples
 #' \dontrun{
-#' assay = ReadProteinGroups('.')
-#' frame.list = Reshape(assay)
+#' Assay = ReadProteinGroups('.')
+#' assay = Reshape(Assay)
 #' }
 #' 
-Reshape.ProteinGroups = function(object) {
-## @param index A length-1 character or numeric vector specifying 
-##   the data.table in the object.
+Reshape.ProteinGroups = function(
+  object
+) {
   new.object = data.table::copy(object)
   for (i in 1:length(new.object)) {
     new.object[[i]] = object[[i]][, attr(object, "experiments"), with = FALSE
@@ -404,10 +421,13 @@ Reshape.default = function(object, ...) {
 #' @export
 #' @examples
 #' \dontrun{
-#' new.framelist = LogNorm(old.framelist)
+#' new.assay = LogNorm(old.assay)
 #' }
 #' 
-LogNorm.ExpAssayFrame = function(object, inverse = TRUE) {
+LogNorm.ExpAssayFrame = function(
+  object, 
+  inverse = TRUE
+) {
   new.object = data.table::copy(object)
   for (i in 1:length(new.object)) {
     new.object[[i]] = 

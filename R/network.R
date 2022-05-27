@@ -70,8 +70,9 @@ AddNetwork.ExpAssayFrame = function(
   } else {
     stop("The given power was invalid!")
   }
-  net = data.table::copy(assay)
-  attr(net, "Network") = list()
+  new.assay = data.table::copy(assay)
+  ATTR_NET = "network"
+  attr(new.assay, ATTR_NET) = list()
   colorOrder = c("grey", WGCNA::standardColors(50))
   for (i in 1:length(assay)) {
 
@@ -89,7 +90,7 @@ AddNetwork.ExpAssayFrame = function(
   merge = WGCNA::mergeCloseModules(assay[[i]], colors = dynamicColors, 
     cutHeight = MEDissThres)
   ## Result
-  attr(net, "Network")[[i]] = list(
+  attr(new.assay, ATTR_NET)[[i]] = list(
     power = power[[i]], 
     MEDissThres = MEDissThres, 
     minModuleSize = minModuleSize, 
@@ -103,9 +104,9 @@ AddNetwork.ExpAssayFrame = function(
     )
 
   }
-  names(attr(net, "Network")) = names(net)
-  class(net) = c("CorrelationNetwork", class(net))
-  return(net)
+  names(attr(new.assay, ATTR_NET)) = names(new.assay)
+  class(new.assay) = c("CorrelationNetwork", class(new.assay))
+  return(new.assay)
 }
 
 #' @rdname AddNetwork
@@ -120,9 +121,13 @@ AddNetwork.default = function(object, ...) {
   }
 }
 
-#' Calculate the connectivity values for genes.
+#' Calculate the connectivity in a network.
+#' 
+#' Calculate both the whole network and 
+#' the intramodular connectivity for genes.
 #' 
 #' @param object A CorrelationNetwork object.
+#' @param geneinfo (A length-1 logical) Add gene annotation or not.
 #' @return A new CorrelationNetwork object.
 #' 
 #' @rdname AddConnectivity
@@ -130,26 +135,35 @@ AddNetwork.default = function(object, ...) {
 #' @export
 #' 
 AddConnectivity.CorrelationNetwork = function(
-  object
+  object, 
+  geneinfo = FALSE
 ) {
+  ATTR_NET = "network"
+  ATTR_CON = "connectivity"
   GENE = "gene"
   #MODULE = "module"
+  if (length(object) != length(attr(object, ATTR_NET))) {
+    stop("Invalid correlation network in the input!")
+  }
   new.object = data.table::copy(object)
-  attr(new.object, "connectivity") = list()
+  attr(new.object, ATTR_CON) = list()
   for (i in 1:length(new.object)) {
-    network = attr(new.object, "Network")[[i]]
+    network = attr(new.object, ATTR_NET)[[i]]
     module_labels = network$moduleLabels %>% 
       data.table::as.data.table(., keep.rownames = TRUE) %>% 
       data.table::setnames(., c(GENE, "module"))
-    attr(new.object, "connectivity")[[i]] = 
+  
+    connectivity = 
       WGCNA::intramodularConnectivity(network$adjacency, network$moduleLabels) %>% 
       data.table::as.data.table(., keep.rownames = TRUE) %>% 
       data.table::setnames(., "rn", GENE) %>% 
       .[module_labels, on = c(GENE)] %>% 
-      .[order(module, -kWithin)] %>% 
-      get_geneinfo()
+      .[order(module, -kWithin)]
+    
+    attr(new.object, ATTR_CON)[[i]] = 
+      if (geneinfo) get_geneinfo(connectivity) else connectivity
   }
-  names(attr(new.object, "connectivity")) = names(new.object)
+  names(attr(new.object, ATTR_CON)) = names(new.object)
   return(new.object)
 }
 
@@ -160,6 +174,68 @@ AddConnectivity.CorrelationNetwork = function(
 AddConnectivity.default = function(object, ...) {
   if (inherits(object, "CorrelationNetwork")) {
     AddConnectivity.CorrelationNetwork(object, ...)
+  } else {
+    stop("This method is associated with class CorrelationNetwork.")
+  }
+}
+
+#' Find hub genes in each module of a correlation network.
+#' 
+#' @param object A CorrelationNetwork object.
+#' @param intramodular.ratio.threshold Choose the genes with the connectivity higher 
+#'   than 0.9 * top_connectivity_within_the_module, 
+#'   when intramodular.ratio.threshold = 0.9.
+#' @param ratio.threshold Choose the genes with the connectivity higher 
+#'   than 0.9 * top_connectivity_across_all_modules, 
+#'   when ratio.threshold = 0.9.
+#' @param top.n (A length-1 integer) Choose n top genes in each modules.
+#' @param index A length-1 numeric or character vector specifying the frame.
+#' @param geneinfo (A length-1 logical) Add gene annotation or not.
+#' @return A data.table with hub genes.
+#' 
+#' @rdname GetHubGenes
+#' @method GetHubGenes CorrelationNetwork
+#' @export
+#' 
+GetHubGenes.CorrelationNetwork = function(
+  object, 
+  intramodular.ratio.threshold = 0.9, 
+  ratio.threshold = 0.0, 
+  top.n, 
+  index = 1, 
+  geneinfo = TRUE
+) {
+  ATTR_CON = "connectivity"
+  if (length(object) != length(attr(object, ATTR_CON))) {
+    object = AddConnectivity.CorrelationNetwork(object)
+  }
+  connectivity = attr(object, ATTR_CON)[[
+    assert_length_1(index)[[1]]
+    ]]
+  if (missing(top.n) || length(top.n) < 1) {
+    hub_genes = connectivity[, max_kWithin := max(kWithin)
+      ][, top_kWithin := max(kWithin), by = "module"
+      ][module  > 0 & 
+        kWithin > top_kWithin*intramodular.ratio.threshold & 
+        kWithin > max_kWithin*ratio.threshold
+      ][, max_kWithin := NULL
+      ][, top_kWithin := NULL
+      ][order(module, -kWithin)]
+  } else {
+    top.n = assert_length_1(top.n)
+    hub_genes = connectivity[order(module, -kWithin)
+      ][, head(.SD, top.n), by = "module"]
+  }
+  if (geneinfo) get_geneinfo(hub_genes) else hub_genes
+}
+
+#' @rdname GetHubGenes
+#' @method GetHubGenes default
+#' @export
+#' 
+GetHubGenes.default = function(object, ...) {
+  if (inherits(object, "CorrelationNetwork")) {
+    GetHubGenes.CorrelationNetwork(object, ...)
   } else {
     stop("This method is associated with class CorrelationNetwork.")
   }

@@ -4,11 +4,11 @@
 \alias{AddConnectivity}
 \alias{AddConnectivity.CorrelationNetwork}
 \alias{AddConnectivity.default}
-\title{Calculate the connectivity values of genes.}
+\title{Calculate the degree of nodes.}
 \usage{
 AddConnectivity(object, ...)
 
-\method{AddConnectivity}{CorrelationNetwork}(object)
+\method{AddConnectivity}{CorrelationNetwork}(object, geneinfo = FALSE)
 
 \method{AddConnectivity}{default}(object, ...)
 }
@@ -16,12 +16,13 @@ AddConnectivity(object, ...)
 \item{object}{A CorrelationNetwork object.}
 
 \item{...}{further arguments to be passed to or from other methods.}
+
+\item{geneinfo}{(A length-1 logical) Add gene annotation or not.}
 }
 \value{
 A new CorrelationNetwork object.
 }
 \description{
-Calculate the connectivity values of genes.
-
-Calculate the connectivity values for genes.
+Calculate both the whole network and
+the intramodular connectivity for genes.
 }

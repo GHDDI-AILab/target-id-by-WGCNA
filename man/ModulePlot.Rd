@@ -3,13 +3,13 @@
 \name{ModulePlot}
 \alias{ModulePlot}
 \alias{GeneTree}
-\alias{ModulePlot.ExpAssayFrame}
+\alias{ModulePlot.CorrelationNetwork}
 \alias{ModulePlot.default}
 \title{Plot a gene tree..}
 \usage{
 ModulePlot(object, ...)
 
-\method{ModulePlot}{ExpAssayFrame}(assay, file.prefix, plot.width = 12.5, plot.height = 10)
+\method{ModulePlot}{CorrelationNetwork}(assay, index = 1, file.prefix, plot.width = 12.5, plot.height = 10)
 
 \method{ModulePlot}{default}(object, ...)
 }
@@ -18,7 +18,9 @@ ModulePlot(object, ...)
 
 \item{...}{further arguments to be passed to or from other methods.}
 
-\item{assay}{An ExpAssayFrame object.}
+\item{assay}{A CorrelationNetwork object.}
+
+\item{index}{A length-1 numeric or character vector specifying the frame.}
 
 \item{file.prefix}{(A length-1 character) A prefix for the name of output file.}
 

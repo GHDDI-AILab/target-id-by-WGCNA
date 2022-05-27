@@ -29,7 +29,7 @@ Perform log normalization of an expression profile.
 }
 \examples{
 \dontrun{
-new.framelist = LogNorm(old.framelist)
+new.assay = LogNorm(old.assay)
 }
 
 }

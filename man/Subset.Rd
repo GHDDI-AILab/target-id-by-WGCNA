@@ -40,7 +40,7 @@ new.Assay = Subset(old.Assay, samples = c("sample_1", "sample_2", "sample_3"))
 }
 
 \dontrun{
-new.Assay = Subset(old.Assay, samples = c("sample_1", "sample_2", "sample_3"))
+new.assay = Subset(old.assay, samples = c("sample_1", "sample_2", "sample_3"))
 }
 
 }

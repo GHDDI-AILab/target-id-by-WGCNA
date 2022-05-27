@@ -5,6 +5,6 @@
 \alias{ExpAssayTable-class}
 \title{The ExpAssayTable class.}
 \description{
-A list of data.tables of experiment data, whose rows correspond
-to genes.
+A list of data.tables of experiment data, whose
+rows correspond to genes.
 }

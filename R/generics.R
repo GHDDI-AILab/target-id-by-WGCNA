@@ -95,7 +95,7 @@ GeneTree = function(...) {
   ModulePlot(...)
 }
 
-#' Calculate the connectivity values of genes.
+#' Calculate the degree of nodes.
 #' 
 #' @param object An object.
 #' @param ... further arguments to be passed to or from other methods.
@@ -103,5 +103,15 @@ GeneTree = function(...) {
 #' 
 AddConnectivity = function(object, ...) {
   UseMethod("AddConnectivity")
+}
+
+#' Find hub genes.
+#' 
+#' @param object An object.
+#' @param ... further arguments to be passed to or from other methods.
+#' @export
+#' 
+GetHubGenes = function(object, ...) {
+  UseMethod("GetHubGenes")
 }
 

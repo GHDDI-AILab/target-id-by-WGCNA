@@ -36,11 +36,9 @@ Histogram.ExpAssayFrame = function(
   } else {
     stop("The given file was invalid!")
   }
-  if (length(index) == 1) {
-    assay = object[[index]]
-  } else {
-    stop("The given index was invalid!")
-  }
+  assay = object[[
+    assert_length_1(index)[[1]]
+    ]]
   if (!missing(samples) && length(samples) > 0 && !any(is.na(samples))) {
     assay = assay[samples, ]
   }
@@ -124,22 +122,28 @@ SampleTree.default = function(object, ...) {
 
 #' Plot the gene tree of a gene co-expression network.
 #' 
-#' @param assay An ExpAssayFrame object.
+#' @param assay A CorrelationNetwork object.
+#' @param index A length-1 numeric or character vector specifying the frame.
 #' @param file.prefix (A length-1 character) A prefix for the name of output file.
 #' @param plot.width (A length-1 numeric) Set the plot width.
 #' @param plot.height (A length-1 numeric) Set the plot height.
 #' @return Path to the output file.
 #' 
 #' @rdname ModulePlot
-#' @method ModulePlot ExpAssayFrame
+#' @method ModulePlot CorrelationNetwork
 #' @export
 #' 
-ModulePlot.ExpAssayFrame = function(
+ModulePlot.CorrelationNetwork = function(
   assay, 
+  index = 1, 
   file.prefix, 
   plot.width = 12.5, 
   plot.height = 10
 ) {
+  ATTR_NET = "network"
+  net = attr(assay, ATTR_NET)[[
+    assert_length_1(index)[[1]]
+    ]]
   if (missing(file.prefix)) {
     file.prefix = ""
   } else if (is.character(file.prefix)) {
@@ -147,7 +151,6 @@ ModulePlot.ExpAssayFrame = function(
   } else {
     stop("The given file.prefix was invalid!")
   }
-  net = attr(assay, "Network") %>% assert_length_1() %>% .[[1]]
   dir = format(Sys.Date(), "Plots_%Y%m%d")
   file = sprintf("%s/%sGeneTree.power%s.pdf", dir, file.prefix, net$power)
   dir.create(dirname(file), showWarnings = FALSE, recursive = TRUE)
@@ -169,10 +172,10 @@ ModulePlot.ExpAssayFrame = function(
 #' @export
 #' 
 ModulePlot.default = function(object, ...) {
-  if (inherits(object, "ExpAssayFrame")) {
-    ModulePlot.ExpAssayFrame(object, ...)
+  if (inherits(object, "CorrelationNetwork")) {
+    ModulePlot.CorrelationNetwork(object, ...)
   } else {
-    stop("This method is associated with class ExpAssayFrame.")
+    stop("This method is associated with class CorrelationNetwork.")
   }
 }
 

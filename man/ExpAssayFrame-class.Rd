@@ -5,6 +5,6 @@
 \alias{ExpAssayFrame-class}
 \title{The ExpAssayFrame class.}
 \description{
-A list of matrices of experiment data, whose rows correspond
-to samples and columns to genes.
+A list of data frames of experiment data, whose
+rows correspond to samples and columns to genes.
 }
