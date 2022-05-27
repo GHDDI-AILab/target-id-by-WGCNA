@@ -121,7 +121,7 @@ print.ExpAssayFrame = function(x) {
                 ncol(x[[i]]), length(attr(x, 'experiments')), i))
   }
   ## Print other attributes
-  cat("Attributes:\n")
+  cat("\nAttributes:\n")
   index = setdiff(names(attributes(x)), c("names", "experiments", "class"))
   utils::str(attributes(x)[index])
   invisible(x)
