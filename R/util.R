@@ -73,7 +73,7 @@ get_geneinfo = function(
 
   d.t[gene %in% names(GENES_DICT), gene := GENES_DICT[gene]]
   AnnotationDbi::select(org.Hs.eg.db::org.Hs.eg.db, 
-    keys = d.t[, gene], columns = c("ENSEMBL","GENENAME"), keytype = "SYMBOL"
+    keys = d.t[["gene"]], columns = c("ENSEMBL","GENENAME"), keytype = "SYMBOL"
     ) %>% 
   suppressMessages() %>% 
   data.table::as.data.table() %>% 

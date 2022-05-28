@@ -1,4 +1,4 @@
-#' Subset assays.
+#' Return subsets of assays.
 #' 
 #' @param object An object.
 #' @param ... further arguments to be passed to or from other methods.
@@ -38,7 +38,7 @@ LogNorm = function(object, ...) {
   UseMethod("LogNorm")
 }
 
-#' Draw the distribution.
+#' Plot a distribution.
 #' 
 #' @param object An object.
 #' @param ... further arguments to be passed to or from other methods.
@@ -58,7 +58,7 @@ SampleTree = function(object, ...) {
   UseMethod("SampleTree")
 }
 
-#' Pick a soft threshold.
+#' Pick a threshold.
 #' 
 #' @param object An object.
 #' @param ... further arguments to be passed to or from other methods.
@@ -95,7 +95,7 @@ GeneTree = function(...) {
   ModulePlot(...)
 }
 
-#' Calculate the degree of nodes.
+#' Calculate the degree of each node.
 #' 
 #' @param object An object.
 #' @param ... further arguments to be passed to or from other methods.

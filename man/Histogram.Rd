@@ -4,7 +4,7 @@
 \alias{Histogram}
 \alias{Histogram.ExpAssayFrame}
 \alias{Histogram.default}
-\title{Draw the distribution.}
+\title{Plot a distribution.}
 \usage{
 Histogram(object, ...)
 
@@ -43,7 +43,7 @@ If not supplied, use the size of current graphics device.}
 Path to the output file.
 }
 \description{
-Draw the distribution.
+Plot a distribution.
 
 Plot the distribution of expression levels in the assay.
 }

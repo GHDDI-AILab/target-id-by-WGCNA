@@ -292,6 +292,7 @@ Reshape.ProteinGroups = function(
 ) {
   new.object = data.table::copy(object)
   for (i in 1:length(new.object)) {
+    ## TODO: the "integer64" problem
     new.object[[i]] = object[[i]][, attr(object, "experiments"), with = FALSE
 				  ] %>% t() %>% as.data.frame()
     colnames(new.object[[i]]) = object[[i]][["Gene names"]]

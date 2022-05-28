@@ -4,7 +4,7 @@
 \alias{AddConnectivity}
 \alias{AddConnectivity.CorrelationNetwork}
 \alias{AddConnectivity.default}
-\title{Calculate the degree of nodes.}
+\title{Calculate the degree of each node.}
 \usage{
 AddConnectivity(object, ...)
 

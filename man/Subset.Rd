@@ -5,7 +5,7 @@
 \alias{Subset.ExpAssayTable}
 \alias{Subset.ExpAssayFrame}
 \alias{Subset.default}
-\title{Subset assays.}
+\title{Return subsets of assays.}
 \usage{
 Subset(object, ...)
 
@@ -28,7 +28,7 @@ A new object of class ExpAssayTable.
 A new object of class ExpAssayFrame.
 }
 \description{
-Subset assays.
+Return subsets of assays.
 
 Subsetting an ExpAssayTable object.
 

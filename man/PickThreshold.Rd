@@ -4,7 +4,7 @@
 \alias{PickThreshold}
 \alias{PickThreshold.ExpAssayFrame}
 \alias{PickThreshold.default}
-\title{Pick a soft threshold.}
+\title{Pick a threshold.}
 \usage{
 PickThreshold(object, ...)
 
@@ -26,7 +26,7 @@ the scale free topology fit indices are to be calculated.}
 A new ExpAssayFrame object.
 }
 \description{
-Pick a soft threshold.
+Pick a threshold.
 
 Pick a soft-thresholding power for correlation network construction.
 }
