@@ -23,8 +23,10 @@ ReadExperimentalDesign = function(
 ) {
   ## Check the infile
   pattern = c(
-    'experimentalDesign*.*',
-    'MaxQuantOutput*/experimentalDesign*.*'
+    "MaxQuantOutput*/experimentalDesign*.*", 
+    "experimentalDesign*.*", 
+    "MaxQuantOutput*/summary*.*", 
+    "summary*.*"
     )
   data.dir = assert_length_1(data.dir)
   experimentalDesign.txt = Sys.glob(file.path(data.dir, pattern))
@@ -36,7 +38,8 @@ ReadExperimentalDesign = function(
   }
   ## Create an object
   structure(
-    list(experiments = unique(sort(DT$Experiment)), table = DT),
+    list(experiments = setdiff(unique(sort(DT$Experiment)), ""), 
+         table = DT), 
     filename = normalizePath(infile),
     class = c('ExperimentInfo', 'ExperimentList', 'list')
     )
@@ -65,8 +68,8 @@ ReadProteinGroups = function(
 ) {
   ## Check the infile
   pattern = c(
-    'proteinGroups*.*',
-    'MaxQuantOutput*/proteinGroups*.*'
+    "MaxQuantOutput*/proteinGroups*.*", 
+    "proteinGroups*.*"
     )
   data.dir = assert_length_1(data.dir)
   proteinGroups.txt = Sys.glob(file.path(data.dir, pattern))
