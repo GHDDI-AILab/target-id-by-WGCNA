@@ -1,3 +1,13 @@
+#' Tidy the values.
+#' 
+#' @param object An object.
+#' @param ... further arguments to be passed to or from other methods.
+#' @export
+#' 
+Tidy = function(object, ...) {
+  UseMethod("Tidy")
+}
+
 #' Return subsets of assays.
 #' 
 #' @param object An object.

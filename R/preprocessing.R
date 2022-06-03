@@ -74,7 +74,7 @@ ReadProteinGroups = function(
   data.dir = assert_length_1(data.dir)
   proteinGroups.txt = Sys.glob(file.path(data.dir, pattern))
   infile = assert_length_1(proteinGroups.txt)
-  ## Load the tables
+  ## Load experimentalDesign.txt and proteinGroups.txt
   info = ReadExperimentalDesign(data.dir = dirname(infile))
   DT = data.table::fread(infile)
   if (! nrow(DT) || ! ncol(DT)) {
@@ -110,6 +110,47 @@ ReadProteinGroups = function(
     filename = normalizePath(infile),
     class = c('ProteinGroups', 'ExpAssayTable', 'ExperimentList', 'list')
     )
+}
+
+#' Tidy an ExpAssayTable object.
+#' 
+#' @param object An object of class ExpAssayTable.
+#' @return A new object of class ExpAssayTable.
+#' 
+#' @rdname Tidy
+#' @method Tidy ExpAssayTable
+#' @export
+#' @examples
+#' \dontrun{
+#' new.Assay = Tidy(old.Assay)
+#' }
+#' 
+Tidy.ExpAssayTable = function(
+  object
+) {
+  new.object = data.table::copy(object)
+  samples = attr(new.object, "experiments")
+  for (i in 1:length(new.object)) {
+    ## Solve the "integer64" problem
+    new.object[[i]][, (samples) := 
+      lapply(new.object[[i]][, samples, with = FALSE], as.double)][]
+    ## Convert Nan or 0 to NA
+    convert = function(x) ifelse(is_missing_value(x), NA, x)
+    new.object[[i]][, (samples) := 
+      lapply(new.object[[i]][, samples, with = FALSE], convert)][]
+  }
+  return(new.object)
+}
+
+#' @rdname Tidy
+#' @method Tidy default
+#' @export
+Tidy.default = function(object, ...) {
+  if (inherits(object, "ExpAssayTable")) {
+    Tidy.ExpAssayTable(object, ...)
+  } else {
+    stop("This method is associated with class ExpAssayTable.")
+  }
 }
 
 #' Subsetting an ExpAssayTable object.
@@ -294,9 +335,9 @@ Reshape.ProteinGroups = function(
   object
 ) {
   new.object = data.table::copy(object)
+  samples = attr(object, "experiments")
   for (i in 1:length(new.object)) {
-    ## TODO: the "integer64" problem
-    new.object[[i]] = object[[i]][, attr(object, "experiments"), with = FALSE
+    new.object[[i]] = object[[i]][, samples, with = FALSE
 				  ] %>% t() %>% as.data.frame()
     colnames(new.object[[i]]) = object[[i]][["Gene names"]]
   }
@@ -331,7 +372,7 @@ Reshape.default = function(object, ...) {
 #' 
 LogNorm.ExpAssayFrame = function(
   object, 
-  inverse = TRUE
+  inverse = FALSE
 ) {
   new.object = data.table::copy(object)
   for (i in 1:length(new.object)) {

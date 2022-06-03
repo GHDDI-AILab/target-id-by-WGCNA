@@ -8,7 +8,7 @@
 \usage{
 LogNorm(object, ...)
 
-\method{LogNorm}{ExpAssayFrame}(object, inverse = TRUE)
+\method{LogNorm}{ExpAssayFrame}(object, inverse = FALSE)
 
 \method{LogNorm}{default}(object, ...)
 }

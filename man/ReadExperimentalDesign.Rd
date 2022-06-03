@@ -15,7 +15,7 @@ Directory containing the MaxQuantOutput data.}
 A list containing the experiment information.
 }
 \description{
-Load the data from the experimentalDesign.txt file in
+Load the data from the experimentalDesign.txt or summary.txt file in
 MaxQuantOutput/ and create an ExperimentInfo object.
 }
 \examples{
