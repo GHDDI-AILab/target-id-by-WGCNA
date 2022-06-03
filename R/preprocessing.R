@@ -5,7 +5,7 @@ NULL
 
 #' Read the experiment information of mass spectrometry data.
 #'
-#' Load the data from the experimentalDesign.txt file in 
+#' Load the data from the experimentalDesign.txt or summary.txt file in 
 #' MaxQuantOutput/ and create an ExperimentInfo object.
 #'
 #' @param data.dir (length-1 character vector) 
