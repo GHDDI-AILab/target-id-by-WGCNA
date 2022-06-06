@@ -15,11 +15,11 @@ NULL
 #' @export
 #' @examples
 #' \dontrun{
-#' object <- ReadExperimentalDesign('.')
+#' object = ReadExperimentalDesign(".")
 #' }
 #'
 ReadExperimentalDesign = function(
-  data.dir = '.'
+  data.dir = "."
 ) {
   ## Check the infile
   pattern = c(
@@ -33,15 +33,15 @@ ReadExperimentalDesign = function(
   infile = assert_length_1(experimentalDesign.txt)
   ## Load the table
   DT = data.table::fread(infile)
-  if (! nrow(DT) || ! 'Experiment' %in% names(DT)) {
-    stop('Empty or invalid experimentalDesign file!')
+  if (! nrow(DT) || ! "Experiment" %in% names(DT)) {
+    stop("Empty or invalid experimentalDesign file!")
   }
   ## Create an object
   structure(
     list(experiments = setdiff(unique(sort(DT$Experiment)), ""), 
          table = DT), 
     filename = normalizePath(infile),
-    class = c('ExperimentInfo', 'ExperimentList', 'list')
+    class = c("ExperimentInfo", "ExperimentList", "list")
     )
 }
 
@@ -59,12 +59,12 @@ ReadExperimentalDesign = function(
 #' @export
 #' @examples
 #' \dontrun{
-#' object <- ReadProteinGroups('.', col = 'Ratio H/L normalized')
+#' object = ReadProteinGroups(".", col = "Ratio H/L normalized")
 #' }
 #'
 ReadProteinGroups = function(
-  data.dir = '.',
-  column.prefix = c('Ratio H/L normalized', 'LFQ intensity')
+  data.dir = ".",
+  column.prefix = c("Ratio H/L normalized", "LFQ intensity")
 ) {
   ## Check the infile
   pattern = c(
@@ -78,7 +78,7 @@ ReadProteinGroups = function(
   info = ReadExperimentalDesign(data.dir = dirname(infile))
   DT = data.table::fread(infile)
   if (! nrow(DT) || ! ncol(DT)) {
-    stop('Empty or invalid proteinGroups file!')
+    stop("Empty or invalid proteinGroups file!")
   }
   ## Find the columns that are not sample-specific
   sample_cols = lapply(info$experiments, 
@@ -108,7 +108,7 @@ ReadProteinGroups = function(
     Assays,
     experiments = info$experiments,
     filename = normalizePath(infile),
-    class = c('ProteinGroups', 'ExpAssayTable', 'ExperimentList', 'list')
+    class = c("ProteinGroups", "ExpAssayTable", "ExperimentList", "list")
     )
 }
 
@@ -245,7 +245,7 @@ Subset.default = function(object, ...) {
 QC.ProteinGroups = function(
   object, 
   min.unique.peptides = 2, 
-  min.fraction = 0.2
+  min.fraction = 0.5
 ) {
   ## Create a new object
   new.object = data.table::copy(object)
@@ -327,19 +327,19 @@ QC.default = function(object, ...) {
 #' @export
 #' @examples
 #' \dontrun{
-#' Assay = ReadProteinGroups('.')
+#' Assay = ReadProteinGroups(".")
 #' assay = Reshape(Assay)
 #' }
 #' 
 Reshape.ProteinGroups = function(
   object
 ) {
-  new.object = data.table::copy(object)
-  samples = attr(object, "experiments")
+  new.object = Tidy(object)
+  samples = attr(new.object, "experiments")
   for (i in 1:length(new.object)) {
-    new.object[[i]] = object[[i]][, samples, with = FALSE
-				  ] %>% t() %>% as.data.frame()
-    colnames(new.object[[i]]) = object[[i]][["Gene names"]]
+    genenames = new.object[[i]][["Gene names"]]
+    new.object[[i]] = as.data.frame(t(new.object[[i]][, samples, with = FALSE]))
+    colnames(new.object[[i]]) = genenames
   }
   class(new.object) = c("ExpAssayFrame", "ExperimentList", "list")
   return(new.object)

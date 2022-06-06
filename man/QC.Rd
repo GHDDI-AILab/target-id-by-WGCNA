@@ -8,7 +8,7 @@
 \usage{
 QC(object, ...)
 
-\method{QC}{ProteinGroups}(object, min.unique.peptides = 2, min.fraction = 0.2)
+\method{QC}{ProteinGroups}(object, min.unique.peptides = 2, min.fraction = 0.5)
 
 \method{QC}{default}(object, ...)
 }

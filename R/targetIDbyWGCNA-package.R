@@ -17,6 +17,7 @@
 #'     - `CorrelationNetwork-class`
 #' 
 #' S3 methods:
+#' - `Tidy()`
 #' - `Subset()`
 #' - `QC()`
 #' - `Reshape()`

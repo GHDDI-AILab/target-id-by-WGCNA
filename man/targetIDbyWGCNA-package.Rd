@@ -35,6 +35,7 @@ Classes:
 
 S3 methods:
 \itemize{
+\item \code{Tidy()}
 \item \code{Subset()}
 \item \code{QC()}
 \item \code{Reshape()}

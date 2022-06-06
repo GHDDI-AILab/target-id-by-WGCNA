@@ -20,7 +20,7 @@ MaxQuantOutput/ and create an ExperimentInfo object.
 }
 \examples{
 \dontrun{
-object <- ReadExperimentalDesign('.')
+object = ReadExperimentalDesign(".")
 }
 
 }

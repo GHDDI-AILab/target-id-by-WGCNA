@@ -26,7 +26,7 @@ MaxQuantOutput/ and create a ProteinGroups object.
 }
 \examples{
 \dontrun{
-object <- ReadProteinGroups('.', col = 'Ratio H/L normalized')
+object = ReadProteinGroups(".", col = "Ratio H/L normalized")
 }
 
 }

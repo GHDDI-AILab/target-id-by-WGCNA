@@ -48,8 +48,10 @@ Histogram.ExpAssayFrame = function(
   d.f = data.frame(unlist(assay, use.names = FALSE))
   names(d.f) = "Level"
   p = ggplot2::ggplot(d.f, ggplot2::aes(x = Level)) +   
-    ggplot2::geom_histogram(ggplot2::aes(y = ..count..), binwidth = 0.05, 
-                            alpha = 0.3, position = "identity")
+    ggplot2::geom_histogram(ggplot2::aes(y = ..count..), 
+                            binwidth = 0.05, 
+                            alpha = 0.3, 
+                            position = "identity")
   dir.create(dirname(file), showWarnings = FALSE, recursive = TRUE)
   ggplot2::ggsave(file, p, width = plot.width, height = plot.height)
   invisible(file)
@@ -90,8 +92,7 @@ SampleTree.ExpAssayFrame = function(
   plot.height = 12
 ) {
   d.f = assert_length_1(assay)[[1]]
-  tree = stats::dist(d.f) %>% 
-    fastcluster::hclust(., method = "average")
+  tree = fastcluster::hclust(stats::dist(d.f), method = "average")
   if (missing(file)) {
     file = format(Sys.Date(), "Plots_%Y%m%d/SampleClustering.pdf")
   } else {
