@@ -5,22 +5,20 @@
 \alias{GeneTree}
 \alias{ModulePlot.CorrelationNetwork}
 \alias{ModulePlot.default}
-\title{Plot a gene tree..}
+\title{Plot a gene tree.}
 \usage{
 ModulePlot(object, ...)
 
-\method{ModulePlot}{CorrelationNetwork}(assay, index = 1, file.prefix, plot.width = 12.5, plot.height = 10)
+\method{ModulePlot}{CorrelationNetwork}(object, index = 1, file.prefix, plot.width = 12.5, plot.height = 10)
 
 \method{ModulePlot}{default}(object, ...)
 }
 \arguments{
-\item{object}{An object.}
+\item{object}{A CorrelationNetwork object.}
 
 \item{...}{further arguments to be passed to or from other methods.}
 
-\item{assay}{A CorrelationNetwork object.}
-
-\item{index}{A length-1 numeric or character vector specifying the frame.}
+\item{index}{A length-1 numeric or character vector specifying the frame. (default: 1)}
 
 \item{file.prefix}{(A length-1 character) A prefix for the name of output file.}
 
@@ -32,7 +30,7 @@ ModulePlot(object, ...)
 Path to the output file.
 }
 \description{
-Plot a gene tree..
+Plot a gene tree.
 
 Plot the gene tree of a gene co-expression network.
 }

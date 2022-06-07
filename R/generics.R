@@ -78,7 +78,7 @@ PickThreshold = function(object, ...) {
   UseMethod("PickThreshold")
 }
 
-#' Construct a correlation network..
+#' Construct a correlation network.
 #' 
 #' @param object An object.
 #' @param ... further arguments to be passed to or from other methods.
@@ -88,7 +88,7 @@ AddNetwork = function(object, ...) {
   UseMethod("AddNetwork")
 }
 
-#' Plot a gene tree..
+#' Plot a gene tree.
 #' 
 #' @aliases GeneTree
 #' @param object An object.

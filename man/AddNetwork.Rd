@@ -4,7 +4,7 @@
 \alias{AddNetwork}
 \alias{AddNetwork.ExpAssayFrame}
 \alias{AddNetwork.default}
-\title{Construct a correlation network..}
+\title{Construct a correlation network.}
 \usage{
 AddNetwork(object, ...)
 
@@ -26,7 +26,7 @@ for the adjacency function in WGCNA analysis.}
 A CorrelationNetwork object.
 }
 \description{
-Construct a correlation network..
+Construct a correlation network.
 
 Construct a correlation network by the gene expression profiles.
 }

@@ -9,7 +9,8 @@
 SampleTree(object, ...)
 
 \method{SampleTree}{ExpAssayFrame}(
-  assay,
+  object,
+  index = 1,
   file,
   title = "Sample Clustering",
   hline = 50,
@@ -20,11 +21,11 @@ SampleTree(object, ...)
 \method{SampleTree}{default}(object, ...)
 }
 \arguments{
-\item{object}{An object.}
+\item{object}{An ExpAssayFrame object.}
 
 \item{...}{further arguments to be passed to or from other methods.}
 
-\item{assay}{An ExpAssayFrame object.}
+\item{index}{A length-1 numeric or character vector specifying the frame. (default: 1)}
 
 \item{file}{(A length-1 character vector) File path to save the plot.}
 

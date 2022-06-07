@@ -8,7 +8,7 @@ NULL
 #' @param object An ExpAssayFrame object.
 #' @param samples A character vector specifying the samples of interest.
 #' @param genes A character vector specifying the genes of interest.
-#' @param index A length-1 numeric or character vector specifying the frame.
+#' @param index A length-1 numeric or character vector specifying the frame. (default: 1)
 #' @param file (A length-1 character vector) File path to save the plot.
 #' @param plot.width (A length-1 numeric) Set the plot width. 
 #'   If not supplied, use the size of current graphics device.
@@ -71,7 +71,8 @@ Histogram.default = function(object, ...) {
 
 #' Make a plot of sample clustering using an expression profile.
 #' 
-#' @param assay An ExpAssayFrame object.
+#' @param object An ExpAssayFrame object.
+#' @param index A length-1 numeric or character vector specifying the frame. (default: 1)
 #' @param file (A length-1 character vector) File path to save the plot.
 #' @param title (A length-1 character vector) Title for the plot.
 #' @param hline (A length-1 numeric) Set the position of a red horizontal line.
@@ -84,14 +85,17 @@ Histogram.default = function(object, ...) {
 #' @export
 #' 
 SampleTree.ExpAssayFrame = function(
-  assay, 
+  object, 
+  index = 1, 
   file, 
   title = "Sample Clustering", 
   hline = 50, 
   plot.width = 20, 
   plot.height = 12
 ) {
-  d.f = assert_length_1(assay)[[1]]
+  d.f = object[[
+    assert_length_1(index)[[1]]
+    ]]
   tree = fastcluster::hclust(stats::dist(d.f), method = "average")
   if (missing(file)) {
     file = format(Sys.Date(), "Plots_%Y%m%d/SampleClustering.pdf")
@@ -123,8 +127,8 @@ SampleTree.default = function(object, ...) {
 
 #' Plot the gene tree of a gene co-expression network.
 #' 
-#' @param assay A CorrelationNetwork object.
-#' @param index A length-1 numeric or character vector specifying the frame.
+#' @param object A CorrelationNetwork object.
+#' @param index A length-1 numeric or character vector specifying the frame. (default: 1)
 #' @param file.prefix (A length-1 character) A prefix for the name of output file.
 #' @param plot.width (A length-1 numeric) Set the plot width.
 #' @param plot.height (A length-1 numeric) Set the plot height.
@@ -135,14 +139,14 @@ SampleTree.default = function(object, ...) {
 #' @export
 #' 
 ModulePlot.CorrelationNetwork = function(
-  assay, 
+  object, 
   index = 1, 
   file.prefix, 
   plot.width = 12.5, 
   plot.height = 10
 ) {
   ATTR_NET = "network"
-  net = attr(assay, ATTR_NET)[[
+  net = attr(object, ATTR_NET)[[
     assert_length_1(index)[[1]]
     ]]
   if (missing(file.prefix)) {

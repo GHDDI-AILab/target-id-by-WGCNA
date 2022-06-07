@@ -29,7 +29,7 @@ Histogram(object, ...)
 
 \item{genes}{A character vector specifying the genes of interest.}
 
-\item{index}{A length-1 numeric or character vector specifying the frame.}
+\item{index}{A length-1 numeric or character vector specifying the frame. (default: 1)}
 
 \item{file}{(A length-1 character vector) File path to save the plot.}
 
