@@ -261,11 +261,21 @@ QC.ProteinGroups = function(
   feature.counts[, "Assay" := names(new.object)]
   feature.counts[, "Raw data" := vapply(new.object, nrow, integer(1))]
   ## Remove false hits
+  ## column name: `Potential contaminant` or `Contaminant`
+  ## column name: `Reverse`
+  ## column name: `Only identified by site`
   for (i in 1:length(new.object)) {
-    new.object[[i]] = new.object[[i]][
-      `Potential contaminant` != "+" & 
-      `Reverse` != "+" & 
-      `Only identified by site` != "+", 
+    d.t = new.object[[i]]
+    contaminant  = grep("contaminant", names(d.t), 
+                        ignore.case = TRUE, value = TRUE) %>% assert_length_1()
+    reverse      = grep("Reverse", names(d.t), 
+                        ignore.case = TRUE, value = TRUE) %>% assert_length_1()
+    only_by_site = grep("Only identified by site", names(d.t), 
+                        ignore.case = TRUE, value = TRUE) %>% assert_length_1()
+    new.object[[i]] = d.t[
+      (is.na(d.t[[contaminant]]) | d.t[[contaminant]] != "+") & 
+      (is.na(d.t[[reverse]]) | d.t[[reverse]] != "+") & 
+      (is.na(d.t[[only_by_site]]) | d.t[[only_by_site]] != "+"), 
       ]
   }
   feature.counts[, "Remove false hits" := vapply(new.object, nrow, integer(1))]

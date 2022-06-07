@@ -66,6 +66,7 @@ get_geneinfo = function(
     "ATP5B"  = "ATP5F1B", 
     "ATP5F1" = "ATP5PB", 
     "ATP5O"  = "ATP5PO", 
+    "CSDA"   = "YBX3", 
     "GARS"   = "GARS1", 
     "H1F0"   = "H1-0", 
     "WARS"   = "WARS1"
