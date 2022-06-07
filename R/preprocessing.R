@@ -37,8 +37,11 @@ ReadExperimentalDesign = function(
     stop("Empty or invalid experimentalDesign file!")
   }
   ## Create an object
+  samples = as.character(unique(sort(DT$Experiment))) %>% 
+    setdiff(., "")
+  DT[, Experiment := as.character(Experiment)]
   structure(
-    list(experiments = setdiff(unique(sort(DT$Experiment)), ""), 
+    list(experiments = samples, 
          table = DT), 
     filename = normalizePath(infile),
     class = c("ExperimentInfo", "ExperimentList", "list")
@@ -90,13 +93,14 @@ ReadProteinGroups = function(
     ## There may be no column with the prefix, so we need to check:
     sample_cols = lapply(paste(prefix, info$experiments),
                          function(i) which(i == names(DT))) %>% unlist()
-    if (length(sample_cols)) {
+    if (length(sample_cols) > 0) {
       Assays[[prefix]] = cbind(
         DT[, non_samples, with = FALSE],
         DT[, sample_cols, with = FALSE]
         )
       data.table::setnames(Assays[[prefix]],
-        old = paste(prefix, info$experiments), new = info$experiments,
+        old = paste(prefix, info$experiments), 
+        new = as.character(info$experiments),
         skip_absent = TRUE
         )
     }
