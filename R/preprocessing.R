@@ -101,6 +101,10 @@ ReadProteinGroups = function(
         )
     }
   }
+  ## Check the extraction
+  if (length(Assays) < 1) {
+    stop("Cannot find the columns with the given column.prefix!")
+  }
   ## Remove the original data table from memory
   rm(DT)
   ## Create an object
