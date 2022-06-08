@@ -439,9 +439,9 @@ Normalize.ExpAssayFrame = function(
   }
   new.object = data.table::copy(object)
   for (i in 1:length(new.object)) {
-    d.f = t(new.object[[i]])
+    d.f = as.data.frame(t(new.object[[i]]))
     d.f[, colnames(d.f)] = lapply(d.f, normalize)
-    new.object[[i]] = t(d.f)
+    new.object[[i]] = as.data.frame(t(d.f))
   }
   return(new.object)
 }
