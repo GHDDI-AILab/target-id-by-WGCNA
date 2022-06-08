@@ -39,7 +39,8 @@ S3 methods:
 \item \code{Subset()}
 \item \code{QC()}
 \item \code{Reshape()}
-\item \code{LogNorm()}
+\item \code{LogTransform()}
+\item \code{Normalize()}
 \item \code{Histogram()}
 \item \code{SampleTree()}
 \item \code{PickThreshold()}

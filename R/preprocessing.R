@@ -142,8 +142,8 @@ Tidy.ExpAssayTable = function(
     ## Solve the "integer64" problem
     new.object[[i]][, (samples) := 
       lapply(new.object[[i]][, samples, with = FALSE], as.double)][]
-    ## Convert Nan or 0 to NA
-    convert = function(x) ifelse(is_missing_value(x), NA, x)
+    ## Convert NaN or 0 to NA
+    convert = function(x) ifelse(is_missing_in_ms(x), NA, x)
     new.object[[i]][, (samples) := 
       lapply(new.object[[i]][, samples, with = FALSE], convert)][]
   }
@@ -311,7 +311,7 @@ QC.ProteinGroups = function(
   for (i in 1:length(new.object)) {
     nSamples = length(experiments)
     mat = as.matrix(new.object[[i]][, experiments, with = FALSE])
-    non.NA.fraction = rowSums(!is_missing_value(mat)) / nSamples
+    non.NA.fraction = rowSums(!is_missing_in_ms(mat)) / nSamples
     new.object[[i]] = new.object[[i]][non.NA.fraction >= min.fraction, ]
   }
   feature.counts[, paste("goodGenes, min.fraction >=", min.fraction) := 
@@ -375,20 +375,20 @@ Reshape.default = function(object, ...) {
   }
 }
 
-#' Perform log normalization of an expression profile.
+#' Perform log2 transformation of an expression profile.
 #' 
 #' @param object An object of class ExpAssayFrame.
 #' @param inverse (logical) Compute log2 (FALSE) or -log2 (TRUE).
 #' @return A new object of class ExpAssayFrame.
-#' @rdname LogNorm
-#' @method LogNorm ExpAssayFrame
+#' @rdname LogTransform
+#' @method LogTransform ExpAssayFrame
 #' @export
 #' @examples
 #' \dontrun{
-#' new.assay = LogNorm(old.assay)
+#' new.assay = LogTransform(old.assay)
 #' }
 #' 
-LogNorm.ExpAssayFrame = function(
+LogTransform.ExpAssayFrame = function(
   object, 
   inverse = FALSE
 ) {
@@ -400,13 +400,59 @@ LogNorm.ExpAssayFrame = function(
   return(new.object)
 }
 
-#' @rdname LogNorm
-#' @method LogNorm default
+#' @rdname LogTransform
+#' @method LogTransform default
 #' @export
 #' 
-LogNorm.default = function(object, ...) {
+LogTransform.default = function(object, ...) {
   if (inherits(object, "ExpAssayFrame")) {
-    LogNorm.ExpAssayFrame(object, ...)
+    LogTransform.ExpAssayFrame(object, ...)
+  } else {
+    stop("This method is associated with class ExpAssayFrame.")
+  }
+}
+
+#' Normalize a log-transformed expression profile.
+#' 
+#' @param object An object of class ExpAssayFrame.
+#' @param method Choose the method to use.
+#' @return A new object of class ExpAssayFrame.
+#' @rdname Normalize
+#' @method Normalize ExpAssayFrame
+#' @export
+#' @examples
+#' \dontrun{
+#' new.assay = Normalize(LogTransform(old.assay), method = "center.median")
+#' }
+#' 
+Normalize.ExpAssayFrame = function(
+  object, 
+  method = "center.median"
+) {
+  if (assert_length_1(method) == "center.median") {
+    normalize = function(x) {
+      x[is_missing_in_ms(x)] = NA
+      x - stats::median(x, na.rm = TRUE)
+    }
+  } else {
+    stop("The input method for normalization was not supported!")
+  }
+  new.object = data.table::copy(object)
+  for (i in 1:length(new.object)) {
+    d.f = t(new.object[[i]])
+    d.f[, colnames(d.f)] = lapply(d.f, normalize)
+    new.object[[i]] = t(d.f)
+  }
+  return(new.object)
+}
+
+#' @rdname Normalize
+#' @method Normalize default
+#' @export
+#' 
+Normalize.default = function(object, ...) {
+  if (inherits(object, "ExpAssayFrame")) {
+    Normalize.ExpAssayFrame(object, ...)
   } else {
     stop("This method is associated with class ExpAssayFrame.")
   }

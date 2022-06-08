@@ -85,18 +85,18 @@ get_geneinfo = function(
   .[d.t, on = "gene"]
 }
 
-#' Check missing values.
+#' Check missing values in mass spectrometry data.
 #' 
-#' Check if the values are missing 
+#' Check if the values are missing in MS data 
 #' (NA in labelled MS data, and 0 in label-free MS data).
 #' @param x A numeric vector.
 #' @return A logical vector.
 #' @examples
 #' \dontrun{
-#' is_missing_value(c(1, 0, 0, 1))
+#' is_missing_in_ms(c(1, 0, NA, -Inf))
 #' }
 #' 
-is_missing_value = function(x) {
-  is.na(x) | x == 0
+is_missing_in_ms = function(x) {
+  is.na(x) | x == 0 | is.infinite(x)
 }
 

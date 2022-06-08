@@ -38,14 +38,24 @@ Reshape = function(object, ...) {
   UseMethod("Reshape")
 }
 
-#' Perform log normalization.
+#' Perform log transformation.
 #' 
 #' @param object An object.
 #' @param ... further arguments to be passed to or from other methods.
 #' @export
 #' 
-LogNorm = function(object, ...) {
-  UseMethod("LogNorm")
+LogTransform = function(object, ...) {
+  UseMethod("LogTransform")
+}
+
+#' Perform normalization.
+#' 
+#' @param object An object.
+#' @param ... further arguments to be passed to or from other methods.
+#' @export
+#' 
+Normalize = function(object, ...) {
+  UseMethod("Normalize")
 }
 
 #' Plot a distribution.

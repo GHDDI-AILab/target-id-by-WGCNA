@@ -21,7 +21,8 @@
 #' - `Subset()`
 #' - `QC()`
 #' - `Reshape()`
-#' - `LogNorm()`
+#' - `LogTransform()`
+#' - `Normalize()`
 #' - `Histogram()`
 #' - `SampleTree()`
 #' - `PickThreshold()`
@@ -33,11 +34,12 @@
 #' @importFrom graphics abline par
 #' @importFrom grDevices dev.off pdf
 #' @importFrom utils capture.output head str
-#' @importFrom stats as.dist dist setNames
+#' @importFrom stats as.dist dist median setNames
 #' @importFrom data.table ":=" .SD as.data.table copy data.table fread fwrite setnames
 #' @importFrom magrittr "%>%" "%T>%"
 #' @importFrom ggplot2 aes geom_histogram ggplot ggsave
-#' @importFrom WGCNA TOMsimilarity adjacency cor corPvalueStudent intramodularConnectivity labeledHeatmap labels2colors moduleEigengenes mergeCloseModules plotDendroAndColors pickSoftThreshold standardColors verboseScatterplot
+#' @importFrom WGCNA TOMsimilarity adjacency intramodularConnectivity mergeCloseModules moduleEigengenes pickSoftThreshold
+#' @importFrom WGCNA cor corPvalueStudent labeledHeatmap labels2colors plotDendroAndColors standardColors verboseScatterplot
 #' @importFrom fastcluster hclust
 #' @importFrom dynamicTreeCut cutreeDynamic
 #' @importFrom org.Hs.eg.db org.Hs.eg.db
