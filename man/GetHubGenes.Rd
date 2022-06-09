@@ -34,7 +34,7 @@ when ratio.threshold = 0.9.}
 
 \item{top.n}{(A length-1 integer) Choose n top genes in each modules.}
 
-\item{index}{A length-1 numeric or character vector specifying the frame.}
+\item{index}{A length-1 numeric or character vector specifying the frame. (default: 1)}
 
 \item{geneinfo}{(A length-1 logical) Add gene annotation or not.}
 }

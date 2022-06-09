@@ -124,7 +124,7 @@ AddNetwork.default = function(object, ...) {
 #' Calculate the connectivity in a network.
 #' 
 #' Calculate both the whole network and 
-#' the intramodular connectivity for genes.
+#' the intramodular connectivity for all genes.
 #' 
 #' @param object A CorrelationNetwork object.
 #' @param geneinfo (A length-1 logical) Add gene annotation or not.
@@ -182,6 +182,44 @@ AddConnectivity.default = function(object, ...) {
   }
 }
 
+#' Return the connectivity in a network.
+#' 
+#' Return both the whole network and 
+#' the intramodular connectivity for all genes.
+#' 
+#' @param object A CorrelationNetwork object.
+#' @param geneinfo (A length-1 logical) Add gene annotation or not.
+#' @param index A length-1 numeric or character vector specifying the frame. (default: 1)
+#' @return A new CorrelationNetwork object.
+#' 
+#' @rdname GetConnectivity
+#' @method GetConnectivity CorrelationNetwork
+#' @export
+#' 
+GetConnectivity.CorrelationNetwork = function(
+  object, 
+  geneinfo = TRUE, 
+  index = 1
+) {
+  ATTR_CON = "connectivity"
+  connectivity = attr(new.object, ATTR_CON)[[
+    assert_length_1(index)
+    ]]
+  if (geneinfo) get_geneinfo(connectivity) else connectivity
+}
+
+#' @rdname GetConnectivity
+#' @method GetConnectivity default
+#' @export
+#' 
+GetConnectivity.default = function(object, ...) {
+  if (inherits(object, "CorrelationNetwork")) {
+    GetConnectivity.CorrelationNetwork(object, ...)
+  } else {
+    stop("This method is associated with class CorrelationNetwork.")
+  }
+}
+
 #' Find hub genes in each module of a correlation network.
 #' 
 #' @param object A CorrelationNetwork object.
@@ -192,7 +230,7 @@ AddConnectivity.default = function(object, ...) {
 #'   than 0.9 * top_connectivity_across_all_modules, 
 #'   when ratio.threshold = 0.9.
 #' @param top.n (A length-1 integer) Choose n top genes in each modules.
-#' @param index A length-1 numeric or character vector specifying the frame.
+#' @param index A length-1 numeric or character vector specifying the frame. (default: 1)
 #' @param geneinfo (A length-1 logical) Add gene annotation or not.
 #' @return A data.table with hub genes.
 #' 

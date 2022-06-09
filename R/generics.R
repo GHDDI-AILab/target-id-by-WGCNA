@@ -125,6 +125,16 @@ AddConnectivity = function(object, ...) {
   UseMethod("AddConnectivity")
 }
 
+#' Return the degree of each node.
+#' 
+#' @param object An object.
+#' @param ... further arguments to be passed to or from other methods.
+#' @export
+#' 
+GetConnectivity = function(object, ...) {
+  UseMethod("GetConnectivity")
+}
+
 #' Find hub genes.
 #' 
 #' @param object An object.

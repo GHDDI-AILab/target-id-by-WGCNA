@@ -24,5 +24,5 @@ A new CorrelationNetwork object.
 }
 \description{
 Calculate both the whole network and
-the intramodular connectivity for genes.
+the intramodular connectivity for all genes.
 }
