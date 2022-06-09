@@ -8,7 +8,7 @@
 #' Show(data.dir)
 #' 
 Show = function(x) {
-  name = as.character(substitute(x))
+  name = capture.output(dput(substitute(x)))
   repr = capture.output(dput(x))
   cat(sprintf("%s = %s\n", name, repr))
   invisible(x)
@@ -33,9 +33,9 @@ Show = function(x) {
 #' 
 assert_length_1 = function(x) {
   if (length(x) < 1) {
-    stop(sprintf('No %s was found!', as.character(substitute(x))))
+    stop(sprintf('No %s was found!', capture.output(dput(substitute(x)))))
   } else if (length(x) > 1) {
-    warning(sprintf('More than one %s!', as.character(substitute(x))))
+    warning(sprintf('More than one %s!', capture.output(dput(substitute(x)))))
   }
   return(x[1])  ## `[` won't change the type. 
 }
