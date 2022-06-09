@@ -16,9 +16,7 @@ The input variable.
 Print the name and the value of a variable.
 }
 \examples{
-\dontrun{
-data.dir = '/path/to/dir'
+data.dir = "/path/to/dir"
 Show(data.dir)
-}
 
 }

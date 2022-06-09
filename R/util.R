@@ -2,11 +2,10 @@
 #' 
 #' @param x The object to display.
 #' @return The input variable.
+#' @export
 #' @examples
-#' \dontrun{
-#' data.dir = '/path/to/dir'
+#' data.dir = "/path/to/dir"
 #' Show(data.dir)
-#' }
 #' 
 Show = function(x) {
   name = as.character(substitute(x))
@@ -23,15 +22,14 @@ Show = function(x) {
 #' 
 #' @param x The object for checking.
 #' @return The first element of the input.
+#' @export
 #' @examples
-#' \dontrun{
-#' data.dir = '.'
+#' data.dir = "."
 #' Show(data.dir)
 #' assert_length_1(data.dir)
-#' data.dir = c('.', '/path/to/dir')
+#' data.dir = c(".", "/path/to/dir")
 #' Show(data.dir)
 #' assert_length_1(data.dir)
-#' }
 #' 
 assert_length_1 = function(x) {
   if (length(x) < 1) {
@@ -57,7 +55,9 @@ get_geneinfo = function(
   d.t, 
   remove_dup = TRUE
 ) {
-
+  if (all(c("ensembl", "fullname", "gene") %in% names(d.t))) {
+    return(d.t[])
+  }
   ## A dict with previous and current gene names.
   GENES_DICT = c(
     # previous / approved names
@@ -71,7 +71,12 @@ get_geneinfo = function(
     "H1F0"   = "H1-0", 
     "WARS"   = "WARS1"
     )
-
+  ## Check the column `gene`
+  if (! "gene" %in% names(d.t)) {
+    col = grep("^gene", names(d.t), ignore.case = TRUE, value = TRUE) %>% 
+      assert_length_1()
+    setnames(d.t, col, "gene")
+  } 
   d.t[gene %in% names(GENES_DICT), gene := GENES_DICT[gene]]
   AnnotationDbi::select(org.Hs.eg.db::org.Hs.eg.db, 
     keys = d.t[["gene"]], columns = c("ENSEMBL","GENENAME"), keytype = "SYMBOL"

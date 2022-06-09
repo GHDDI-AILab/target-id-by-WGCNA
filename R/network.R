@@ -77,34 +77,32 @@ AddNetwork.ExpAssayFrame = function(
   attr(new.assay, ATTR_NET) = list()
   colorOrder = c("grey", WGCNA::standardColors(50))
   for (i in 1:length(assay)) {
-
-  genes = colnames(assay[[i]])
-  adjMat = WGCNA::adjacency(assay[[i]], power = power[[i]])
-  dissTOM = 1 - WGCNA::TOMsimilarity(adjMat)
-  geneTree = fastcluster::hclust(stats::as.dist(dissTOM), method = "average")
-  dynamicModules = dynamicTreeCut::cutreeDynamic(
-    dendro = geneTree, distM = dissTOM, 
-    deepSplit = 2, pamRespectsDendro = FALSE, 
-    minClusterSize = minModuleSize
-    )
-  dynamicColors = WGCNA::labels2colors(dynamicModules)
-  MEList = WGCNA::moduleEigengenes(assay[[i]], colors = dynamicColors)
-  merge = WGCNA::mergeCloseModules(assay[[i]], colors = dynamicColors, 
-    cutHeight = MEDissThres)
-  ## Result
-  attr(new.assay, ATTR_NET)[[i]] = list(
-    power = power[[i]], 
-    MEDissThres = MEDissThres, 
-    minModuleSize = minModuleSize, 
-    adjacency = adjMat, 
-    dissTOM = dissTOM, 
-    geneTree = geneTree, 
-    MEs = merge$newMEs, 
-    moduleColors = stats::setNames(merge$colors, genes), 
-    moduleLabels = stats::setNames(match(merge$colors, colorOrder)-1, genes), 
-    unmergedColors = stats::setNames(dynamicColors, genes)
-    )
-
+    genes = colnames(assay[[i]])
+    adjMat = WGCNA::adjacency(assay[[i]], power = power[[i]])
+    dissTOM = 1 - WGCNA::TOMsimilarity(adjMat)
+    geneTree = fastcluster::hclust(stats::as.dist(dissTOM), method = "average")
+    dynamicModules = dynamicTreeCut::cutreeDynamic(
+      dendro = geneTree, distM = dissTOM, 
+      deepSplit = 2, pamRespectsDendro = FALSE, 
+      minClusterSize = minModuleSize
+      )
+    dynamicColors = WGCNA::labels2colors(dynamicModules)
+    MEList = WGCNA::moduleEigengenes(assay[[i]], colors = dynamicColors)
+    merge = WGCNA::mergeCloseModules(assay[[i]], colors = dynamicColors, 
+      cutHeight = MEDissThres)
+    ## Result
+    attr(new.assay, ATTR_NET)[[i]] = list(
+      power = power[[i]], 
+      MEDissThres = MEDissThres, 
+      minModuleSize = minModuleSize, 
+      adjacency = adjMat, 
+      dissTOM = dissTOM, 
+      geneTree = geneTree, 
+      MEs = merge$newMEs, 
+      moduleColors = stats::setNames(merge$colors, genes), 
+      moduleLabels = stats::setNames(match(merge$colors, colorOrder)-1, genes), 
+      unmergedColors = stats::setNames(dynamicColors, genes)
+      )
   }
   names(attr(new.assay, ATTR_NET)) = names(new.assay)
   class(new.assay) = c("CorrelationNetwork", class(new.assay))
