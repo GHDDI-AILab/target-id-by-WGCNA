@@ -14,6 +14,7 @@ Histogram(object, ...)
   genes,
   index = 1,
   file,
+  title,
   plot.width = NA,
   plot.height = NA
 )
@@ -32,6 +33,8 @@ Histogram(object, ...)
 \item{index}{A length-1 numeric or character vector specifying the frame. (default: 1)}
 
 \item{file}{(A length-1 character vector) File path to save the plot.}
+
+\item{title}{(A length-1 character vector) Title for the plot.}
 
 \item{plot.width}{(A length-1 numeric) Set the plot width.
 If not supplied, use the size of current graphics device.}

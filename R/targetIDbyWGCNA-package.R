@@ -37,7 +37,7 @@
 #' @importFrom stats as.dist dist median setNames
 #' @importFrom data.table ":=" .SD as.data.table copy data.table fread fwrite setnames
 #' @importFrom magrittr "%>%" "%T>%"
-#' @importFrom ggplot2 aes geom_histogram ggplot ggsave
+#' @importFrom ggplot2 aes element_text geom_histogram ggplot ggsave labs theme theme_classic
 #' @importFrom WGCNA TOMsimilarity adjacency intramodularConnectivity mergeCloseModules moduleEigengenes pickSoftThreshold
 #' @importFrom WGCNA cor corPvalueStudent labeledHeatmap labels2colors plotDendroAndColors standardColors verboseScatterplot
 #' @importFrom fastcluster hclust

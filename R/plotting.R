@@ -10,6 +10,7 @@ NULL
 #' @param genes A character vector specifying the genes of interest.
 #' @param index A length-1 numeric or character vector specifying the frame. (default: 1)
 #' @param file (A length-1 character vector) File path to save the plot.
+#' @param title (A length-1 character vector) Title for the plot.
 #' @param plot.width (A length-1 numeric) Set the plot width. 
 #'   If not supplied, use the size of current graphics device.
 #' @param plot.height (A length-1 numeric) Set the plot height.
@@ -26,6 +27,7 @@ Histogram.ExpAssayFrame = function(
   genes, 
   index = 1, 
   file, 
+  title, 
   plot.width = NA, 
   plot.height = NA
 ) {
@@ -35,6 +37,13 @@ Histogram.ExpAssayFrame = function(
     file = file[[1]]
   } else {
     stop("The given file was invalid!")
+  }
+  if (missing(title)) {
+    title = "Distribution of expression levels"
+  } else if (is.character(title) && length(title) > 0) {
+    title = title[[1]]
+  } else {
+    stop("The given title was invalid!")
   }
   assay = object[[
     assert_length_1(index)[[1]]
@@ -47,11 +56,16 @@ Histogram.ExpAssayFrame = function(
   }
   d.f = data.frame(unlist(assay, use.names = FALSE))
   names(d.f) = "Level"
-  p = ggplot2::ggplot(d.f, ggplot2::aes(x = Level)) +   
+  p = ggplot2::ggplot(d.f, ggplot2::aes(x = Level)) + 
     ggplot2::geom_histogram(ggplot2::aes(y = ..count..), 
-                            binwidth = 0.05, 
-                            alpha = 0.3, 
-                            position = "identity")
+                            binwidth = 0.2, 
+                            color = "black", 
+                            fill = "white", 
+                            #alpha = 0.3, 
+                            position = "identity") + 
+    ggplot2::labs(title = title) + 
+    ggplot2::theme_classic(base_size = 20, base_family = "Times") + 
+    ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5))
   dir.create(dirname(file), showWarnings = FALSE, recursive = TRUE)
   ggplot2::ggsave(file, p, width = plot.width, height = plot.height)
   invisible(file)
@@ -93,21 +107,22 @@ SampleTree.ExpAssayFrame = function(
   plot.width = 20, 
   plot.height = 12
 ) {
+  if (missing(file)) {
+    file = format(Sys.Date(), "Plots_%Y%m%d/SampleClustering.pdf")
+  } else if (is.character(file) && length(file) > 0) {
+    file = file[[1]]
+  } else {
+    stop("The given file was invalid!")
+  }
   d.f = object[[
     assert_length_1(index)[[1]]
     ]]
   tree = fastcluster::hclust(stats::dist(d.f), method = "average")
-  if (missing(file)) {
-    file = format(Sys.Date(), "Plots_%Y%m%d/SampleClustering.pdf")
-  } else {
-    file = file[[1]]
-  }
   dir.create(dirname(file), showWarnings = FALSE, recursive = TRUE)
   pdf(file = file, width = plot.width, height = plot.height)
-  par(cex = 0.6)
-  par(mar = c(5, 10, 10, 0))
+  par(mar = c(3, 8, 8, 0))
   plot(tree, main = title, sub = "", xlab = "", 
-       cex.lab = 2, cex.axis = 2, cex.main = 4)
+       cex = 0.6, cex.axis = 2.5, cex.lab = 2.5, cex.main = 2.5)
   abline(h = hline, col = "red")
   dev.off()
   invisible(file)
@@ -130,6 +145,7 @@ SampleTree.default = function(object, ...) {
 #' @param object A CorrelationNetwork object.
 #' @param index A length-1 numeric or character vector specifying the frame. (default: 1)
 #' @param file.prefix (A length-1 character) A prefix for the name of output file.
+#' @param title (A length-1 character vector) Title for the plot.
 #' @param plot.width (A length-1 numeric) Set the plot width.
 #' @param plot.height (A length-1 numeric) Set the plot height.
 #' @return Path to the output file.
@@ -142,6 +158,7 @@ ModulePlot.CorrelationNetwork = function(
   object, 
   index = 1, 
   file.prefix, 
+  title = "Gene dendrogram and module colors", 
   plot.width = 12.5, 
   plot.height = 10
 ) {
@@ -161,12 +178,15 @@ ModulePlot.CorrelationNetwork = function(
   dir.create(dirname(file), showWarnings = FALSE, recursive = TRUE)
   pdf(file = file, width = plot.width, height = plot.height)
   WGCNA::plotDendroAndColors(
-    dendro = net$geneTree, colors = cbind(net$unmergedColors, net$moduleColors), 
+    dendro = net$geneTree, 
+    colors = cbind(net$unmergedColors, net$moduleColors), 
     groupLabels = c("Dynamic Tree Cut", "Module colors"),
     dendroLabels = FALSE, hang = 0.03,
     addGuide = TRUE, guideHang = 0.05, 
-    cex.main = 1.5, cex.lab = 1.5, cex.axis = 1.5,
-    main = "Gene dendrogram and module colors"
+    cex.colorLabels = 1.8, cex.dendroLabels = 1, 
+    cex.main = 2, cex.lab = 2, cex.axis = 2, 
+    marAll = c(3, 12, 5, 3), 
+    main = title[[1]]
     )
   dev.off()
   invisible(file)
