@@ -17,7 +17,7 @@ NULL
 #'   If not supplied, use the size of current graphics device.
 #' @param plot.height (A length-1 numeric) Set the plot height.
 #'   If not supplied, use the size of current graphics device.
-#' @return Path to the output file, or a ggplot object when preview=TRUE.
+#' @return Path to the output file, or NULL when preview=TRUE.
 #' 
 #' @rdname Histogram
 #' @method Histogram ExpAssayFrame
@@ -64,7 +64,8 @@ Histogram.ExpAssayFrame = function(
     ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5))
   #
   if (preview) {
-    return(p)
+    print(p)
+    invisible()
   } else {
     if (missing(file)) {
       file = format(Sys.Date(), "Plots_%Y%m%d/LevelDistribution.pdf")

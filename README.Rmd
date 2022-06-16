@@ -18,9 +18,9 @@ knitr::opts_chunk$set(
 
 Target identification is an essential first step in drug discovery. This package implements convenient functions for performing target identification tasks on gene expression data using the WGCNA method. ("cn" in the package name stands for "correlation network".)
 
-## :arrow-double-down: Installation
+## Installation
 
-You can install the development version of targidcn from [GitHub](https://github.com/).
+You can install the development version of `targidcn` from [GitHub](https://github.com/).
 
 ```{r, eval = FALSE}
 if (!require("BiocManager", quietly = TRUE))
@@ -67,6 +67,8 @@ cn =
   Tidy() %>% 
   QC() %>% 
   Reshape() %>% 
+  LogTransform() %>% 
+  Normalize() %>% 
   PickThreshold() %>% 
   AddNetwork() %>% 
   AddConnectivity()

@@ -47,7 +47,7 @@ If not supplied, use the size of current graphics device.}
 If not supplied, use the size of current graphics device.}
 }
 \value{
-Path to the output file, or a ggplot object when preview=TRUE.
+Path to the output file, or NULL when preview=TRUE.
 }
 \description{
 Plot a distribution.
