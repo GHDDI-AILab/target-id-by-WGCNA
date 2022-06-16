@@ -67,7 +67,7 @@ ReadExperimentalDesign = function(
 #'
 ReadProteinGroups = function(
   data.dir = ".",
-  column.prefix = c("Ratio H/L normalized", "LFQ intensity")
+  column.prefix = c("Ratio H/L normalized", "LFQ intensity", "Intensity")
 ) {
   ## Check the infile
   pattern = c(
