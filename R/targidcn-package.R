@@ -2,7 +2,8 @@
 #' 
 #' Target identification is an essential first step in drug
 #'   discovery. This package implements convenient functions for performing
-#'   target identification tasks on gene expression data using the WGCNA method.
+#'   target identification tasks on gene expression data using the WGCNA method. 
+#'   ("cn" in the package name stands for "correlation network".)
 #' 
 #' Functions:
 #' - `ReadExperimentalDesign()`
@@ -29,6 +30,7 @@
 #' - `AddNetwork()`
 #' - `ModulePlot()`
 #' - `AddConnectivity()`
+#' - `GetConnectivity()`
 #' - `GetHubGenes()`
 #' 
 #' @importFrom graphics abline par

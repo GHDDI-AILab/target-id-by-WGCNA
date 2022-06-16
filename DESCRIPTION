@@ -1,11 +1,12 @@
-Package: targetIDbyWGCNA
+Package: targidcn
 Title: Target Identification Using the WGCNA Method
 Version: 0.0.4
 Authors@R: 
     person("Chen", "Liang", , "chen.liang@ghddi.org", role = c("aut", "cre"))
 Description: Target identification is an essential first step in drug 
     discovery. This package implements convenient functions for performing 
-    target identification tasks on gene expression data using the WGCNA method.
+    target identification tasks on gene expression data using the WGCNA method. 
+    ("cn" in the package name stands for "correlation network".)
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -26,4 +27,4 @@ Collate:
     'objects.R'
     'plotting.R'
     'preprocessing.R'
-    'targetIDbyWGCNA-package.R'
+    'targidcn-package.R'
