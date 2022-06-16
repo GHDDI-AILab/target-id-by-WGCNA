@@ -12,8 +12,9 @@ ModulePlot(object, ...)
 \method{ModulePlot}{CorrelationNetwork}(
   object,
   index = 1,
-  file.prefix,
+  preview = FALSE,
   title = "Gene dendrogram and module colors",
+  file.prefix,
   plot.width = 12.5,
   plot.height = 10
 )
@@ -27,16 +28,19 @@ ModulePlot(object, ...)
 
 \item{index}{A length-1 numeric or character vector specifying the frame. (default: 1)}
 
-\item{file.prefix}{(A length-1 character) A prefix for the name of output file.}
+\item{preview}{(A length-1 logical) If TRUE, display a plot; else
+if FALSE, save the plot to a file. (default: FALSE)}
 
 \item{title}{(A length-1 character vector) Title for the plot.}
+
+\item{file.prefix}{(A length-1 character) A prefix for the name of output file.}
 
 \item{plot.width}{(A length-1 numeric) Set the plot width.}
 
 \item{plot.height}{(A length-1 numeric) Set the plot height.}
 }
 \value{
-Path to the output file.
+Path to the output file, or NULL when preview=TRUE.
 }
 \description{
 Plot a gene tree.

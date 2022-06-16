@@ -11,9 +11,10 @@ SampleTree(object, ...)
 \method{SampleTree}{ExpAssayFrame}(
   object,
   index = 1,
-  file,
+  preview = FALSE,
   title = "Sample Clustering",
   hline = 50,
+  file,
   plot.width = 20,
   plot.height = 12
 )
@@ -27,18 +28,21 @@ SampleTree(object, ...)
 
 \item{index}{A length-1 numeric or character vector specifying the frame. (default: 1)}
 
-\item{file}{(A length-1 character vector) File path to save the plot.}
+\item{preview}{(A length-1 logical) If TRUE, display a plot; else
+if FALSE, save the plot to a file. (default: FALSE)}
 
 \item{title}{(A length-1 character vector) Title for the plot.}
 
 \item{hline}{(A length-1 numeric) Set the position of a red horizontal line.}
+
+\item{file}{(A length-1 character vector) File path to save the plot.}
 
 \item{plot.width}{(A length-1 numeric) Set the plot width.}
 
 \item{plot.height}{(A length-1 numeric) Set the plot height.}
 }
 \value{
-Path to the output file.
+Path to the output file, or NULL when preview=TRUE.
 }
 \description{
 Perform sample clustering.

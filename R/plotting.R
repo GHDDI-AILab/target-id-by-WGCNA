@@ -9,13 +9,15 @@ NULL
 #' @param samples A character vector specifying the samples of interest.
 #' @param genes A character vector specifying the genes of interest.
 #' @param index A length-1 numeric or character vector specifying the frame. (default: 1)
-#' @param file (A length-1 character vector) File path to save the plot.
-#' @param title (A length-1 character vector) Title for the plot.
+#' @param preview (A length-1 logical) If TRUE, return a ggplot object; else 
+#'   if FALSE, save the plot to a file. (default: FALSE)
+#' @param title (A length-1 character) Title for the plot.
+#' @param file (A length-1 character) File path to save the plot.
 #' @param plot.width (A length-1 numeric) Set the plot width. 
 #'   If not supplied, use the size of current graphics device.
 #' @param plot.height (A length-1 numeric) Set the plot height.
 #'   If not supplied, use the size of current graphics device.
-#' @return Path to the output file.
+#' @return Path to the output file, or a ggplot object when preview=TRUE.
 #' 
 #' @rdname Histogram
 #' @method Histogram ExpAssayFrame
@@ -26,18 +28,12 @@ Histogram.ExpAssayFrame = function(
   samples, 
   genes, 
   index = 1, 
-  file, 
+  preview = FALSE, 
   title, 
+  file, 
   plot.width = NA, 
   plot.height = NA
 ) {
-  if (missing(file)) {
-    file = format(Sys.Date(), "Plots_%Y%m%d/LevelDistribution.pdf")
-  } else if (is.character(file) && length(file) > 0) {
-    file = file[[1]]
-  } else {
-    stop("The given file was invalid!")
-  }
   if (missing(title)) {
     title = "Distribution of expression levels"
   } else if (is.character(title) && length(title) > 0) {
@@ -66,9 +62,21 @@ Histogram.ExpAssayFrame = function(
     ggplot2::labs(title = title) + 
     ggplot2::theme_classic(base_size = 20, base_family = "Times") + 
     ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5))
-  dir.create(dirname(file), showWarnings = FALSE, recursive = TRUE)
-  ggplot2::ggsave(file, p, width = plot.width, height = plot.height)
-  invisible(file)
+  #
+  if (preview) {
+    return(p)
+  } else {
+    if (missing(file)) {
+      file = format(Sys.Date(), "Plots_%Y%m%d/LevelDistribution.pdf")
+    } else if (is.character(file) && length(file) > 0) {
+      file = file[[1]]
+    } else {
+      stop("The given file was invalid!")
+    }
+    dir.create(dirname(file), showWarnings = FALSE, recursive = TRUE)
+    ggplot2::ggsave(file, p, width = plot.width, height = plot.height)
+    invisible(file)
+  }
 }
 
 #' @rdname Histogram
@@ -87,12 +95,14 @@ Histogram.default = function(object, ...) {
 #' 
 #' @param object An ExpAssayFrame object.
 #' @param index A length-1 numeric or character vector specifying the frame. (default: 1)
-#' @param file (A length-1 character vector) File path to save the plot.
+#' @param preview (A length-1 logical) If TRUE, display a plot; else 
+#'   if FALSE, save the plot to a file. (default: FALSE)
 #' @param title (A length-1 character vector) Title for the plot.
 #' @param hline (A length-1 numeric) Set the position of a red horizontal line.
+#' @param file (A length-1 character vector) File path to save the plot.
 #' @param plot.width (A length-1 numeric) Set the plot width.
 #' @param plot.height (A length-1 numeric) Set the plot height.
-#' @return Path to the output file.
+#' @return Path to the output file, or NULL when preview=TRUE.
 #' 
 #' @rdname SampleTree
 #' @method SampleTree ExpAssayFrame
@@ -101,31 +111,40 @@ Histogram.default = function(object, ...) {
 SampleTree.ExpAssayFrame = function(
   object, 
   index = 1, 
-  file, 
+  preview = FALSE, 
   title = "Sample Clustering", 
   hline = 50, 
+  file, 
   plot.width = 20, 
   plot.height = 12
 ) {
-  if (missing(file)) {
-    file = format(Sys.Date(), "Plots_%Y%m%d/SampleClustering.pdf")
-  } else if (is.character(file) && length(file) > 0) {
-    file = file[[1]]
-  } else {
-    stop("The given file was invalid!")
-  }
   d.f = object[[
     assert_length_1(index)[[1]]
     ]]
   tree = fastcluster::hclust(stats::dist(d.f), method = "average")
-  dir.create(dirname(file), showWarnings = FALSE, recursive = TRUE)
-  pdf(file = file, width = plot.width, height = plot.height)
-  par(mar = c(3, 8, 8, 0))
-  plot(tree, main = title, sub = "", xlab = "", 
-       cex = 0.6, cex.axis = 2.5, cex.lab = 2.5, cex.main = 2.5)
-  abline(h = hline, col = "red")
-  dev.off()
-  invisible(file)
+  draw = function(tree) {
+    par(mar = c(3, 8, 8, 0))
+    plot(tree, main = title, sub = "", xlab = "", 
+         cex = 0.6, cex.axis = 2.5, cex.lab = 2.5, cex.main = 2.5)
+    abline(h = hline, col = "red")
+  }
+  if (preview) {
+    draw(tree)
+    invisible()
+  } else {
+    if (missing(file)) {
+      file = format(Sys.Date(), "Plots_%Y%m%d/SampleClustering.pdf")
+    } else if (is.character(file) && length(file) > 0) {
+      file = file[[1]]
+    } else {
+      stop("The given file was invalid!")
+    }
+    dir.create(dirname(file), showWarnings = FALSE, recursive = TRUE)
+    pdf(file = file, width = plot.width, height = plot.height)
+    draw(tree)
+    dev.off()
+    invisible(file)
+  }
 }
 
 #' @rdname SampleTree
@@ -144,11 +163,13 @@ SampleTree.default = function(object, ...) {
 #' 
 #' @param object A CorrelationNetwork object.
 #' @param index A length-1 numeric or character vector specifying the frame. (default: 1)
-#' @param file.prefix (A length-1 character) A prefix for the name of output file.
+#' @param preview (A length-1 logical) If TRUE, display a plot; else 
+#'   if FALSE, save the plot to a file. (default: FALSE)
 #' @param title (A length-1 character vector) Title for the plot.
+#' @param file.prefix (A length-1 character) A prefix for the name of output file.
 #' @param plot.width (A length-1 numeric) Set the plot width.
 #' @param plot.height (A length-1 numeric) Set the plot height.
-#' @return Path to the output file.
+#' @return Path to the output file, or NULL when preview=TRUE.
 #' 
 #' @rdname ModulePlot
 #' @method ModulePlot CorrelationNetwork
@@ -157,8 +178,9 @@ SampleTree.default = function(object, ...) {
 ModulePlot.CorrelationNetwork = function(
   object, 
   index = 1, 
-  file.prefix, 
+  preview = FALSE, 
   title = "Gene dendrogram and module colors", 
+  file.prefix, 
   plot.width = 12.5, 
   plot.height = 10
 ) {
@@ -166,30 +188,38 @@ ModulePlot.CorrelationNetwork = function(
   net = attr(object, ATTR_NET)[[
     assert_length_1(index)[[1]]
     ]]
-  if (missing(file.prefix)) {
-    file.prefix = ""
-  } else if (is.character(file.prefix)) {
-    file.prefix = paste0(assert_length_1(file.prefix), ".")
-  } else {
-    stop("The given file.prefix was invalid!")
+  draw = function(net) {
+    WGCNA::plotDendroAndColors(
+      dendro = net$geneTree, 
+      colors = cbind(net$unmergedColors, net$moduleColors), 
+      groupLabels = c("Dynamic Tree Cut", "Module colors"),
+      dendroLabels = FALSE, hang = 0.03,
+      addGuide = TRUE, guideHang = 0.05, 
+      cex.colorLabels = 1.8, cex.dendroLabels = 1, 
+      cex.main = 2, cex.lab = 2, cex.axis = 2, 
+      marAll = c(3, 12, 5, 3), 
+      main = title[[1]]
+      )
   }
-  dir = format(Sys.Date(), "Plots_%Y%m%d")
-  file = sprintf("%s/%sGeneTree.power%s.pdf", dir, file.prefix, net$power)
-  dir.create(dirname(file), showWarnings = FALSE, recursive = TRUE)
-  pdf(file = file, width = plot.width, height = plot.height)
-  WGCNA::plotDendroAndColors(
-    dendro = net$geneTree, 
-    colors = cbind(net$unmergedColors, net$moduleColors), 
-    groupLabels = c("Dynamic Tree Cut", "Module colors"),
-    dendroLabels = FALSE, hang = 0.03,
-    addGuide = TRUE, guideHang = 0.05, 
-    cex.colorLabels = 1.8, cex.dendroLabels = 1, 
-    cex.main = 2, cex.lab = 2, cex.axis = 2, 
-    marAll = c(3, 12, 5, 3), 
-    main = title[[1]]
-    )
-  dev.off()
-  invisible(file)
+  if (preview) {
+    draw(net)
+    invisible()
+  } else {
+    if (missing(file.prefix)) {
+      file.prefix = ""
+    } else if (is.character(file.prefix) && length(file.prefix) > 0) {
+      file.prefix = paste0(assert_length_1(file.prefix), ".")
+    } else {
+      stop("The given file.prefix was invalid!")
+    }
+    dir = format(Sys.Date(), "Plots_%Y%m%d")
+    file = sprintf("%s/%sGeneTree.power%s.pdf", dir, file.prefix, net$power)
+    dir.create(dirname(file), showWarnings = FALSE, recursive = TRUE)
+    pdf(file = file, width = plot.width, height = plot.height)
+    draw(net)
+    dev.off()
+    invisible(file)
+  }
 }
 
 #' @rdname ModulePlot

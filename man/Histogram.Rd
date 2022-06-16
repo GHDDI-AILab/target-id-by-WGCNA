@@ -13,8 +13,9 @@ Histogram(object, ...)
   samples,
   genes,
   index = 1,
-  file,
+  preview = FALSE,
   title,
+  file,
   plot.width = NA,
   plot.height = NA
 )
@@ -32,9 +33,12 @@ Histogram(object, ...)
 
 \item{index}{A length-1 numeric or character vector specifying the frame. (default: 1)}
 
-\item{file}{(A length-1 character vector) File path to save the plot.}
+\item{preview}{(A length-1 logical) If TRUE, return a ggplot object; else
+if FALSE, save the plot to a file. (default: FALSE)}
 
-\item{title}{(A length-1 character vector) Title for the plot.}
+\item{title}{(A length-1 character) Title for the plot.}
+
+\item{file}{(A length-1 character) File path to save the plot.}
 
 \item{plot.width}{(A length-1 numeric) Set the plot width.
 If not supplied, use the size of current graphics device.}
@@ -43,7 +47,7 @@ If not supplied, use the size of current graphics device.}
 If not supplied, use the size of current graphics device.}
 }
 \value{
-Path to the output file.
+Path to the output file, or a ggplot object when preview=TRUE.
 }
 \description{
 Plot a distribution.
