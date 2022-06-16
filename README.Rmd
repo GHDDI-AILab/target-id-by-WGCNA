@@ -1,0 +1,88 @@
+---
+output: github_document
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# targidcn <img src="man/figures/logo.png" align="right" height="139" />
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+Target identification is an essential first step in drug discovery. This package implements convenient functions for performing target identification tasks on gene expression data using the WGCNA method. ("cn" in the package name stands for "correlation network".)
+
+## :arrow-double-down: Installation
+
+You can install the development version of targidcn from [GitHub](https://github.com/).
+
+```{r, eval = FALSE}
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install(c("AnnotationDbi", "GO.db", "org.Hs.eg.db", "preprocessCore", "impute"))
+
+if (!require("remotes", quietly = TRUE))
+    install.packages("remotes")
+
+remotes::install_github("GHDDI-AILab/target-id-by-WGCNA")
+```
+
+## Input data formats
+The method can be applied to gene expression data generate by RNA-seq or Mass Spectrometry (MS).
+
+### RNA-seq data
+(preprocessing not available so far)
+
+### Labelled MS data
+The expression levels of proteins are stored in the columns with the prefixes `Ratio H/L` and `Ratio H/L normalized`.
+
+### Label-free MS data
+The expression levels of proteins are stored in the columns with the prefixes `LFQ intensity` or `Intensity`.
+
+## Tutorial
+
+```{r}
+library(magrittr)
+library(targidcn) %>% suppressMessages()
+
+datadir = system.file("extdata", "MS_label-free", package = "targidcn")
+assay = ReadProteinGroups(datadir)
+assay
+```
+
+```{r}
+attributes(assay)
+```
+
+```{r}
+cn = 
+  assay %>% 
+  Tidy() %>% 
+  QC() %>% 
+  Reshape() %>% 
+  PickThreshold() %>% 
+  AddNetwork() %>% 
+  AddConnectivity()
+
+```
+
+```{r}
+cn %T>% 
+  Histogram(preview = TRUE) %T>% 
+  SampleTree(preview = TRUE) %T>% 
+  ModulePlot(preview = TRUE) %>% 
+  GetHubGenes()
+```
+
+
+<!-- 
+You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this. You could also use GitHub Actions to re-render `README.Rmd` every time you push. An example workflow can be found here: <https://github.com/r-lib/actions/tree/v1/examples>.
+--->
+
