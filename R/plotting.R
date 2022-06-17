@@ -17,6 +17,8 @@ NULL
 #'   If not supplied, use the size of current graphics device.
 #' @param plot.height (A length-1 numeric) Set the plot height.
 #'   If not supplied, use the size of current graphics device.
+#' @param font.size (A length-1 numeric) Set the `base_size` for ggplot2::theme_classic().
+#' @param font.family (A length-1 character) Set the `base_family` for ggplot2::theme_classic().
 #' @return Path to the output file, or NULL when preview=TRUE.
 #' 
 #' @rdname Histogram
@@ -32,7 +34,9 @@ Histogram.ExpAssayFrame = function(
   title, 
   file, 
   plot.width = NA, 
-  plot.height = NA
+  plot.height = NA, 
+  font.size = 20, 
+  font.family = "Sans"
 ) {
   if (missing(title)) {
     title = "Distribution of expression levels"
@@ -60,7 +64,7 @@ Histogram.ExpAssayFrame = function(
                             #alpha = 0.3, 
                             position = "identity") + 
     ggplot2::labs(title = title) + 
-    ggplot2::theme_classic(base_size = 20, base_family = "Times") + 
+    ggplot2::theme_classic(base_size = font.size, base_family = font.family) + 
     ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5))
   #
   if (preview) {

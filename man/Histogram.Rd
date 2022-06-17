@@ -17,7 +17,9 @@ Histogram(object, ...)
   title,
   file,
   plot.width = NA,
-  plot.height = NA
+  plot.height = NA,
+  font.size = 20,
+  font.family = "Sans"
 )
 
 \method{Histogram}{default}(object, ...)
@@ -45,6 +47,10 @@ If not supplied, use the size of current graphics device.}
 
 \item{plot.height}{(A length-1 numeric) Set the plot height.
 If not supplied, use the size of current graphics device.}
+
+\item{font.size}{(A length-1 numeric) Set the \code{base_size} for ggplot2::theme_classic().}
+
+\item{font.family}{(A length-1 character) Set the \code{base_family} for ggplot2::theme_classic().}
 }
 \value{
 Path to the output file, or NULL when preview=TRUE.

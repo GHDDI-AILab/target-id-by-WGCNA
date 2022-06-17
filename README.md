@@ -16,12 +16,12 @@ You can install the development version of `targidcn` from
 
 ``` r
 if (!require("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
+  install.packages("BiocManager")
 
 BiocManager::install(c("AnnotationDbi", "GO.db", "org.Hs.eg.db", "preprocessCore", "impute"))
 
 if (!require("remotes", quietly = TRUE))
-    install.packages("remotes")
+  install.packages("remotes")
 
 remotes::install_github("GHDDI-AILab/target-id-by-WGCNA")
 ```
@@ -44,6 +44,43 @@ prefixes `Ratio H/L` and `Ratio H/L normalized`.
 
 The expression levels of proteins are stored in the columns with the
 prefixes `LFQ intensity` or `Intensity`.
+
+## Details
+
+R package `targidcn` contains:
+
+-   Functions for loading raw data:
+    -   `ReadExperimentalDesign()`: read raw data path, return an object
+        of class `ExperimentInfo`
+    -   `ReadProteinGroups()`: read raw data path, return an object of
+        class `ProteinGroups`
+-   S3 classes:
+    -   `ExperimentList-class`
+        -   `ExperimentInfo-class`: for storing sample information
+        -   `ExpAssayTable-class`: for storing raw or QCed expression
+            data, whose rows correspond to genes
+            -   `ProteinGroups-class`: for storing raw or QCed
+                proteomics data
+        -   `ExpAssayFrame-class`: for storing QCed, scaled, normalized
+            expression data, whose rows correspond to samples
+            -   `CorrelationNetwork-class`: for storing storing
+                expression data with correlation network(s)
+-   S3 methods:
+    -   `Subset()`
+    -   `Tidy()`
+    -   `QC()`
+    -   `Reshape()`: convert an `ExpAssayTable` object to an
+        `ExpAssayFrame` object
+    -   `LogTransform()`
+    -   `Normalize()`
+    -   `Histogram()`
+    -   `SampleTree()`
+    -   `PickThreshold()`
+    -   `AddNetwork()`
+    -   `ModulePlot()`
+    -   `AddConnectivity()`
+    -   `GetConnectivity()`
+    -   `GetHubGenes()`
 
 ## Tutorial
 
@@ -79,7 +116,7 @@ attributes(assay)
 #> [109] "630" "631" "632"
 #> 
 #> $filename
-#> [1] "/tmp/RtmpBEk69z/temp_libpath3d5d830a748a7/targidcn/extdata/MS_label-free/MaxQuantOutput/proteinGroups.txt"
+#> [1] "/tmp/Rtmpb3AqK0/temp_libpathb7001391b2c7/targidcn/extdata/MS_label-free/MaxQuantOutput/proteinGroups.txt"
 #> 
 #> $class
 #> [1] "ProteinGroups"  "ExpAssayTable"  "ExperimentList" "list"
@@ -124,46 +161,122 @@ cn =
 ```
 
 ``` r
-cn %T>% 
-  Histogram(preview = TRUE) %T>% 
-  SampleTree(preview = TRUE) %T>% 
-  ModulePlot(preview = TRUE) %>% 
-  GetHubGenes()
+cn
+#> An object of class CorrelationNetwork
+#> 
+#> 111 Experiment(s): "147", "151", "162", ...
+#> 1 Assay(s): "Intensity"
+#>  818 features across 111 samples within assay 1.
+#> 
+#> Attributes:
+#> List of 5
+#>  $ filename     : chr "/tmp/Rtmpb3AqK0/temp_libpathb7001391b2c7/targidcn/extdata/MS_label-free/MaxQuantOutput/proteinGroups.txt"
+#>  $ QC           :Classes 'data.table' and 'data.frame':  1 obs. of  6 variables:
+#>   ..$ Assay                         : chr "Intensity"
+#>   ..$ Raw data                      : int 1591
+#>   ..$ Remove false hits             : int 1531
+#>   ..$ With gene names               : int 1509
+#>   ..$ Unique peptides >= 2          : int 1126
+#>   ..$ goodGenes, min.fraction >= 0.5: int 818
+#>   ..- attr(*, ".internal.selfref")=<externalptr> 
+#>  $ powerEstimate:List of 1
+#>   ..$ Intensity: num 4
+#>  $ network      :List of 1
+#>   ..$ Intensity:List of 10
+#>   .. ..$ power         : num 4
+#>   .. ..$ MEDissThres   : num 0.15
+#>   .. ..$ minModuleSize : num 30
+#>   .. ..$ adjacency     : num [1:818, 1:818] 1.00 3.10e-07 6.58e-10 9.50e-04 1.13e-03 ...
+#>   .. .. ..- attr(*, "dimnames")=List of 2
+#>   .. .. .. ..$ : chr [1:818] "CLCA1" "IGLL5;IGLC1" "PDLIM1" "MYO1C" ...
+#>   .. .. .. ..$ : chr [1:818] "CLCA1" "IGLL5;IGLC1" "PDLIM1" "MYO1C" ...
+#>   .. ..$ dissTOM       : num [1:818, 1:818] 0 0.995 0.994 0.992 0.992 ...
+#>   .. ..$ geneTree      :List of 7
+#>   .. .. ..$ merge      : int [1:817, 1:2] -65 -670 1 -359 3 -232 -794 -77 5 -191 ...
+#>   .. .. ..$ height     : num [1:817] 0.392 0.403 0.435 0.458 0.468 ...
+#>   .. .. ..$ order      : int [1:818] 265 675 628 62 56 403 630 366 479 627 ...
+#>   .. .. ..$ labels     : NULL
+#>   .. .. ..$ method     : chr "average"
+#>   .. .. ..$ call       : language fastcluster::hclust(d = stats::as.dist(dissTOM), method = "average")
+#>   .. .. ..$ dist.method: NULL
+#>   .. .. ..- attr(*, "class")= chr "hclust"
+#>   .. ..$ MEs           :'data.frame':    111 obs. of  7 variables:
+#>   .. .. ..$ MEgreen    : num [1:111] 0.0244 0.1157 -0.0578 0.0668 0.0986 ...
+#>   .. .. ..$ MEturquoise: num [1:111] 0.0927 0.1283 0.1358 0.1086 0.0934 ...
+#>   .. .. ..$ MEblue     : num [1:111] 0.0447 0.0442 0.1142 0.1116 0.0294 ...
+#>   .. .. ..$ MEyellow   : num [1:111] 0.0267 0.0481 0.0396 0.044 0.0705 ...
+#>   .. .. ..$ MEred      : num [1:111] -0.051965 -0.094088 -0.011963 0.000277 -0.05732 ...
+#>   .. .. ..$ MEblack    : num [1:111] -0.04727 0.00409 0.01239 -0.05464 0.06629 ...
+#>   .. .. ..$ MEbrown    : num [1:111] 0.0306 0.1201 0.0131 -0.0917 0.1399 ...
+#>   .. ..$ moduleColors  : Named chr [1:818] "green" "yellow" "blue" "blue" ...
+#>   .. .. ..- attr(*, "names")= chr [1:818] "CLCA1" "IGLL5;IGLC1" "PDLIM1" "MYO1C" ...
+#>   .. ..$ moduleLabels  : Named num [1:818] 5 4 2 2 1 1 3 1 3 3 ...
+#>   .. .. ..- attr(*, "names")= chr [1:818] "CLCA1" "IGLL5;IGLC1" "PDLIM1" "MYO1C" ...
+#>   .. ..$ unmergedColors: Named chr [1:818] "green" "yellow" "blue" "blue" ...
+#>   .. .. ..- attr(*, "names")= chr [1:818] "CLCA1" "IGLL5;IGLC1" "PDLIM1" "MYO1C" ...
+#>  $ connectivity :List of 1
+#>   ..$ Intensity:Classes 'data.table' and 'data.frame':   818 obs. of  6 variables:
+#>   .. ..$ gene   : chr [1:818] "ALDH1A1" "CLYBL" "SNRPB;SNRPN" "CHMP5" ...
+#>   .. ..$ kTotal : num [1:818] 43.9 43.9 41.2 37.5 36.2 ...
+#>   .. ..$ kWithin: num [1:818] 32 32 28 27.6 27.3 ...
+#>   .. ..$ kOut   : num [1:818] 11.92 11.92 13.15 9.95 8.93 ...
+#>   .. ..$ kDiff  : num [1:818] 20.1 20.1 14.9 17.6 18.3 ...
+#>   .. ..$ module : num [1:818] 1 1 1 1 1 1 1 1 1 1 ...
+#>   .. ..- attr(*, ".internal.selfref")=<externalptr>
+```
+
+``` r
+cn %>% Histogram(preview = TRUE)
 #> Warning: Removed 15206 rows containing non-finite values (stat_bin).
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" /><img src="man/figures/README-unnamed-chunk-6-2.png" width="100%" /><img src="man/figures/README-unnamed-chunk-6-3.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-7-1.png" width="80%" />
 
-    #>        gene         ensembl                                   fullname   kTotal
-    #>  1: ALDH1A1 ENSG00000165092  aldehyde dehydrogenase 1 family member A1 43.89376
-    #>  2:   CLYBL ENSG00000125246                       citramalyl-CoA lyase 43.89376
-    #>  3:  SPTBN1 ENSG00000115306          spectrin beta, non-erythrocytic 1 24.85082
-    #>  4:    MDH2 ENSG00000146701                     malate dehydrogenase 2 26.49073
-    #>  5: HSP90B1 ENSG00000166598 heat shock protein 90 beta family member 1 15.48458
-    #>  6:    SCIN ENSG00000006747                                  scinderin 22.50675
-    #>  7:     HPX ENSG00000110169                                  hemopexin 32.85560
-    #>  8:    CDV3 ENSG00000091527                               CDV3 homolog 30.07123
-    #>  9:   RAB2A ENSG00000104388          RAB2A, member RAS oncogene family 30.50436
-    #> 10:    TPM3 ENSG00000143549                              tropomyosin 3 26.24318
-    #> 11:   RPS18 ENSG00000231500                      ribosomal protein S18 22.13689
-    #> 12:   RBM8A ENSG00000265241               RNA binding motif protein 8A 10.39302
-    #> 13:   ECHS1 ENSG00000127884         enoyl-CoA hydratase, short chain 1 14.96758
-    #> 14:  RPL23A ENSG00000198242                     ribosomal protein L23a 12.97417
-    #>       kWithin      kOut      kDiff module
-    #>  1: 31.972834 11.920928 20.0519059      1
-    #>  2: 31.972834 11.920928 20.0519059      1
-    #>  3: 14.057922 10.792901  3.2650213      2
-    #>  4: 13.007820 13.482913 -0.4750932      2
-    #>  5:  9.536351  5.948226  3.5881251      3
-    #>  6:  9.011228 13.495519 -4.4842908      3
-    #>  7: 15.300028 17.555571 -2.2555426      4
-    #>  8: 14.591160 15.480066 -0.8889061      4
-    #>  9: 13.880218 16.624144 -2.7439255      4
-    #> 10:  9.382158 16.861017 -7.4788592      5
-    #> 11:  9.114045 13.022842 -3.9087972      5
-    #> 12:  3.814425  6.578593 -2.7641682      6
-    #> 13:  3.981047 10.986535 -7.0054880      7
-    #> 14:  3.644575  9.329599 -5.6850232      7
+``` r
+cn %>% SampleTree(preview = TRUE)
+```
+
+<img src="man/figures/README-unnamed-chunk-8-1.png" width="80%" />
+
+``` r
+cn %>% ModulePlot(preview = TRUE)
+```
+
+<img src="man/figures/README-unnamed-chunk-9-1.png" width="80%" />
+
+``` r
+cn %>% GetHubGenes()
+#>        gene         ensembl                                   fullname   kTotal
+#>  1: ALDH1A1 ENSG00000165092  aldehyde dehydrogenase 1 family member A1 43.89376
+#>  2:   CLYBL ENSG00000125246                       citramalyl-CoA lyase 43.89376
+#>  3:  SPTBN1 ENSG00000115306          spectrin beta, non-erythrocytic 1 24.85082
+#>  4:    MDH2 ENSG00000146701                     malate dehydrogenase 2 26.49073
+#>  5: HSP90B1 ENSG00000166598 heat shock protein 90 beta family member 1 15.48458
+#>  6:    SCIN ENSG00000006747                                  scinderin 22.50675
+#>  7:     HPX ENSG00000110169                                  hemopexin 32.85560
+#>  8:    CDV3 ENSG00000091527                               CDV3 homolog 30.07123
+#>  9:   RAB2A ENSG00000104388          RAB2A, member RAS oncogene family 30.50436
+#> 10:    TPM3 ENSG00000143549                              tropomyosin 3 26.24318
+#> 11:   RPS18 ENSG00000231500                      ribosomal protein S18 22.13689
+#> 12:   RBM8A ENSG00000265241               RNA binding motif protein 8A 10.39302
+#> 13:   ECHS1 ENSG00000127884         enoyl-CoA hydratase, short chain 1 14.96758
+#> 14:  RPL23A ENSG00000198242                     ribosomal protein L23a 12.97417
+#>       kWithin      kOut      kDiff module
+#>  1: 31.972834 11.920928 20.0519059      1
+#>  2: 31.972834 11.920928 20.0519059      1
+#>  3: 14.057922 10.792901  3.2650213      2
+#>  4: 13.007820 13.482913 -0.4750932      2
+#>  5:  9.536351  5.948226  3.5881251      3
+#>  6:  9.011228 13.495519 -4.4842908      3
+#>  7: 15.300028 17.555571 -2.2555426      4
+#>  8: 14.591160 15.480066 -0.8889061      4
+#>  9: 13.880218 16.624144 -2.7439255      4
+#> 10:  9.382158 16.861017 -7.4788592      5
+#> 11:  9.114045 13.022842 -3.9087972      5
+#> 12:  3.814425  6.578593 -2.7641682      6
+#> 13:  3.981047 10.986535 -7.0054880      7
+#> 14:  3.644575  9.329599 -5.6850232      7
+```
 
 <!-- 
 You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this. You could also use GitHub Actions to re-render `README.Rmd` every time you push. An example workflow can be found here: <https://github.com/r-lib/actions/tree/v1/examples>.

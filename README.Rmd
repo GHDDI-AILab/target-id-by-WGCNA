@@ -7,8 +7,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "100%"
-)
+  out.width = "80%"
+  )
 ```
 
 # targidcn <img src="man/figures/logo.png" align="right" height="139" />
@@ -24,12 +24,12 @@ You can install the development version of `targidcn` from [GitHub](https://gith
 
 ```{r, eval = FALSE}
 if (!require("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
+  install.packages("BiocManager")
 
 BiocManager::install(c("AnnotationDbi", "GO.db", "org.Hs.eg.db", "preprocessCore", "impute"))
 
 if (!require("remotes", quietly = TRUE))
-    install.packages("remotes")
+  install.packages("remotes")
 
 remotes::install_github("GHDDI-AILab/target-id-by-WGCNA")
 ```
@@ -45,6 +45,38 @@ The expression levels of proteins are stored in the columns with the prefixes `R
 
 ### Label-free MS data
 The expression levels of proteins are stored in the columns with the prefixes `LFQ intensity` or `Intensity`.
+
+## Details
+
+R package `targidcn` contains:
+
+- Functions for loading raw data:
+  - `ReadExperimentalDesign()`: read raw data path, return an object of class `ExperimentInfo`
+  - `ReadProteinGroups()`: read raw data path, return an object of class `ProteinGroups`
+
+- S3 classes:
+  - `ExperimentList-class`
+    - `ExperimentInfo-class`: for storing sample information
+    - `ExpAssayTable-class`: for storing raw or QCed expression data, whose rows correspond to genes
+      - `ProteinGroups-class`: for storing raw or QCed proteomics data
+    - `ExpAssayFrame-class`: for storing QCed, scaled, normalized expression data, whose rows correspond to samples
+      - `CorrelationNetwork-class`: for storing storing expression data with correlation network(s)
+
+- S3 methods:
+  - `Subset()`
+  - `Tidy()`
+  - `QC()`
+  - `Reshape()`: convert an `ExpAssayTable` object to an `ExpAssayFrame` object
+  - `LogTransform()`
+  - `Normalize()`
+  - `Histogram()`
+  - `SampleTree()`
+  - `PickThreshold()`
+  - `AddNetwork()`
+  - `ModulePlot()`
+  - `AddConnectivity()`
+  - `GetConnectivity()`
+  - `GetHubGenes()`
 
 ## Tutorial
 
@@ -72,15 +104,27 @@ cn =
   PickThreshold() %>% 
   AddNetwork() %>% 
   AddConnectivity()
-
+  
 ```
 
 ```{r}
-cn %T>% 
-  Histogram(preview = TRUE) %T>% 
-  SampleTree(preview = TRUE) %T>% 
-  ModulePlot(preview = TRUE) %>% 
-  GetHubGenes()
+cn
+```
+
+```{r, fig.dim = c(7, 7)}
+cn %>% Histogram(preview = TRUE)
+```
+
+```{r, fig.dim = c(20, 12)}
+cn %>% SampleTree(preview = TRUE)
+```
+
+```{r, fig.dim = c(12.5, 10)}
+cn %>% ModulePlot(preview = TRUE)
+```
+
+```{r}
+cn %>% GetHubGenes()
 ```
 
 
