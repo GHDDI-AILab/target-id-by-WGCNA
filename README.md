@@ -1,4 +1,6 @@
 
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
 # targidcn <img src="man/figures/logo.png" align="right" height="139" />
 
 <!-- badges: start -->
@@ -8,6 +10,10 @@ Target identification is an essential first step in drug discovery. This
 package implements convenient functions for performing target
 identification tasks on gene expression data using the WGCNA method.
 (“cn” in the package name stands for “correlation network”.)
+
+## Authors
+
+-   Chen Liang <https://github.com/dzyim>
 
 ## Installation
 
@@ -116,7 +122,7 @@ attributes(assay)
 #> [109] "630" "631" "632"
 #> 
 #> $filename
-#> [1] "/tmp/Rtmpb3AqK0/temp_libpathb7001391b2c7/targidcn/extdata/MS_label-free/MaxQuantOutput/proteinGroups.txt"
+#> [1] "/tmp/Rtmp08AW2O/temp_libpathd8b62a7ed5c6/targidcn/extdata/MS_label-free/MaxQuantOutput/proteinGroups.txt"
 #> 
 #> $class
 #> [1] "ProteinGroups"  "ExpAssayTable"  "ExperimentList" "list"
@@ -170,7 +176,7 @@ cn
 #> 
 #> Attributes:
 #> List of 5
-#>  $ filename     : chr "/tmp/Rtmpb3AqK0/temp_libpathb7001391b2c7/targidcn/extdata/MS_label-free/MaxQuantOutput/proteinGroups.txt"
+#>  $ filename     : chr "/tmp/Rtmp08AW2O/temp_libpathd8b62a7ed5c6/targidcn/extdata/MS_label-free/MaxQuantOutput/proteinGroups.txt"
 #>  $ QC           :Classes 'data.table' and 'data.frame':  1 obs. of  6 variables:
 #>   ..$ Assay                         : chr "Intensity"
 #>   ..$ Raw data                      : int 1591
@@ -230,19 +236,19 @@ cn %>% Histogram(preview = TRUE)
 #> Warning: Removed 15206 rows containing non-finite values (stat_bin).
 ```
 
-<img src="man/figures/README-unnamed-chunk-7-1.png" width="80%" />
+<img src="man/figures/README-unnamed-chunk-7-1.png" width="60%" />
 
 ``` r
 cn %>% SampleTree(preview = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-8-1.png" width="80%" />
+<img src="man/figures/README-unnamed-chunk-8-1.png" width="90%" />
 
 ``` r
 cn %>% ModulePlot(preview = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-9-1.png" width="80%" />
+<img src="man/figures/README-unnamed-chunk-9-1.png" width="90%" />
 
 ``` r
 cn %>% GetHubGenes()
@@ -277,6 +283,17 @@ cn %>% GetHubGenes()
 #> 13:  3.981047 10.986535 -7.0054880      7
 #> 14:  3.644575  9.329599 -5.6850232      7
 ```
+
+## References
+
+**Analysis of oncogenic signaling networks in glioblastoma identifies
+ASPM as a molecular target. **  
+Horvath S, Zhang B, Carlson M, et al.  
+PNAS. 2006;103(46):17402-17407. <doi:10.1073/pnas.0608396103>
+
+**WGCNA: an R package for weighted correlation network analysis. **  
+Langfelder P, Horvath S.  
+BMC Bioinformatics. 2008;9:559. <doi:10.1186/1471-2105-9-559>
 
 <!-- 
 You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this. You could also use GitHub Actions to re-render `README.Rmd` every time you push. An example workflow can be found here: <https://github.com/r-lib/actions/tree/v1/examples>.

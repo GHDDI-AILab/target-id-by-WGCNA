@@ -1,13 +1,14 @@
 ---
 output: github_document
 ---
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "80%"
+  out.width = "90%"
   )
 ```
 
@@ -17,6 +18,9 @@ knitr::opts_chunk$set(
 <!-- badges: end -->
 
 Target identification is an essential first step in drug discovery. This package implements convenient functions for performing target identification tasks on gene expression data using the WGCNA method. ("cn" in the package name stands for "correlation network".)
+
+## Authors
+- Chen Liang <https://github.com/dzyim>
 
 ## Installation
 
@@ -104,14 +108,14 @@ cn =
   PickThreshold() %>% 
   AddNetwork() %>% 
   AddConnectivity()
-  
+
 ```
 
 ```{r}
 cn
 ```
 
-```{r, fig.dim = c(7, 7)}
+```{r, fig.dim = c(8, 8), out.width = "60%"}
 cn %>% Histogram(preview = TRUE)
 ```
 
@@ -126,6 +130,16 @@ cn %>% ModulePlot(preview = TRUE)
 ```{r}
 cn %>% GetHubGenes()
 ```
+
+## References
+
+**Analysis of oncogenic signaling networks in glioblastoma identifies ASPM as a molecular target. **  
+Horvath S, Zhang B, Carlson M, et al.  
+PNAS. 2006;103(46):17402-17407. doi:10.1073/pnas.0608396103  
+
+**WGCNA: an R package for weighted correlation network analysis. **  
+Langfelder P, Horvath S.  
+BMC Bioinformatics. 2008;9:559. doi:10.1186/1471-2105-9-559  
 
 
 <!-- 
