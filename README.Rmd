@@ -133,13 +133,17 @@ cn %>% GetHubGenes()
 
 ## References
 
-**Analysis of oncogenic signaling networks in glioblastoma identifies ASPM as a molecular target. **  
+**Analysis of oncogenic signaling networks in glioblastoma identifies ASPM as a molecular target.**  
 Horvath S, Zhang B, Carlson M, et al.  
 PNAS. 2006;103(46):17402-17407. doi:10.1073/pnas.0608396103  
 
-**WGCNA: an R package for weighted correlation network analysis. **  
+**WGCNA: an R package for weighted correlation network analysis.**  
 Langfelder P, Horvath S.  
 BMC Bioinformatics. 2008;9:559. doi:10.1186/1471-2105-9-559  
+
+**Structural weakening of the colonic mucus barrier is an early event in ulcerative colitis pathogenesis.**  
+van der Post S, Jabbar KS, Birchenough G, et al.  
+Gut. 2019;68(12):2142-2151. doi:10.1136/gutjnl-2018-317571  
 
 
 <!-- 

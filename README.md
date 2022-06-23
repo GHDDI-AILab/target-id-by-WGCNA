@@ -122,7 +122,7 @@ attributes(assay)
 #> [109] "630" "631" "632"
 #> 
 #> $filename
-#> [1] "/tmp/Rtmp08AW2O/temp_libpathd8b62a7ed5c6/targidcn/extdata/MS_label-free/MaxQuantOutput/proteinGroups.txt"
+#> [1] "/tmp/Rtmp27Eljd/temp_libpath3abcd63e96cbc/targidcn/extdata/MS_label-free/MaxQuantOutput/proteinGroups.txt"
 #> 
 #> $class
 #> [1] "ProteinGroups"  "ExpAssayTable"  "ExperimentList" "list"
@@ -176,7 +176,7 @@ cn
 #> 
 #> Attributes:
 #> List of 5
-#>  $ filename     : chr "/tmp/Rtmp08AW2O/temp_libpathd8b62a7ed5c6/targidcn/extdata/MS_label-free/MaxQuantOutput/proteinGroups.txt"
+#>  $ filename     : chr "/tmp/Rtmp27Eljd/temp_libpath3abcd63e96cbc/targidcn/extdata/MS_label-free/MaxQuantOutput/proteinGroups.txt"
 #>  $ QC           :Classes 'data.table' and 'data.frame':  1 obs. of  6 variables:
 #>   ..$ Assay                         : chr "Intensity"
 #>   ..$ Raw data                      : int 1591
@@ -287,13 +287,18 @@ cn %>% GetHubGenes()
 ## References
 
 **Analysis of oncogenic signaling networks in glioblastoma identifies
-ASPM as a molecular target. **  
+ASPM as a molecular target.**  
 Horvath S, Zhang B, Carlson M, et al.  
 PNAS. 2006;103(46):17402-17407. <doi:10.1073/pnas.0608396103>
 
-**WGCNA: an R package for weighted correlation network analysis. **  
+**WGCNA: an R package for weighted correlation network analysis.**  
 Langfelder P, Horvath S.  
 BMC Bioinformatics. 2008;9:559. <doi:10.1186/1471-2105-9-559>
+
+**Structural weakening of the colonic mucus barrier is an early event in
+ulcerative colitis pathogenesis.**  
+van der Post S, Jabbar KS, Birchenough G, et al.  
+Gut. 2019;68(12):2142-2151. <doi:10.1136/gutjnl-2018-317571>
 
 <!-- 
 You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this. You could also use GitHub Actions to re-render `README.Rmd` every time you push. An example workflow can be found here: <https://github.com/r-lib/actions/tree/v1/examples>.
