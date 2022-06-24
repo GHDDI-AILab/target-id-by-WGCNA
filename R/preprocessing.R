@@ -83,18 +83,17 @@ ReadProteinGroups = function(
     stop("Empty or invalid proteinGroups file!")
   }
   ## Find the columns that are not sample-specific
-  sample_cols = lapply(info$experiments, 
-                       function(i) grep(i, names(DT))) %>% unlist()
+  sample_cols = lapply(info$experiments, function(i) grep(i, names(DT))) %>% unlist()
   non_samples = setdiff(1:ncol(DT), sample_cols)
   ## Find the columns that are sample-specific with the given prefixes
   Assays = list()
   for (prefix in column.prefix) {
     ## There may be no column with the prefix, so we need to check:
-    sample_cols = lapply(paste(prefix, info$experiments, sep = " "),
-                         function(i) which(i == names(DT))) %>% unlist()
+    col_names = paste(prefix, info$experiments, sep = " ")
+    sample_cols = lapply(col_names, function(i) which(i == names(DT))) %>% unlist()
     if (length(sample_cols) < 1) {
-      sample_cols = lapply(paste(prefix, info$experiments, sep = "_"), 
-                           function(i) which(i == names(DT))) %>% unlist()
+      col_names = paste(prefix, info$experiments, sep = "_")
+      sample_cols = lapply(col_names, function(i) which(i == names(DT))) %>% unlist()
     }
     if (length(sample_cols) > 0) {
       Assays[[prefix]] = cbind(
@@ -102,7 +101,7 @@ ReadProteinGroups = function(
         DT[, sample_cols, with = FALSE]
         )
       data.table::setnames(Assays[[prefix]],
-        old = paste(prefix, info$experiments), 
+        old = col_names, 
         new = as.character(info$experiments),
         skip_absent = TRUE
         )
