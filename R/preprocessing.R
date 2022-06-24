@@ -37,9 +37,8 @@ ReadExperimentalDesign = function(
     stop("Empty or invalid experimentalDesign file!")
   }
   ## Create an object
-  samples = as.character(unique(sort(DT$Experiment))) %>% 
-    setdiff(., "")
   DT[, Experiment := as.character(Experiment)]
+  samples = setdiff(unique(DT$Experiment), "")
   structure(
     list(experiments = samples, 
          table = DT), 
