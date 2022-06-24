@@ -24,7 +24,7 @@ Target identification is an essential first step in drug discovery. This package
 
 ## Installation
 
-You can install the development version of `targidcn` from [GitHub](https://github.com/).
+You can install the development version of `targidcn` from [GitHub](https://github.com/GHDDI-AILab/target-id-by-WGCNA).
 
 ```{r, eval = FALSE}
 if (!require("BiocManager", quietly = TRUE))

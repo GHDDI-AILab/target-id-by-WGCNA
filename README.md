@@ -18,7 +18,7 @@ identification tasks on gene expression data using the WGCNA method.
 ## Installation
 
 You can install the development version of `targidcn` from
-[GitHub](https://github.com/).
+[GitHub](https://github.com/GHDDI-AILab/target-id-by-WGCNA).
 
 ``` r
 if (!require("BiocManager", quietly = TRUE))
@@ -122,7 +122,7 @@ attributes(assay)
 #> [109] "630" "631" "632"
 #> 
 #> $filename
-#> [1] "/tmp/Rtmp27Eljd/temp_libpath3abcd63e96cbc/targidcn/extdata/MS_label-free/MaxQuantOutput/proteinGroups.txt"
+#> [1] "/tmp/Rtmp7coclE/temp_libpath2899750556213/targidcn/extdata/MS_label-free/MaxQuantOutput/proteinGroups.txt"
 #> 
 #> $class
 #> [1] "ProteinGroups"  "ExpAssayTable"  "ExperimentList" "list"
@@ -176,7 +176,7 @@ cn
 #> 
 #> Attributes:
 #> List of 5
-#>  $ filename     : chr "/tmp/Rtmp27Eljd/temp_libpath3abcd63e96cbc/targidcn/extdata/MS_label-free/MaxQuantOutput/proteinGroups.txt"
+#>  $ filename     : chr "/tmp/Rtmp7coclE/temp_libpath2899750556213/targidcn/extdata/MS_label-free/MaxQuantOutput/proteinGroups.txt"
 #>  $ QC           :Classes 'data.table' and 'data.frame':  1 obs. of  6 variables:
 #>   ..$ Assay                         : chr "Intensity"
 #>   ..$ Raw data                      : int 1591
