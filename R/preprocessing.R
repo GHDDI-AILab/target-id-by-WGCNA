@@ -90,8 +90,12 @@ ReadProteinGroups = function(
   Assays = list()
   for (prefix in column.prefix) {
     ## There may be no column with the prefix, so we need to check:
-    sample_cols = lapply(paste(prefix, info$experiments),
+    sample_cols = lapply(paste(prefix, info$experiments, sep = " "),
                          function(i) which(i == names(DT))) %>% unlist()
+    if (length(sample_cols) < 1) {
+      sample_cols = lapply(paste(prefix, info$experiments, sep = "_"), 
+                           function(i) which(i == names(DT))) %>% unlist()
+    }
     if (length(sample_cols) > 0) {
       Assays[[prefix]] = cbind(
         DT[, non_samples, with = FALSE],
