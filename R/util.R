@@ -69,6 +69,7 @@ get_geneinfo = function(
     "CSDA"   = "YBX3", 
     "GARS"   = "GARS1", 
     "H1F0"   = "H1-0", 
+    "PKM2"   = "PKM", 
     "WARS"   = "WARS1"
     )
   ## Check the column `gene`
