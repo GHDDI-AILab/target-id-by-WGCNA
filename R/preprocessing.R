@@ -122,6 +122,32 @@ ReadProteinGroups = function(
     )
 }
 
+#' Read the phenotype information of the samples.
+#' 
+#' @param file A length-1 character specifying the file path.
+#' @return An ExperimentInfo object.
+#' @export
+#' 
+ReadPhenotypeTable = function(
+  file
+) {
+  file = assert_length_1(file)
+  ## Load the table
+  DT = data.table::fread(file)
+  if (! nrow(DT) || ! "Experiment" %in% names(DT)) {
+    stop("Empty or invalid phenotype file!")
+  }
+  ## Create an object
+  DT[, Experiment := as.character(Experiment)]
+  samples = setdiff(unique(DT$Experiment), "")
+  structure(
+    list(experiments = samples, 
+         table = DT), 
+    filename = normalizePath(file),
+    class = c("ExperimentInfo", "ExperimentList", "list")
+    )
+}
+
 #' Tidy an ExpAssayTable object.
 #' 
 #' @param object An object of class ExpAssayTable.
@@ -184,12 +210,18 @@ Subset.ExpAssayTable = function(
   if (!is.character(samples)) {
     stop("Invalid input samples!")
   }
+  new.samples = intersect(samples, attr(object, "experiments"))
+  if (length(new.samples) < 1) {
+    stop("Invalid input samples!")
+  } else if (length(new.samples) != length(samples)) {
+    warning("Some of the given sample names were invalid!")
+  }
   new.object = data.table::copy(object)
   for (i in 1:length(new.object)) {
     non_samples = setdiff(names(new.object[[i]]), attr(new.object, "experiments"))
-    new.object[[i]] = new.object[[i]][, c(non_samples, samples), with = FALSE]
+    new.object[[i]] = new.object[[i]][, c(non_samples, new.samples), with = FALSE]
   }
-  attr(new.object, "experiments") = samples
+  attr(new.object, "experiments") = new.samples
   return(new.object)
 }
 
@@ -214,11 +246,17 @@ Subset.ExpAssayFrame = function(
   if (!is.character(samples)) {
     stop("Invalid input samples!")
   }
+  new.samples = intersect(samples, attr(object, "experiments"))
+  if (length(new.samples) < 1) {
+    stop("Invalid input samples!")
+  } else if (length(new.samples) != length(samples)) {
+    warning("Some of the given sample names were invalid!")
+  }
   new.object = data.table::copy(object)
   for (i in 1:length(new.object)) {
-    new.object[[i]] = new.object[[i]][samples, ]
+    new.object[[i]] = new.object[[i]][new.samples, ]
   }
-  attr(new.object, "experiments") = samples
+  attr(new.object, "experiments") = new.samples
   return(new.object)
 }
 

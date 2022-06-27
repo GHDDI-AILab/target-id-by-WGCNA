@@ -21,6 +21,7 @@ PickThreshold.ExpAssayFrame = function(
   ATTR_POW = "powerEstimate"
   new.assay = data.table::copy(assay)
   attr(new.assay, ATTR_POW) = list()
+  WGCNA::enableWGCNAThreads(nThreads = 4)
   for (i in 1:length(assay)) {
     fit = WGCNA::pickSoftThreshold(assay[[i]], powerVector = powerVector)
     attr(new.assay, ATTR_POW)[[i]] = fit$powerEstimate
