@@ -27,4 +27,5 @@ Collate:
     'objects.R'
     'plotting.R'
     'preprocessing.R'
+    'reader.R'
     'targidcn-package.R'

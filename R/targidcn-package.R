@@ -8,6 +8,7 @@
 #' Functions:
 #' - `ReadExperimentalDesign()`
 #' - `ReadProteinGroups()`
+#' - `ReadPhenotypeTable()`
 #' 
 #' Classes:
 #' - `ExperimentList-class`

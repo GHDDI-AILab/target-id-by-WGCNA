@@ -16,6 +16,7 @@ Functions:
 \itemize{
 \item \code{ReadExperimentalDesign()}
 \item \code{ReadProteinGroups()}
+\item \code{ReadPhenotypeTable()}
 }
 
 Classes:
