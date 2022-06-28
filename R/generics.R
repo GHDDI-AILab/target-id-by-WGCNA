@@ -18,6 +18,16 @@ Subset = function(object, ...) {
   UseMethod("Subset")
 }
 
+#' Add the phenotype information to assays.
+#' 
+#' @param object An object.
+#' @param ... further arguments to be passed to or from other methods.
+#' @export
+#' 
+AddPhenotype = function(object, ...) {
+  UseMethod("AddPhenotype")
+}
+
 #' Perform quality control for assays.
 #' 
 #' @param object An object.

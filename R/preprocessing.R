@@ -273,6 +273,67 @@ Subset.default = function(object, ...) {
   }
 }
 
+#' Add a phenotype table of the samples in the assay.
+#' 
+#' @param object An object of class ExpAssayTable.
+#' @param phenotype An object of class ExperimentInfo.
+#' @return A new object of class ExpAssayTable.
+#' 
+#' @rdname AddPhenotype
+#' @method AddPhenotype ExpAssayTable
+#' @export
+#' 
+AddPhenotype.ExpAssayTable = function(
+  object, 
+  phenotype
+) {
+  ATTR_PHENO = "phenotype"
+  samples = attr(object, "experiments")
+  if (length(setdiff(samples, phenotype$experiments)) > 0) {
+    stop("The phenotypes of some samples were missing!")
+  }
+  new.object = data.table::copy(object)
+  attr(new.object, ATTR_PHENO) = phenotype$table
+  return(new.object)
+}
+
+#' Add a phenotype table of the samples in the assay.
+#' 
+#' @param object An object of class ExpAssayFrame.
+#' @param phenotype An object of class ExperimentInfo.
+#' @return A new object of class ExpAssayFrame.
+#' 
+#' @rdname AddPhenotype
+#' @method AddPhenotype ExpAssayFrame
+#' @export
+#' 
+AddPhenotype.ExpAssayFrame = function(
+  object, 
+  phenotype
+) {
+  ATTR_PHENO = "phenotype"
+  samples = attr(object, "experiments")
+  if (length(setdiff(samples, phenotype$experiments)) > 0) {
+    stop("The phenotypes of some samples were missing!")
+  }
+  new.object = data.table::copy(object)
+  attr(new.object, ATTR_PHENO) = phenotype$table
+  return(new.object)
+}
+
+#' @rdname AddPhenotype
+#' @method AddPhenotype default
+#' @export
+AddPhenotype.default = function(object, ...) {
+  if (inherits(object, "ExpAssayTable")) {
+    AddPhenotype.ExpAssayTable(object, ...)
+  } else if (inherits(object, "ExpAssayFrame")) {
+    AddPhenotype.ExpAssayFrame(object, ...)
+  } else {
+    stop("This method is associated with class ExpAssayTable and ExpAssayFrame.")
+  }
+}
+
 #' Perform quality control of MS-based proteomics data.
 #' 
 #' @param object An object of class ProteinGroups.
