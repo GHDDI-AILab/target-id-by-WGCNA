@@ -30,7 +30,8 @@ You can install the development version of `targidcn` from [GitHub](https://gith
 if (!require("BiocManager", quietly = TRUE))
   install.packages("BiocManager")
 
-BiocManager::install(c("AnnotationDbi", "GO.db", "org.Hs.eg.db", "preprocessCore", "impute"))
+BiocManager::install(c("GO.db", "preprocessCore", "impute"))  # Prerequisites for the WGCNA package
+BiocManager::install(c("AnnotationDbi", "org.Hs.eg.db"))
 
 if (!require("remotes", quietly = TRUE))
   install.packages("remotes")
