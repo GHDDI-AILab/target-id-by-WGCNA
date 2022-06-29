@@ -29,3 +29,4 @@ Collate:
     'preprocessing.R'
     'reader.R'
     'targidcn-package.R'
+    'traits.R'

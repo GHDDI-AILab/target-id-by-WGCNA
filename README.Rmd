@@ -57,6 +57,7 @@ R package `targidcn` contains:
 
 - Functions for loading raw data:
   - `ReadExperimentalDesign()`: read raw data path, return an object of class `ExperimentInfo`
+  - `ReadPhenotypeTable()`: read a phenotype table, return an object of class `ExperimentInfo`
   - `ReadProteinGroups()`: read raw data path, return an object of class `ProteinGroups`
 
 - S3 classes:
@@ -68,6 +69,7 @@ R package `targidcn` contains:
       - `CorrelationNetwork-class`: for storing storing expression data with correlation network(s)
 
 - S3 methods:
+  - `AddPhenotype()`
   - `Subset()`
   - `Tidy()`
   - `QC()`
@@ -82,6 +84,10 @@ R package `targidcn` contains:
   - `AddConnectivity()`
   - `GetConnectivity()`
   - `GetHubGenes()`
+  - `ModuleSignificance()`
+  - `ModuleTraitHeatmap()`
+  - `GeneSignificance()`
+  - `ModuleMembership()`
 
 ## Tutorial
 
@@ -92,10 +98,6 @@ library(targidcn) %>% suppressMessages()
 datadir = system.file("extdata", "MS_label-free", package = "targidcn")
 assay = ReadProteinGroups(datadir)
 assay
-```
-
-```{r}
-attributes(assay)
 ```
 
 ```{r}

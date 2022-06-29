@@ -115,13 +115,13 @@ ReadProteinGroups = function(
   ## Create an object
   structure(
     Assays, 
+    filename = normalizePath(infile), 
     experiments = as.character(info$experiments), 
-    QC = data.table::data.table(), 
     phenotype = data.frame(), 
+    QC = data.table::data.table(), 
     powerEstimate = list(), 
     network = list(), 
     connectivity = list(), 
-    filename = normalizePath(infile), 
     class = c("ProteinGroups", "ExpAssayTable", "ExperimentList", "list")
     )
 }

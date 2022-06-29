@@ -7,8 +7,8 @@
 #' 
 #' Functions:
 #' - `ReadExperimentalDesign()`
-#' - `ReadProteinGroups()`
 #' - `ReadPhenotypeTable()`
+#' - `ReadProteinGroups()`
 #' 
 #' Classes:
 #' - `ExperimentList-class`
@@ -19,6 +19,7 @@
 #'     - `CorrelationNetwork-class`
 #' 
 #' S3 methods:
+#' - `AddPhenotype()`
 #' - `Tidy()`
 #' - `Subset()`
 #' - `QC()`
@@ -33,6 +34,10 @@
 #' - `AddConnectivity()`
 #' - `GetConnectivity()`
 #' - `GetHubGenes()`
+#' - `ModuleSignificance()`
+#' - `ModuleTraitHeatmap()`
+#' - `GeneSignificance()`
+#' - `ModuleMembership()`
 #' 
 #' @importFrom graphics abline par
 #' @importFrom grDevices dev.off pdf

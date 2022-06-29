@@ -125,7 +125,7 @@ GeneTree = function(...) {
   ModulePlot(...)
 }
 
-#' Calculate the degree of each node.
+#' Compute the degree of each node.
 #' 
 #' @param object An object.
 #' @param ... further arguments to be passed to or from other methods.
@@ -153,5 +153,45 @@ GetConnectivity = function(object, ...) {
 #' 
 GetHubGenes = function(object, ...) {
   UseMethod("GetHubGenes")
+}
+
+#' Compute module-trait correlation and significance.
+#' 
+#' @param object An object.
+#' @param ... further arguments to be passed to or from other methods.
+#' @export
+#' 
+ModuleSignificance = function(object, ...) {
+  UseMethod("ModuleSignificance")
+}
+
+#' Plot a module-trait heatmap.
+#' 
+#' @param object An object.
+#' @param ... further arguments to be passed to or from other methods.
+#' @export
+#' 
+ModuleTraitHeatmap = function(object, ...) {
+  UseMethod("ModuleTraitHeatmap")
+}
+
+#' Compute gene-trait correlation and significance.
+#' 
+#' @param object An object.
+#' @param ... further arguments to be passed to or from other methods.
+#' @export
+#' 
+GeneSignificance = function(object, ...) {
+  UseMethod("GeneSignificance")
+}
+
+#' Compute module membership of genes.
+#' 
+#' @param object An object.
+#' @param ... further arguments to be passed to or from other methods.
+#' @export
+#' 
+ModuleMembership = function(object, ...) {
+  UseMethod("ModuleMembership")
 }
 

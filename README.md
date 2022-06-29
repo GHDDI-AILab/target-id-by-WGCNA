@@ -59,6 +59,8 @@ R package `targidcn` contains:
 -   Functions for loading raw data:
     -   `ReadExperimentalDesign()`: read raw data path, return an object
         of class `ExperimentInfo`
+    -   `ReadPhenotypeTable()`: read a phenotype table, return an object
+        of class `ExperimentInfo`
     -   `ReadProteinGroups()`: read raw data path, return an object of
         class `ProteinGroups`
 -   S3 classes:
@@ -73,6 +75,7 @@ R package `targidcn` contains:
             -   `CorrelationNetwork-class`: for storing storing
                 expression data with correlation network(s)
 -   S3 methods:
+    -   `AddPhenotype()`
     -   `Subset()`
     -   `Tidy()`
     -   `QC()`
@@ -88,6 +91,10 @@ R package `targidcn` contains:
     -   `AddConnectivity()`
     -   `GetConnectivity()`
     -   `GetHubGenes()`
+    -   `ModuleSignificance()`
+    -   `ModuleTraitHeatmap()`
+    -   `GeneSignificance()`
+    -   `ModuleMembership()`
 
 ## Tutorial
 
@@ -106,30 +113,6 @@ assay
 ```
 
 ``` r
-attributes(assay)
-#> $names
-#> [1] "Intensity"
-#> 
-#> $experiments
-#>   [1] "147" "151" "162" "167" "170" "216" "217" "218" "220" "221" "224" "241"
-#>  [13] "242" "245" "248" "249" "251" "253" "254" "255" "256" "257" "259" "260"
-#>  [25] "261" "262" "263" "265" "268" "269" "270" "271" "272" "273" "275" "276"
-#>  [37] "277" "281" "282" "284" "285" "286" "289" "290" "292" "511" "518" "519"
-#>  [49] "520" "522" "526" "527" "530" "536" "552" "554" "556" "557" "558" "560"
-#>  [61] "561" "563" "564" "566" "567" "569" "570" "572" "573" "574" "575" "576"
-#>  [73] "577" "578" "580" "581" "584" "585" "586" "587" "588" "589" "591" "594"
-#>  [85] "596" "599" "602" "603" "604" "605" "611" "612" "613" "614" "615" "617"
-#>  [97] "618" "619" "620" "621" "622" "623" "624" "625" "626" "627" "628" "629"
-#> [109] "630" "631" "632"
-#> 
-#> $filename
-#> [1] "/tmp/Rtmp7coclE/temp_libpath2899750556213/targidcn/extdata/MS_label-free/MaxQuantOutput/proteinGroups.txt"
-#> 
-#> $class
-#> [1] "ProteinGroups"  "ExpAssayTable"  "ExperimentList" "list"
-```
-
-``` r
 cn = 
   assay %>% 
   Tidy() %>% 
@@ -140,7 +123,7 @@ cn =
   PickThreshold() %>% 
   AddNetwork() %>% 
   AddConnectivity()
-#> Warning: executing %dopar% sequentially: no parallel backend registered
+#> Allowing parallel execution with up to 4 working processes.
 #>    Power SFT.R.sq slope truncated.R.sq mean.k. median.k. max.k.
 #> 1      1    0.230 -1.79         0.9890 160.000  1.58e+02  268.0
 #> 2      2    0.533 -1.68         0.9790  48.900  4.54e+01  123.0
@@ -177,7 +160,7 @@ cn
 #> 
 #> Attributes:
 #> List of 5
-#>  $ filename     : chr "/tmp/Rtmp7coclE/temp_libpath2899750556213/targidcn/extdata/MS_label-free/MaxQuantOutput/proteinGroups.txt"
+#>  $ phenotype    :'data.frame':   0 obs. of  0 variables
 #>  $ QC           :Classes 'data.table' and 'data.frame':  1 obs. of  6 variables:
 #>   ..$ Assay                         : chr "Intensity"
 #>   ..$ Raw data                      : int 1591
@@ -190,15 +173,15 @@ cn
 #>   ..$ Intensity: num 4
 #>  $ network      :List of 1
 #>   ..$ Intensity:List of 10
-#>   .. ..$ power         : num 4
-#>   .. ..$ MEDissThres   : num 0.15
-#>   .. ..$ minModuleSize : num 30
-#>   .. ..$ adjacency     : num [1:818, 1:818] 1.00 3.10e-07 6.58e-10 9.50e-04 1.13e-03 ...
+#>   .. ..$ power           : num 4
+#>   .. ..$ MEDissThres     : num 0.15
+#>   .. ..$ minModuleSize   : num 30
+#>   .. ..$ adjacency       : num [1:818, 1:818] 1.00 3.10e-07 6.58e-10 9.50e-04 1.13e-03 ...
 #>   .. .. ..- attr(*, "dimnames")=List of 2
 #>   .. .. .. ..$ : chr [1:818] "CLCA1" "IGLL5;IGLC1" "PDLIM1" "MYO1C" ...
 #>   .. .. .. ..$ : chr [1:818] "CLCA1" "IGLL5;IGLC1" "PDLIM1" "MYO1C" ...
-#>   .. ..$ dissTOM       : num [1:818, 1:818] 0 0.995 0.994 0.992 0.992 ...
-#>   .. ..$ geneTree      :List of 7
+#>   .. ..$ dissTOM         : num [1:818, 1:818] 0 0.995 0.994 0.992 0.992 ...
+#>   .. ..$ geneTree        :List of 7
 #>   .. .. ..$ merge      : int [1:817, 1:2] -65 -670 1 -359 3 -232 -794 -77 5 -191 ...
 #>   .. .. ..$ height     : num [1:817] 0.392 0.403 0.435 0.458 0.468 ...
 #>   .. .. ..$ order      : int [1:818] 265 675 628 62 56 403 630 366 479 627 ...
@@ -207,7 +190,7 @@ cn
 #>   .. .. ..$ call       : language fastcluster::hclust(d = stats::as.dist(dissTOM), method = "average")
 #>   .. .. ..$ dist.method: NULL
 #>   .. .. ..- attr(*, "class")= chr "hclust"
-#>   .. ..$ MEs           :'data.frame':    111 obs. of  7 variables:
+#>   .. ..$ moduleEigengenes:'data.frame':  111 obs. of  7 variables:
 #>   .. .. ..$ MEgreen    : num [1:111] 0.0244 0.1157 -0.0578 0.0668 0.0986 ...
 #>   .. .. ..$ MEturquoise: num [1:111] 0.0927 0.1283 0.1358 0.1086 0.0934 ...
 #>   .. .. ..$ MEblue     : num [1:111] 0.0447 0.0442 0.1142 0.1116 0.0294 ...
@@ -215,11 +198,11 @@ cn
 #>   .. .. ..$ MEred      : num [1:111] -0.051965 -0.094088 -0.011963 0.000277 -0.05732 ...
 #>   .. .. ..$ MEblack    : num [1:111] -0.04727 0.00409 0.01239 -0.05464 0.06629 ...
 #>   .. .. ..$ MEbrown    : num [1:111] 0.0306 0.1201 0.0131 -0.0917 0.1399 ...
-#>   .. ..$ moduleColors  : Named chr [1:818] "green" "yellow" "blue" "blue" ...
+#>   .. ..$ moduleColors    : Named chr [1:818] "green" "yellow" "blue" "blue" ...
 #>   .. .. ..- attr(*, "names")= chr [1:818] "CLCA1" "IGLL5;IGLC1" "PDLIM1" "MYO1C" ...
-#>   .. ..$ moduleLabels  : Named num [1:818] 5 4 2 2 1 1 3 1 3 3 ...
+#>   .. ..$ moduleLabels    : Named num [1:818] 5 4 2 2 1 1 3 1 3 3 ...
 #>   .. .. ..- attr(*, "names")= chr [1:818] "CLCA1" "IGLL5;IGLC1" "PDLIM1" "MYO1C" ...
-#>   .. ..$ unmergedColors: Named chr [1:818] "green" "yellow" "blue" "blue" ...
+#>   .. ..$ unmergedColors  : Named chr [1:818] "green" "yellow" "blue" "blue" ...
 #>   .. .. ..- attr(*, "names")= chr [1:818] "CLCA1" "IGLL5;IGLC1" "PDLIM1" "MYO1C" ...
 #>  $ connectivity :List of 1
 #>   ..$ Intensity:Classes 'data.table' and 'data.frame':   818 obs. of  6 variables:
@@ -237,19 +220,19 @@ cn %>% Histogram(preview = TRUE)
 #> Warning: Removed 15206 rows containing non-finite values (stat_bin).
 ```
 
-<img src="man/figures/README-unnamed-chunk-7-1.png" width="60%" />
+<img src="man/figures/README-unnamed-chunk-6-1.png" width="60%" />
 
 ``` r
 cn %>% SampleTree(preview = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-8-1.png" width="90%" />
+<img src="man/figures/README-unnamed-chunk-7-1.png" width="90%" />
 
 ``` r
 cn %>% ModulePlot(preview = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-9-1.png" width="90%" />
+<img src="man/figures/README-unnamed-chunk-8-1.png" width="90%" />
 
 ``` r
 cn %>% GetHubGenes()

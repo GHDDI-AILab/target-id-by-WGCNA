@@ -122,7 +122,7 @@ print.ExpAssayFrame = function(x) {
   }
   ## Print other attributes
   cat("\nAttributes:\n")
-  index = setdiff(names(attributes(x)), c("names", "experiments", "class"))
+  index = setdiff(names(attributes(x)), c("names", "filename", "experiments", "class"))
   utils::str(attributes(x)[index])
   invisible(x)
 }

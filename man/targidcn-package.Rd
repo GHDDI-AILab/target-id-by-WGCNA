@@ -15,8 +15,8 @@ target identification tasks on gene expression data using the WGCNA method.
 Functions:
 \itemize{
 \item \code{ReadExperimentalDesign()}
-\item \code{ReadProteinGroups()}
 \item \code{ReadPhenotypeTable()}
+\item \code{ReadProteinGroups()}
 }
 
 Classes:
@@ -37,6 +37,7 @@ Classes:
 
 S3 methods:
 \itemize{
+\item \code{AddPhenotype()}
 \item \code{Tidy()}
 \item \code{Subset()}
 \item \code{QC()}
@@ -51,6 +52,10 @@ S3 methods:
 \item \code{AddConnectivity()}
 \item \code{GetConnectivity()}
 \item \code{GetHubGenes()}
+\item \code{ModuleSignificance()}
+\item \code{ModuleTraitHeatmap()}
+\item \code{GeneSignificance()}
+\item \code{ModuleMembership()}
 }
 }
 \author{

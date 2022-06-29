@@ -92,7 +92,6 @@ AddNetwork.ExpAssayFrame = function(
       minClusterSize = minModuleSize
       )
     dynamicColors = WGCNA::labels2colors(dynamicModules)
-    MEList = WGCNA::moduleEigengenes(assay[[i]], colors = dynamicColors)
     merge = WGCNA::mergeCloseModules(assay[[i]], colors = dynamicColors, 
       cutHeight = MEDissThres)
     ## Result
@@ -103,7 +102,7 @@ AddNetwork.ExpAssayFrame = function(
       adjacency = adjMat, 
       dissTOM = dissTOM, 
       geneTree = geneTree, 
-      MEs = merge$newMEs, 
+      moduleEigengenes = merge$newMEs, 
       moduleColors = stats::setNames(merge$colors, genes), 
       moduleLabels = stats::setNames(match(merge$colors, colorOrder)-1, genes), 
       unmergedColors = stats::setNames(dynamicColors, genes)
