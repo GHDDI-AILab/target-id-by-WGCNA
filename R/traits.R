@@ -41,10 +41,10 @@ ModuleSignificance.CorrelationNetwork = function(
   for (i in 1:length(new.object)) {
     if (missing(samples)) {
       MEs = attr(object, ATTR_NET)[[i]][["moduleEigengenes"]]
-      datTraits = attr(object, ATTR_PHENO)[rownames(MEs), traits]
+      datTraits = attr(object, ATTR_PHENO)[rownames(MEs), traits, drop = FALSE]
     } else if (length(samples) > 1) {
       MEs = attr(new.object, ATTR_NET)[[i]][["moduleEigengenes"]][samples, ]
-      datTraits = attr(object, ATTR_PHENO)[samples, traits]
+      datTraits = attr(object, ATTR_PHENO)[samples, traits, drop = FALSE]
     } else {
       stop("The number of samples should be more than one!")
     }
