@@ -147,8 +147,11 @@ AddPhenotype.ExpAssayTable = function(
   if (length(setdiff(samples, phenotype$experiments)) > 0) {
     stop("The phenotypes of some samples were missing!")
   }
+  d.f = as.data.frame(phenotype$table)
+  rownames(d.f) = d.f$Experiment
+  d.f$Experiment = NULL
   new.object = data.table::copy(object)
-  attr(new.object, ATTR_PHENO) = phenotype$table
+  attr(new.object, ATTR_PHENO) = d.f
   return(new.object)
 }
 
@@ -171,8 +174,11 @@ AddPhenotype.ExpAssayFrame = function(
   if (length(setdiff(samples, phenotype$experiments)) > 0) {
     stop("The phenotypes of some samples were missing!")
   }
+  d.f = as.data.frame(phenotype$table)
+  rownames(d.f) = d.f$Experiment
+  d.f$Experiment = NULL
   new.object = data.table::copy(object)
-  attr(new.object, ATTR_PHENO) = phenotype$table
+  attr(new.object, ATTR_PHENO) = d.f
   return(new.object)
 }
 

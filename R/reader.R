@@ -32,7 +32,7 @@ ReadExperimentalDesign = function(
   infile = assert_length_1(experimentalDesign.txt)
   ## Load the table
   DT = data.table::fread(infile)
-  if (! nrow(DT) || ! "Experiment" %in% names(DT)) {
+  if (nrow(DT) < 1 || ! "Experiment" %in% names(DT)) {
     stop("Empty or invalid experimentalDesign file!")
   }
   ## Create an object
@@ -78,7 +78,7 @@ ReadProteinGroups = function(
   ## Load experimentalDesign.txt and proteinGroups.txt
   info = ReadExperimentalDesign(data.dir = dirname(infile))
   DT = data.table::fread(infile)
-  if (! nrow(DT) || ! ncol(DT)) {
+  if (nrow(DT) < 1 || ncol(DT) < 1) {
     stop("Empty or invalid proteinGroups file!")
   }
   ## Find the columns that are not sample-specific
@@ -116,8 +116,8 @@ ReadProteinGroups = function(
   structure(
     Assays, 
     experiments = as.character(info$experiments), 
-    phenotype = data.table::data.table(), 
     QC = data.table::data.table(), 
+    phenotype = data.frame(), 
     powerEstimate = list(), 
     network = list(), 
     connectivity = list(), 
@@ -150,7 +150,7 @@ ReadPhenotypeTable = function(
   samples = setdiff(unique(DT$Experiment), "")
   structure(
     list(experiments = samples, 
-         table = DT), 
+         table = DT[Experiment %in% samples, head(.SD, 1), by = "Experiment"]), 
     filename = normalizePath(file),
     class = c("ExperimentInfo", "ExperimentList", "list")
     )
