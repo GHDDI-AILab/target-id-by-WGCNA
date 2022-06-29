@@ -114,9 +114,14 @@ ReadProteinGroups = function(
   rm(DT)
   ## Create an object
   structure(
-    Assays,
-    experiments = info$experiments,
-    filename = normalizePath(infile),
+    Assays, 
+    experiments = as.character(info$experiments), 
+    phenotype = data.table::data.table(), 
+    QC = data.table::data.table(), 
+    powerEstimate = list(), 
+    network = list(), 
+    connectivity = list(), 
+    filename = normalizePath(infile), 
     class = c("ProteinGroups", "ExpAssayTable", "ExperimentList", "list")
     )
 }

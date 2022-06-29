@@ -190,6 +190,9 @@ ModulePlot.CorrelationNetwork = function(
   plot.height = 10
 ) {
   ATTR_NET = "network"
+  if (length(object) != length(attr(object, ATTR_NET))) {
+    stop("Invalid CorrelationNetwork object in the input!")
+  }
   net = attr(object, ATTR_NET)[[
     assert_length_1(index)[[1]]
     ]]

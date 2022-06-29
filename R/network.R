@@ -69,7 +69,11 @@ AddNetwork.ExpAssayFrame = function(
     }
     power = attr(assay, "powerEstimate")
   } else if (is.numeric(power)) {
-    power = rep(power, length(assay))
+    if (length(power) == 1) {
+      power = rep(power, length(assay))
+    } else if (length(power) != length(assay)) {
+      stop("The given power was invalid!")
+    }
   } else {
     stop("The given power was invalid!")
   }
@@ -144,7 +148,7 @@ AddConnectivity.CorrelationNetwork = function(
   GENE = "gene"
   #MODULE = "module"
   if (length(object) != length(attr(object, ATTR_NET))) {
-    stop("Invalid correlation network in the input!")
+    stop("Invalid CorrelationNetwork object in the input!")
   }
   new.object = data.table::copy(object)
   attr(new.object, ATTR_CON) = list()
@@ -203,6 +207,9 @@ GetConnectivity.CorrelationNetwork = function(
   index = 1
 ) {
   ATTR_CON = "connectivity"
+  if (length(object) != length(attr(object, ATTR_CON))) {
+    object = AddConnectivity.CorrelationNetwork(object)
+  }
   connectivity = attr(new.object, ATTR_CON)[[
     assert_length_1(index)
     ]]
