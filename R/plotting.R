@@ -242,3 +242,83 @@ ModulePlot.default = function(object, ...) {
   }
 }
 
+#' Plot a module-trait heatmap.
+#' 
+#' @param object A CorrelationNetwork object.
+#' @param index A length-1 numeric or character vector specifying the frame. (default: 1)
+#' @param preview (A length-1 logical) If TRUE, display a plot; else 
+#'   if FALSE, save the plot to a file. (default: FALSE)
+#' @param title (A length-1 character vector) Title for the plot.
+#' @param file.prefix (A length-1 character) A prefix for the name of output file.
+#' @param plot.width (A length-1 numeric) Set the plot width.
+#' @param plot.height (A length-1 numeric) Set the plot height.
+#' @return Path to the output file, or NULL when preview=TRUE.
+#' 
+#' @rdname ModuleTraitHeatmap
+#' @method ModuleTraitHeatmap CorrelationNetwork
+#' @export
+#' 
+ModuleTraitHeatmap.CorrelationNetwork = function(
+  object, 
+  index = 1, 
+  preview = FALSE, 
+  title = "Module-Trait Relationships", 
+  file.prefix, 
+  plot.width = 12, 
+  plot.height = 8, 
+  font.size = 1.5
+) {
+  ATTR_MS = "module-trait"
+  if (length(object) != length(attr(object, ATTR_MS))) {
+    stop("Invalid input without module-trait correlation data!")
+  }
+  module_signif = attr(object, ATTR_MS)[[
+    assert_length_1(index)[[1]]
+    ]]
+  draw = function(x) {
+    textMatrix = paste(signif(as.matrix(x$cor), 2), "\n(",
+                       signif(as.matrix(x$pval), 1), ")", sep = "")
+    dim(textMatrix) = dim(x$cor)
+    par(mar = c(8, 10, 5, 5))
+    WGCNA::labeledHeatmap(
+      Matrix = x$cor, 
+      xLabels = colnames(x$cor), yLabels = rownames(x$cor), ySymbols = rownames(x$cor), 
+      colorLabels = FALSE, colors = WGCNA::blueWhiteRed(50), 
+      textMatrix = textMatrix, setStdMargins = FALSE, 
+      cex.main = font.size, cex.text = font.size, cex.lab = font.size, 
+      zlim = c(-1, 1), main = title[[1]]
+      )
+  }
+  if (preview) {
+    draw(module_signif)
+    invisible()
+  } else {
+    if (missing(file.prefix)) {
+      file.prefix = ""
+    } else if (is.character(file.prefix) && length(file.prefix) > 0) {
+      file.prefix = paste0(assert_length_1(file.prefix), ".")
+    } else {
+      stop("The given file.prefix was invalid!")
+    }
+    dir = format(Sys.Date(), "Plots_%Y%m%d")
+    file = sprintf("%s/%sModuleTraitRelationships.pdf", dir, file.prefix)
+    dir.create(dirname(file), showWarnings = FALSE, recursive = TRUE)
+    pdf(file = file, width = plot.width, height = plot.height)
+    draw(module_signif)
+    dev.off()
+    invisible(file)
+  }
+}
+
+#' @rdname ModuleTraitHeatmap
+#' @method ModuleTraitHeatmap default
+#' @export
+#' 
+ModuleTraitHeatmap.default = function(object, ...) {
+  if (inherits(object, "CorrelationNetwork")) {
+    ModuleTraitHeatmap.CorrelationNetwork(object, ...)
+  } else {
+    stop("This method is associated with class CorrelationNetwork.")
+  }
+}
+

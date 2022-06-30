@@ -47,8 +47,8 @@
 #' @importFrom magrittr "%>%" "%T>%"
 #' @importFrom ggplot2 aes element_text geom_histogram ggplot ggsave labs theme theme_classic
 #' @importFrom WGCNA TOMsimilarity adjacency intramodularConnectivity mergeCloseModules moduleEigengenes pickSoftThreshold
-#' @importFrom WGCNA cor corPvalueStudent labeledHeatmap labels2colors plotDendroAndColors standardColors verboseScatterplot
-#' @importFrom WGCNA enableWGCNAThreads
+#' @importFrom WGCNA blueWhiteRed labeledHeatmap labels2colors plotDendroAndColors standardColors verboseScatterplot
+#' @importFrom WGCNA cor corPvalueStudent enableWGCNAThreads
 #' @importFrom fastcluster hclust
 #' @importFrom dynamicTreeCut cutreeDynamic
 #' @importFrom org.Hs.eg.db org.Hs.eg.db
