@@ -19,7 +19,7 @@ Histogram(object, ...)
   plot.width = NA,
   plot.height = NA,
   font.size = 20,
-  font.family = "Sans"
+  font.family = ""
 )
 
 \method{Histogram}{default}(object, ...)
