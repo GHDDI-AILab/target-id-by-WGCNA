@@ -20,10 +20,10 @@
 #' 
 #' S3 methods:
 #' - `AddPhenotype()`
-#' - `Tidy()`
 #' - `Subset()`
+#' - `Tidy()`
 #' - `QC()`
-#' - `Reshape()`
+#' - `Reshape()`: convert an `ExpAssayTable` object to an `ExpAssayFrame` object
 #' - `LogTransform()`
 #' - `Normalize()`
 #' - `Histogram()`
@@ -35,9 +35,11 @@
 #' - `GetConnectivity()`
 #' - `GetHubGenes()`
 #' - `ModuleSignificance()`
+#' - `BindModuleSignificance()`
 #' - `ModuleTraitHeatmap()`
 #' - `GeneSignificance()`
 #' - `ModuleMembership()`
+#' - `GetRelatedHubGenes()`
 #' 
 #' @importFrom graphics abline par
 #' @importFrom grDevices dev.off pdf

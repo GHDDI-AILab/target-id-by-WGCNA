@@ -38,10 +38,10 @@ Classes:
 S3 methods:
 \itemize{
 \item \code{AddPhenotype()}
-\item \code{Tidy()}
 \item \code{Subset()}
+\item \code{Tidy()}
 \item \code{QC()}
-\item \code{Reshape()}
+\item \code{Reshape()}: convert an \code{ExpAssayTable} object to an \code{ExpAssayFrame} object
 \item \code{LogTransform()}
 \item \code{Normalize()}
 \item \code{Histogram()}
@@ -53,9 +53,11 @@ S3 methods:
 \item \code{GetConnectivity()}
 \item \code{GetHubGenes()}
 \item \code{ModuleSignificance()}
+\item \code{BindModuleSignificance()}
 \item \code{ModuleTraitHeatmap()}
 \item \code{GeneSignificance()}
 \item \code{ModuleMembership()}
+\item \code{GetRelatedHubGenes()}
 }
 }
 \author{

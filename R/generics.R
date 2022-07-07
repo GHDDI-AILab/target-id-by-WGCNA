@@ -205,3 +205,13 @@ ModuleMembership = function(object, ...) {
   UseMethod("ModuleMembership")
 }
 
+#' Get hub genes in the modules associated with traits of interest.
+#' 
+#' @param object An object.
+#' @param ... further arguments to be passed to or from other methods.
+#' @export
+#' 
+GetRelatedHubGenes = function(object, ...) {
+  UseMethod("GetRelatedHubGenes")
+}
+
