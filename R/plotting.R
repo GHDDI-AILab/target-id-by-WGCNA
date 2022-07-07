@@ -36,7 +36,7 @@ Histogram.ExpAssayFrame = function(
   plot.width = NA, 
   plot.height = NA, 
   font.size = 20, 
-  font.family = "Sans"
+  font.family = ""
 ) {
   if (missing(title)) {
     title = "Distribution of expression levels"
