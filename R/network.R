@@ -207,9 +207,9 @@ GetConnectivity.CorrelationNetwork = function(
 ) {
   ATTR_CON = "connectivity"
   if (length(object) != length(attr(object, ATTR_CON))) {
-    object = AddConnectivity.CorrelationNetwork(object)
+    object = AddConnectivity(object)
   }
-  connectivity = attr(new.object, ATTR_CON)[[
+  connectivity = attr(object, ATTR_CON)[[
     assert_length_1(index)
     ]]
   if (geneinfo) get_geneinfo(connectivity) else connectivity
