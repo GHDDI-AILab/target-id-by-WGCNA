@@ -24,10 +24,6 @@ ModuleSignificance.CorrelationNetwork = function(
   if (length(object) != length(attr(object, ATTR_NET))) {
     stop("Invalid CorrelationNetwork object in the input!")
   }
-  samples = attr(object, "experiments")
-  if (length(setdiff(samples, rownames(attr(object, ATTR_PHENO)))) > 0) {
-    stop("The phenotypes of some samples were missing!")
-  }
   if (missing(prefix)) {
     prefix = ""
   } else {
@@ -35,6 +31,8 @@ ModuleSignificance.CorrelationNetwork = function(
   }
   if (missing(traits) || length(traits) < 1) {
     traits = colnames(attr(object, ATTR_PHENO))
+  } else if (! all(traits %in% colnames(attr(object, ATTR_PHENO)))) {
+    stop("Invalid traits in the input!")
   }
   new.object = data.table::copy(object)
   attr(new.object, ATTR_MS) = list()
