@@ -252,6 +252,7 @@ ModulePlot.default = function(object, ...) {
 #' @param file.prefix (A length-1 character) A prefix for the name of output file.
 #' @param plot.width (A length-1 numeric) Set the plot width.
 #' @param plot.height (A length-1 numeric) Set the plot height.
+#' @param font.size (A length-1 numeric) Set the font size.
 #' @return Path to the output file, or NULL when preview=TRUE.
 #' 
 #' @rdname ModuleTraitHeatmap
@@ -279,7 +280,7 @@ ModuleTraitHeatmap.CorrelationNetwork = function(
     textMatrix = paste(signif(as.matrix(x$cor), 2), "\n(",
                        signif(as.matrix(x$pval), 1), ")", sep = "")
     dim(textMatrix) = dim(x$cor)
-    par(mar = c(8, 10, 5, 5))
+    par(mar = c(12, 12, 5, 5))
     WGCNA::labeledHeatmap(
       Matrix = x$cor, 
       xLabels = colnames(x$cor), yLabels = rownames(x$cor), ySymbols = rownames(x$cor), 

@@ -165,6 +165,16 @@ ModuleSignificance = function(object, ...) {
   UseMethod("ModuleSignificance")
 }
 
+#' Combine module-trait correlation and significance.
+#' 
+#' @param object An object.
+#' @param ... further arguments to be passed to or from other methods.
+#' @export
+#' 
+BindModuleSignificance = function(object, ...) {
+  UseMethod("BindModuleSignificance")
+}
+
 #' Plot a module-trait heatmap.
 #' 
 #' @param object An object.

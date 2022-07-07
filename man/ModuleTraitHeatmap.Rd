@@ -38,6 +38,8 @@ if FALSE, save the plot to a file. (default: FALSE)}
 \item{plot.width}{(A length-1 numeric) Set the plot width.}
 
 \item{plot.height}{(A length-1 numeric) Set the plot height.}
+
+\item{font.size}{(A length-1 numeric) Set the font size.}
 }
 \value{
 Path to the output file, or NULL when preview=TRUE.

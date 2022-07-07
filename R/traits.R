@@ -73,3 +73,64 @@ ModuleSignificance.default = function(object, ...) {
   }
 }
 
+#' Combine the module-trait correlation and significance results.
+#' 
+#' Combine the module-trait correlation and significance results 
+#' from two CorrelationNetwork objects.
+#' 
+#' @param this A CorrelationNetwork object.
+#' @param that Another CorrelationNetwork object.
+#' @return A new CorrelationNetwork object.
+#' @export
+#' 
+BindModuleSignificance.CorrelationNetwork = function(
+  this, 
+  that 
+) {
+  ATTR_MS = "module-trait"
+  if (! inherits(that, "CorrelationNetwork")) {
+    stop("Need two CorrelationNetwork objects as input.")
+  }
+  if (length(this) != length(that) || 
+      ! setequal(names(attr(this, ATTR_MS)), names(attr(that, ATTR_MS)))) {
+    stop("The module-trait of the two input objects should correspond!")
+  }
+  if (length(this) != length(attr(this, ATTR_MS))) {
+    stop("Invalid CorrelationNetwork object: 'this'!")
+  }
+  if (length(that) != length(attr(that, ATTR_MS))) {
+    stop("Invalid CorrelationNetwork object: 'that'!")
+  }
+  if (! is.null(names(attr(this, ATTR_MS))) && ! is.null(names(attr(that, ATTR_MS)))) {
+    indices = names(attr(this, ATTR_MS))
+  } else {
+    indices = 1:length(this)
+  }
+  merge_module_trait = function(df1, df2) {
+    d.f = merge(df1, df2, by = "row.names", all = TRUE)
+    rownames(d.f) = d.f[["Row.names"]]
+    d.f[["Row.names"]] = NULL
+    return(d.f)
+  }
+  new.object = data.table::copy(this)
+  for (i in indices) {
+    attr(new.object, ATTR_MS)[[i]] = list(
+      cor = merge_module_trait(attr(this, ATTR_MS)[[i]]$cor, attr(that, ATTR_MS)[[i]]$cor), 
+      pval = merge_module_trait(attr(this, ATTR_MS)[[i]]$pval, attr(that, ATTR_MS)[[i]]$pval)
+      )
+  }
+  return(new.object)
+}
+
+#' @rdname BindModuleSignificance
+#' @method BindModuleSignificance default
+#' @export
+#' 
+BindModuleSignificance.default = function(object, ...) {
+  if (inherits(object, "CorrelationNetwork")) {
+    BindModuleSignificance.CorrelationNetwork(object, ...)
+  } else {
+    stop("This method is associated with class CorrelationNetwork.")
+  }
+}
+
