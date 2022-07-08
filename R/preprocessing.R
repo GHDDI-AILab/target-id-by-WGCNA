@@ -227,18 +227,28 @@ QC.ProteinGroups = function(
   ## column name: `Reverse`
   ## column name: `Only identified by site`
   for (i in 1:length(new.object)) {
-    d.t = new.object[[i]]
-    contaminant  = grep("contaminant", names(d.t), 
-                        ignore.case = TRUE, value = TRUE) %>% assert_length_1()
-    reverse      = grep("Reverse", names(d.t), 
-                        ignore.case = TRUE, value = TRUE) %>% assert_length_1()
-    only_by_site = grep("Only identified by site", names(d.t), 
-                        ignore.case = TRUE, value = TRUE) %>% assert_length_1()
-    new.object[[i]] = d.t[
-      (is.na(d.t[[contaminant]]) | d.t[[contaminant]] != "+") & 
-      (is.na(d.t[[reverse]]) | d.t[[reverse]] != "+") & 
-      (is.na(d.t[[only_by_site]]) | d.t[[only_by_site]] != "+"), 
-      ]
+    contaminant = grep("contaminant", names(new.object[[i]]), ignore.case = TRUE)
+    reverse = grep("Reverse", names(new.object[[i]]), ignore.case = TRUE)
+    only_by_site = grep("Only identified by site", names(new.object[[i]]), ignore.case = TRUE)
+    if (length(contaminant) == 0 && length(reverse) == 0 && length(only_by_site) == 0) {
+        warning("No columns for checking false hits!")
+    } else {
+      if (length(contaminant) > 0) {
+        contaminant = assert_length_1(contaminant)
+        new.object[[i]] = new.object[[i]][
+          is.na(new.object[[i]][[contaminant]]) | new.object[[i]][[contaminant]] != "+", ]
+      }
+      if (length(reverse) > 0) {
+        reverse = assert_length_1(reverse)
+        new.object[[i]] = new.object[[i]][
+          is.na(new.object[[i]][[reverse]]) | new.object[[i]][[reverse]] != "+", ]
+      }
+      if (length(only_by_site) > 0) {
+        only_by_site = assert_length_1(only_by_site)
+        new.object[[i]] = new.object[[i]][
+          is.na(new.object[[i]][[only_by_site]]) | new.object[[i]][[only_by_site]] != "+", ]
+      }
+    }
   }
   feature.counts[, "Remove false hits" := vapply(new.object, nrow, integer(1))]
   ## Get gene names
@@ -250,24 +260,26 @@ QC.ProteinGroups = function(
       no = character(1)
       )
   }
-  if ("Gene names" %in% names(new.object[[1]])) {
-    for (i in 1:length(new.object)) {
-      genes = new.object[[i]][, get_genename_from_fasta_header(`Fasta headers`)]
-      new.object[[i]][, "Gene names" := ifelse(nzchar(genes), genes, `Gene names`)]
-      new.object[[i]] = new.object[[i]][nzchar(`Gene names`), ]
-    }
-    feature.counts[, "With gene names" := vapply(new.object, nrow, integer(1))]
-  } else {
-    for (i in 1:length(new.object)) {
-      new.object[[i]][, "Gene names" := `Fasta headers`]
+  for (i in 1:length(new.object)) {
+    if ("Gene names" %in% names(new.object[[i]])) {
+      if ("Fasta headers" %in% names(new.object[[i]])) {
+        genes = get_genename_from_fasta_header(new.object[[i]][["Fasta headers"]])
+        new.object[[i]][, "Gene names" := ifelse(nzchar(genes), genes, new.object[[i]][["Gene names"]])]
+      }
+      new.object[[i]] = new.object[[i]][nzchar(new.object[[i]][["Gene names"]]), ]
+    } else {
+      if ("Fasta headers" %in% names(new.object[[i]])) {
+        new.object[[i]][, "Gene names" := new.object[[i]][["Fasta headers"]]]
+      }
     }
   }
+  feature.counts[, "With gene names" := vapply(new.object, nrow, integer(1))]
   ## Check unique peptides
   for (i in 1:length(new.object)) {
-    new.object[[i]] = new.object[[i]][`Unique peptides` >= min.unique.peptides, ]
+    new.object[[i]] = new.object[[i]][new.object[[i]][["Unique peptides"]] >= min.unique.peptides, ]
   }
   feature.counts[, paste("Unique peptides >=", min.unique.peptides) := 
-		 vapply(new.object, nrow, integer(1))]
+                 vapply(new.object, nrow, integer(1))]
   ## Check non-missing fraction
   experiments = attr(new.object, "experiments")
   for (i in 1:length(new.object)) {
