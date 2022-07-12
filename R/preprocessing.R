@@ -231,7 +231,7 @@ QC.ProteinGroups = function(
     reverse = grep("Reverse", names(new.object[[i]]), ignore.case = TRUE)
     only_by_site = grep("Only identified by site", names(new.object[[i]]), ignore.case = TRUE)
     if (length(contaminant) == 0 && length(reverse) == 0 && length(only_by_site) == 0) {
-        warning("No columns for checking false hits!")
+        warning("No column for checking false hits!")
     } else {
       if (length(contaminant) > 0) {
         contaminant = assert_length_1(contaminant)
@@ -276,7 +276,13 @@ QC.ProteinGroups = function(
   feature.counts[, "With gene names" := vapply(new.object, nrow, integer(1))]
   ## Check unique peptides
   for (i in 1:length(new.object)) {
-    new.object[[i]] = new.object[[i]][new.object[[i]][["Unique peptides"]] >= min.unique.peptides, ]
+    unique_peptides = grep("Unique peptides", names(new.object[[i]]), ignore.case = TRUE)
+    if (length(unique_peptides) < 1) {
+      warning("No column for checking unique peptides!")
+    } else {
+      unique_peptides = assert_length_1(unique_peptides)
+      new.object[[i]] = new.object[[i]][new.object[[i]][[unique_peptides]] >= min.unique.peptides, ]
+    }
   }
   feature.counts[, paste("Unique peptides >=", min.unique.peptides) := 
                  vapply(new.object, nrow, integer(1))]
