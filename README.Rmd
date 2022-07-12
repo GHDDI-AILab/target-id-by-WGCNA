@@ -85,31 +85,34 @@ R package `targidcn` contains:
   - `GetConnectivity()`
   - `GetHubGenes()`
   - `ModuleSignificance()`
+  - `BindModuleSignificance()`
   - `ModuleTraitHeatmap()`
   - `GeneSignificance()`
   - `ModuleMembership()`
+  - `GetRelatedHubGenes()`
 
 ## Tutorial
 
 ```{r}
+library(data.table)
 library(magrittr)
 library(targidcn) %>% suppressMessages()
 
-datadir = system.file("extdata", "MS_label-free", package = "targidcn")
+datadir = system.file("extdata", "MS_label-free", "MaxQuantOutput_50", package = "targidcn")
+pheno = ReadPhenotypeTable(file.path(datadir, "phenotype.txt"))
 assay = ReadProteinGroups(datadir)
 assay
 ```
 
 ```{r}
-cn = 
-  assay %>% 
+cn = assay %>% 
+  AddPhenotype(pheno) %>% 
   Tidy() %>% 
   QC() %>% 
   Reshape() %>% 
   LogTransform() %>% 
   Normalize() %>% 
-  PickThreshold() %>% 
-  AddNetwork() %>% 
+  AddNetwork(power = 6) %>% 
   AddConnectivity()
 
 ```
@@ -132,6 +135,22 @@ cn %>% ModulePlot(preview = TRUE)
 
 ```{r}
 cn %>% GetHubGenes()
+```
+
+```{r}
+samples1 = pheno$table[is.na(Remission) | Remission == 0, Experiment]
+samples2 = pheno$table[!is.na(Remission), Experiment]
+mt1 = ModuleSignificance(cn, samples = samples1, traits = "Illness", prefix = "UC")
+mt2 = ModuleSignificance(cn, samples = samples2, traits = "Remission", prefix = "UC")
+mt = BindModuleSignificance(mt1, mt2)
+```
+
+```{r, fig.dim = c(8, 8), out.width = "60%"}
+mt %>% ModuleTraitHeatmap(preview = TRUE)
+```
+
+```{r}
+mt %>% GetRelatedHubGenes()
 ```
 
 ## References

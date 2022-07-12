@@ -92,59 +92,47 @@ R package `targidcn` contains:
     -   `GetConnectivity()`
     -   `GetHubGenes()`
     -   `ModuleSignificance()`
+    -   `BindModuleSignificance()`
     -   `ModuleTraitHeatmap()`
     -   `GeneSignificance()`
     -   `ModuleMembership()`
+    -   `GetRelatedHubGenes()`
 
 ## Tutorial
 
 ``` r
+library(data.table)
 library(magrittr)
 library(targidcn) %>% suppressMessages()
 
-datadir = system.file("extdata", "MS_label-free", package = "targidcn")
+datadir = system.file("extdata", "MS_label-free", "MaxQuantOutput_50", package = "targidcn")
+pheno = ReadPhenotypeTable(file.path(datadir, "phenotype.txt"))
 assay = ReadProteinGroups(datadir)
 assay
 #> An object of class ProteinGroups
 #> 
-#> 111 Experiment(s): "147", "151", "162", ...
+#> 111 Experiment(s): "UCA_1", "UCA_2", "UCA_3", ...
 #> 1 Assay(s): "Intensity"
-#>  1591 features across 111 samples within assay 1.
+#>  853 features across 111 samples within assay 1.
 ```
 
 ``` r
-cn = 
-  assay %>% 
+cn = assay %>% 
+  AddPhenotype(pheno) %>% 
   Tidy() %>% 
   QC() %>% 
   Reshape() %>% 
   LogTransform() %>% 
   Normalize() %>% 
-  PickThreshold() %>% 
-  AddNetwork() %>% 
+  AddNetwork(power = 6) %>% 
   AddConnectivity()
-#> Allowing parallel execution with up to 4 working processes.
-#>    Power SFT.R.sq slope truncated.R.sq mean.k. median.k. max.k.
-#> 1      1    0.230 -1.79         0.9890 160.000  1.58e+02  268.0
-#> 2      2    0.533 -1.68         0.9790  48.900  4.54e+01  123.0
-#> 3      3    0.789 -1.67         0.9460  18.800  1.61e+01   65.5
-#> 4      4    0.877 -1.93         0.9180   8.470  6.37e+00   43.9
-#> 5      5    0.922 -1.98         0.9130   4.310  2.81e+00   33.8
-#> 6      6    0.931 -1.88         0.9130   2.430  1.31e+00   28.5
-#> 7      7    0.324 -2.89         0.1830   1.510  6.56e-01   25.6
-#> 8      8    0.314 -2.60         0.1580   1.020  3.49e-01   23.8
-#> 9      9    0.191 -2.44        -0.0318   0.750  1.90e-01   22.8
-#> 10    10    0.296 -2.14         0.1330   0.588  1.06e-01   22.2
-#> 11    12    0.149 -1.73        -0.0766   0.422  3.58e-02   21.5
-#> 12    14    0.192 -1.78        -0.0362   0.346  1.26e-02   21.2
-#> 13    16    0.284 -1.55         0.1410   0.306  4.73e-03   21.1
-#> 14    18    0.283 -1.47         0.1440   0.282  1.80e-03   21.1
-#> 15    20    0.285 -1.41         0.1480   0.265  7.18e-04   21.0
+#> Warning in QC.ProteinGroups(.): No column for checking false hits!
+#> Warning in QC.ProteinGroups(.): No column for checking unique peptides!
 #> ..connectivity..
 #> ..matrix multiplication (system BLAS)..
 #> ..normalization..
 #> ..done.
-#>  ..cutHeight not given, setting it to 0.994  ===>  99% of the (truncated) height range in dendro.
+#>  ..cutHeight not given, setting it to 0.999  ===>  99% of the (truncated) height range in dendro.
 #>  ..done.
 #>  mergeCloseModules: Merging modules whose distance is less than 0.15
 #>    Calculating new MEs...
@@ -154,70 +142,70 @@ cn =
 cn
 #> An object of class CorrelationNetwork
 #> 
-#> 111 Experiment(s): "147", "151", "162", ...
+#> 111 Experiment(s): "UCA_1", "UCA_2", "UCA_3", ...
 #> 1 Assay(s): "Intensity"
-#>  818 features across 111 samples within assay 1.
+#>  846 features across 111 samples within assay 1.
 #> 
 #> Attributes:
 #> List of 5
-#>  $ phenotype    :'data.frame':   0 obs. of  0 variables
+#>  $ phenotype    :'data.frame':   111 obs. of  3 variables:
+#>   ..$ Diagnosis: chr [1:111] "UC" "UC" "UC" "UC" ...
+#>   ..$ Illness  : int [1:111] 1 1 1 1 1 1 1 1 1 1 ...
+#>   ..$ Remission: int [1:111] 0 0 0 0 0 0 0 0 0 0 ...
 #>  $ QC           :Classes 'data.table' and 'data.frame':  1 obs. of  6 variables:
 #>   ..$ Assay                         : chr "Intensity"
-#>   ..$ Raw data                      : int 1591
-#>   ..$ Remove false hits             : int 1531
-#>   ..$ With gene names               : int 1509
-#>   ..$ Unique peptides >= 2          : int 1126
-#>   ..$ goodGenes, min.fraction >= 0.5: int 818
+#>   ..$ Raw data                      : int 853
+#>   ..$ Remove false hits             : int 853
+#>   ..$ With gene names               : int 853
+#>   ..$ Unique peptides >= 2          : int 853
+#>   ..$ goodGenes, min.fraction >= 0.5: int 846
 #>   ..- attr(*, ".internal.selfref")=<externalptr> 
-#>  $ powerEstimate:List of 1
-#>   ..$ Intensity: num 4
+#>  $ powerEstimate: list()
 #>  $ network      :List of 1
 #>   ..$ Intensity:List of 10
-#>   .. ..$ power           : num 4
+#>   .. ..$ power           : num 6
 #>   .. ..$ MEDissThres     : num 0.15
 #>   .. ..$ minModuleSize   : num 30
-#>   .. ..$ adjacency       : num [1:818, 1:818] 1.00 3.10e-07 6.58e-10 9.50e-04 1.13e-03 ...
+#>   .. ..$ adjacency       : num [1:846, 1:846] 1.00 1.78e-07 3.47e-04 1.31e-06 2.02e-12 ...
 #>   .. .. ..- attr(*, "dimnames")=List of 2
-#>   .. .. .. ..$ : chr [1:818] "CLCA1" "IGLL5;IGLC1" "PDLIM1" "MYO1C" ...
-#>   .. .. .. ..$ : chr [1:818] "CLCA1" "IGLL5;IGLC1" "PDLIM1" "MYO1C" ...
-#>   .. ..$ dissTOM         : num [1:818, 1:818] 0 0.995 0.994 0.992 0.992 ...
+#>   .. .. .. ..$ : chr [1:846] "A1BG" "AGR2" "ANXA2.ANXA2P2" "BSG" ...
+#>   .. .. .. ..$ : chr [1:846] "A1BG" "AGR2" "ANXA2.ANXA2P2" "BSG" ...
+#>   .. ..$ dissTOM         : num [1:846, 1:846] 0 0.999 0.997 0.999 1 ...
 #>   .. ..$ geneTree        :List of 7
-#>   .. .. ..$ merge      : int [1:817, 1:2] -65 -670 1 -359 3 -232 -794 -77 5 -191 ...
-#>   .. .. ..$ height     : num [1:817] 0.392 0.403 0.435 0.458 0.468 ...
-#>   .. .. ..$ order      : int [1:818] 265 675 628 62 56 403 630 366 479 627 ...
+#>   .. .. ..$ merge      : int [1:845, 1:2] -17 -352 -23 -18 -318 -597 -431 -493 3 -173 ...
+#>   .. .. ..$ height     : num [1:845] 0.62 0.677 0.686 0.687 0.691 ...
+#>   .. .. ..$ order      : int [1:846] 796 250 187 598 175 234 628 712 58 227 ...
 #>   .. .. ..$ labels     : NULL
 #>   .. .. ..$ method     : chr "average"
 #>   .. .. ..$ call       : language fastcluster::hclust(d = stats::as.dist(dissTOM), method = "average")
 #>   .. .. ..$ dist.method: NULL
 #>   .. .. ..- attr(*, "class")= chr "hclust"
-#>   .. ..$ moduleEigengenes:'data.frame':  111 obs. of  7 variables:
-#>   .. .. ..$ MEgreen    : num [1:111] 0.0244 0.1157 -0.0578 0.0668 0.0986 ...
-#>   .. .. ..$ MEturquoise: num [1:111] 0.0927 0.1283 0.1358 0.1086 0.0934 ...
-#>   .. .. ..$ MEblue     : num [1:111] 0.0447 0.0442 0.1142 0.1116 0.0294 ...
-#>   .. .. ..$ MEyellow   : num [1:111] 0.0267 0.0481 0.0396 0.044 0.0705 ...
-#>   .. .. ..$ MEred      : num [1:111] -0.051965 -0.094088 -0.011963 0.000277 -0.05732 ...
-#>   .. .. ..$ MEblack    : num [1:111] -0.04727 0.00409 0.01239 -0.05464 0.06629 ...
-#>   .. .. ..$ MEbrown    : num [1:111] 0.0306 0.1201 0.0131 -0.0917 0.1399 ...
-#>   .. ..$ moduleColors    : Named chr [1:818] "green" "yellow" "blue" "blue" ...
-#>   .. .. ..- attr(*, "names")= chr [1:818] "CLCA1" "IGLL5;IGLC1" "PDLIM1" "MYO1C" ...
-#>   .. ..$ moduleLabels    : Named num [1:818] 5 4 2 2 1 1 3 1 3 3 ...
-#>   .. .. ..- attr(*, "names")= chr [1:818] "CLCA1" "IGLL5;IGLC1" "PDLIM1" "MYO1C" ...
-#>   .. ..$ unmergedColors  : Named chr [1:818] "green" "yellow" "blue" "blue" ...
-#>   .. .. ..- attr(*, "names")= chr [1:818] "CLCA1" "IGLL5;IGLC1" "PDLIM1" "MYO1C" ...
+#>   .. ..$ moduleEigengenes:'data.frame':  111 obs. of  5 variables:
+#>   .. .. ..$ MEturquoise: num [1:111] -0.2971 -0.0318 0.0856 -0.132 0.0428 ...
+#>   .. .. ..$ MEblue     : num [1:111] 0.0794 0.063 -0.0601 -0.0131 -0.2603 ...
+#>   .. .. ..$ MEbrown    : num [1:111] -0.024 0.076 -0.0939 -0.1834 -0.1365 ...
+#>   .. .. ..$ MEyellow   : num [1:111] -0.1034 0.061 -0.0071 -0.0687 -0.1588 ...
+#>   .. .. ..$ MEgrey     : num [1:111] -0.1788 -0.1398 -0.0985 -0.1133 -0.1283 ...
+#>   .. ..$ moduleColors    : Named chr [1:846] "turquoise" "blue" "yellow" "turquoise" ...
+#>   .. .. ..- attr(*, "names")= chr [1:846] "A1BG" "AGR2" "ANXA2.ANXA2P2" "BSG" ...
+#>   .. ..$ moduleLabels    : Named num [1:846] 1 2 4 1 0 1 4 1 1 1 ...
+#>   .. .. ..- attr(*, "names")= chr [1:846] "A1BG" "AGR2" "ANXA2.ANXA2P2" "BSG" ...
+#>   .. ..$ unmergedColors  : Named chr [1:846] "turquoise" "blue" "yellow" "turquoise" ...
+#>   .. .. ..- attr(*, "names")= chr [1:846] "A1BG" "AGR2" "ANXA2.ANXA2P2" "BSG" ...
 #>  $ connectivity :List of 1
-#>   ..$ Intensity:Classes 'data.table' and 'data.frame':   818 obs. of  6 variables:
-#>   .. ..$ gene   : chr [1:818] "ALDH1A1" "CLYBL" "SNRPB;SNRPN" "CHMP5" ...
-#>   .. ..$ kTotal : num [1:818] 43.9 43.9 41.2 37.5 36.2 ...
-#>   .. ..$ kWithin: num [1:818] 32 32 28 27.6 27.3 ...
-#>   .. ..$ kOut   : num [1:818] 11.92 11.92 13.15 9.95 8.93 ...
-#>   .. ..$ kDiff  : num [1:818] 20.1 20.1 14.9 17.6 18.3 ...
-#>   .. ..$ module : num [1:818] 1 1 1 1 1 1 1 1 1 1 ...
+#>   ..$ Intensity:Classes 'data.table' and 'data.frame':   846 obs. of  6 variables:
+#>   .. ..$ gene   : chr [1:846] "C3" "HP" "APOA1" "A2M" ...
+#>   .. ..$ kTotal : num [1:846] 0.915 1.144 1.013 0.553 0.667 ...
+#>   .. ..$ kWithin: num [1:846] 0.424 0.379 0.311 0.176 0.122 ...
+#>   .. ..$ kOut   : num [1:846] 0.49 0.765 0.701 0.377 0.545 ...
+#>   .. ..$ kDiff  : num [1:846] -0.0659 -0.3865 -0.3899 -0.2008 -0.4232 ...
+#>   .. ..$ module : num [1:846] 0 0 0 0 0 0 0 0 0 0 ...
 #>   .. ..- attr(*, ".internal.selfref")=<externalptr>
 ```
 
 ``` r
 cn %>% Histogram(preview = TRUE)
-#> Warning: Removed 15206 rows containing non-finite values (stat_bin).
+#> Warning: Removed 14993 rows containing non-finite values (stat_bin).
 ```
 
 <img src="man/figures/README-unnamed-chunk-6-1.png" width="60%" />
@@ -236,36 +224,52 @@ cn %>% ModulePlot(preview = TRUE)
 
 ``` r
 cn %>% GetHubGenes()
-#>        gene         ensembl                                   fullname   kTotal
-#>  1: ALDH1A1 ENSG00000165092  aldehyde dehydrogenase 1 family member A1 43.89376
-#>  2:   CLYBL ENSG00000125246                       citramalyl-CoA lyase 43.89376
-#>  3:  SPTBN1 ENSG00000115306          spectrin beta, non-erythrocytic 1 24.85082
-#>  4:    MDH2 ENSG00000146701                     malate dehydrogenase 2 26.49073
-#>  5: HSP90B1 ENSG00000166598 heat shock protein 90 beta family member 1 15.48458
-#>  6:    SCIN ENSG00000006747                                  scinderin 22.50675
-#>  7:     HPX ENSG00000110169                                  hemopexin 32.85560
-#>  8:    CDV3 ENSG00000091527                               CDV3 homolog 30.07123
-#>  9:   RAB2A ENSG00000104388          RAB2A, member RAS oncogene family 30.50436
-#> 10:    TPM3 ENSG00000143549                              tropomyosin 3 26.24318
-#> 11:   RPS18 ENSG00000231500                      ribosomal protein S18 22.13689
-#> 12:   RBM8A ENSG00000265241               RNA binding motif protein 8A 10.39302
-#> 13:   ECHS1 ENSG00000127884         enoyl-CoA hydratase, short chain 1 14.96758
-#> 14:  RPL23A ENSG00000198242                     ribosomal protein L23a 12.97417
-#>       kWithin      kOut      kDiff module
-#>  1: 31.972834 11.920928 20.0519059      1
-#>  2: 31.972834 11.920928 20.0519059      1
-#>  3: 14.057922 10.792901  3.2650213      2
-#>  4: 13.007820 13.482913 -0.4750932      2
-#>  5:  9.536351  5.948226  3.5881251      3
-#>  6:  9.011228 13.495519 -4.4842908      3
-#>  7: 15.300028 17.555571 -2.2555426      4
-#>  8: 14.591160 15.480066 -0.8889061      4
-#>  9: 13.880218 16.624144 -2.7439255      4
-#> 10:  9.382158 16.861017 -7.4788592      5
-#> 11:  9.114045 13.022842 -3.9087972      5
-#> 12:  3.814425  6.578593 -2.7641682      6
-#> 13:  3.981047 10.986535 -7.0054880      7
-#> 14:  3.644575  9.329599 -5.6850232      7
+#>      gene         ensembl                                             fullname
+#> 1: ATP12A ENSG00000075673 ATPase H+/K+ transporting non-gastric alpha2 subunit
+#> 2: ATP1A1 ENSG00000163399           ATPase Na+/K+ transporting subunit alpha 1
+#> 3:   ENO1 ENSG00000074800                                            enolase 1
+#> 4: COL6A1 ENSG00000142156                       collagen type VI alpha 1 chain
+#> 5:    DCN ENSG00000011465                                              decorin
+#> 6: COL6A2 ENSG00000142173                       collagen type VI alpha 2 chain
+#> 7:    DLD ENSG00000091140                       dihydrolipoamide dehydrogenase
+#> 8: SUCLG2 ENSG00000172340        succinate-CoA ligase GDP-forming subunit beta
+#>       kTotal   kWithin      kOut      kDiff module
+#> 1:  8.493045  5.030402 3.4626427  1.5677597      1
+#> 2:  5.720120  4.883286 0.8368346  4.0464514      1
+#> 3:  8.331755  6.325000 2.0067549  4.3182450      2
+#> 4: 14.027675 11.122084 2.9055901  8.2164943      3
+#> 5: 14.676139 10.986816 3.6893238  7.2974918      3
+#> 6: 13.141510 10.078089 3.0634212  7.0146680      3
+#> 7:  8.740479  4.281549 4.4589306 -0.1773816      4
+#> 8:  7.336496  3.912245 3.4242513  0.4879937      4
+```
+
+``` r
+samples1 = pheno$table[is.na(Remission) | Remission == 0, Experiment]
+samples2 = pheno$table[!is.na(Remission), Experiment]
+mt1 = ModuleSignificance(cn, samples = samples1, traits = "Illness", prefix = "UC")
+mt2 = ModuleSignificance(cn, samples = samples2, traits = "Remission", prefix = "UC")
+mt = BindModuleSignificance(mt1, mt2)
+```
+
+``` r
+mt %>% ModuleTraitHeatmap(preview = TRUE)
+```
+
+<img src="man/figures/README-unnamed-chunk-11-1.png" width="60%" />
+
+``` r
+mt %>% GetRelatedHubGenes()
+#>      gene         ensembl                                             fullname
+#> 1: ATP12A ENSG00000075673 ATPase H+/K+ transporting non-gastric alpha2 subunit
+#> 2: ATP1A1 ENSG00000163399           ATPase Na+/K+ transporting subunit alpha 1
+#> 3:    DLD ENSG00000091140                       dihydrolipoamide dehydrogenase
+#> 4: SUCLG2 ENSG00000172340        succinate-CoA ligase GDP-forming subunit beta
+#>      kTotal  kWithin      kOut      kDiff module
+#> 1: 8.493045 5.030402 3.4626427  1.5677597      1
+#> 2: 5.720120 4.883286 0.8368346  4.0464514      1
+#> 3: 8.740479 4.281549 4.4589306 -0.1773816      4
+#> 4: 7.336496 3.912245 3.4242513  0.4879937      4
 ```
 
 ## References
