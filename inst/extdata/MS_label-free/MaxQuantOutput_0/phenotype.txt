@@ -1,0 +1,104 @@
+Sample	Diagnosis	Illness	Inflamed	Remission
+UCAnoninf_1	UC	1	0	0
+UCAnoninf_2	UC	1	0	0
+UCAnoninf_3	UC	1	0	0
+UCAnoninf_4	UC	1	0	0
+UCAnoninf_5	UC	1	0	0
+UCAnoninf_6	UC	1	0	0
+UCAnoninf_7	UC	1	0	0
+UCAnoninf_8	UC	1	0	0
+UCAnoninf_9	UC	1	0	0
+UCAnoninf_10	UC	1	0	0
+UCAnoninf_11	UC	1	0	0
+UCAnoninf_12	UC	1	0	0
+UCAnoninf_13	UC	1	0	0
+UCAnoninf_14	UC	1	0	0
+UCAnoninf_15	UC	1	0	0
+UCAnoninf_16	UC	1	0	0
+UCAnoninf_17	UC	1	0	0
+UCAnoninf_18	UC	1	0	0
+UCAinf_1	UC	1	1	0
+UCAinf_2	UC	1	1	0
+UCAinf_3	UC	1	1	0
+UCAinf_4	UC	1	1	0
+UCAinf_5	UC	1	1	0
+UCAinf_6	UC	1	1	0
+UCAinf_7	UC	1	1	0
+UCAinf_8	UC	1	1	0
+UCAinf_9	UC	1	1	0
+UCAinf_10	UC	1	1	0
+UCAinf_11	UC	1	1	0
+UCAinf_12	UC	1	1	0
+UCAinf_13	UC	1	1	0
+UCAinf_14	UC	1	1	0
+UCAinf_15	UC	1	1	0
+UCR_1	UC	1	0	1
+UCR_2	UC	1	0	1
+UCR_3	UC	1	0	1
+UCR_4	UC	1	0	1
+UCR_5	UC	1	0	1
+UCR_6	UC	1	0	1
+UCR_7	UC	1	0	1
+UCR_8	UC	1	0	1
+UCR_9	UC	1	0	1
+UCR_10	UC	1	0	1
+UCR_11	UC	1	0	1
+UCR_12	UC	1	0	1
+UCR_13	UC	1	0	1
+UCR_14	UC	1	0	1
+UCR_15	UC	1	0	1
+UCR_16	UC	1	0	1
+UCR_17	UC	1	0	1
+UCR_18	UC	1	0	1
+UCR_19	UC	1	0	1
+UCR_20	UC	1	0	1
+UCR_21	UC	1	0	1
+UCR_22	UC	1	0	1
+UCR_23	UC	1	0	1
+C_1	Control	0	0	
+C_2	Control	0	0	
+C_3	Control	0	0	
+C_4	Control	0	0	
+C_5	Control	0	0	
+C_6	Control	0	0	
+C_7	Control	0	0	
+C_8	Control	0	0	
+C_9	Control	0	0	
+C_10	Control	0	0	
+C_11	Control	0	0	
+C_12	Control	0	0	
+C_13	Control	0	0	
+C_14	Control	0	0	
+C_15	Control	0	0	
+C_16	Control	0	0	
+C_17	Control	0	0	
+C_18	Control	0	0	
+C_19	Control	0	0	
+C_20	Control	0	0	
+C_21	Control	0	0	
+C_22	Control	0	0	
+C_23	Control	0	0	
+C_24	Control	0	0	
+C_25	Control	0	0	
+C_26	Control	0	0	
+C_27	Control	0	0	
+C_28	Control	0	0	
+C_29	Control	0	0	
+C_30	Control	0	0	
+C_31	Control	0	0	
+C_32	Control	0	0	
+C_33	Control	0	0	
+C_34	Control	0	0	
+C_35	Control	0	0	
+C_36	Control	0	0	
+C_37	Control	0	0	
+C_38	Control	0	0	
+C_39	Control	0	0	
+C_40	Control	0	0	
+C_41	Control	0	0	
+C_42	Control	0	0	
+C_43	Control	0	0	
+C_44	Control	0	0	
+C_45	Control	0	0	
+C_46	Control	0	0	
+C_47	Control	0	0	

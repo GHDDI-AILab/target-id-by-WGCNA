@@ -1,0 +1,112 @@
+Sample	Diagnosis	Illness	Remission
+UCA_1	UC	1	0
+UCA_2	UC	1	0
+UCA_3	UC	1	0
+UCA_4	UC	1	0
+UCA_5	UC	1	0
+UCA_6	UC	1	0
+UCA_7	UC	1	0
+UCA_8	UC	1	0
+UCA_9	UC	1	0
+UCA_10	UC	1	0
+UCA_11	UC	1	0
+UCA_12	UC	1	0
+UCA_13	UC	1	0
+UCA_14	UC	1	0
+UCA_15	UC	1	0
+UCA_16	UC	1	0
+UCA_17	UC	1	0
+UCA_18	UC	1	0
+UCA_19	UC	1	0
+UCA_20	UC	1	0
+UCA_21	UC	1	0
+UCA_22	UC	1	0
+UCA_23	UC	1	0
+UCA_24	UC	1	0
+UCA_25	UC	1	0
+UCA_26	UC	1	0
+UCA_27	UC	1	0
+UCA_28	UC	1	0
+UCA_29	UC	1	0
+UCA_30	UC	1	0
+UCA_31	UC	1	0
+UCA_32	UC	1	0
+UCA_33	UC	1	0
+UCA_34	UC	1	0
+UCA_35	UC	1	0
+UCA_36	UC	1	0
+UCR_1	UC	1	1
+UCR_2	UC	1	1
+UCR_3	UC	1	1
+UCR_4	UC	1	1
+UCR_5	UC	1	1
+UCR_6	UC	1	1
+UCR_7	UC	1	1
+UCR_8	UC	1	1
+UCR_9	UC	1	1
+UCR_10	UC	1	1
+UCR_11	UC	1	1
+UCR_12	UC	1	1
+UCR_13	UC	1	1
+UCR_14	UC	1	1
+UCR_15	UC	1	1
+UCR_16	UC	1	1
+UCR_17	UC	1	1
+UCR_18	UC	1	1
+UCR_19	UC	1	1
+UCR_20	UC	1	1
+UCR_21	UC	1	1
+UCR_22	UC	1	1
+UCR_23	UC	1	1
+UCR_24	UC	1	1
+UCR_25	UC	1	1
+UCR_26	UC	1	1
+UCR_27	UC	1	1
+UCR_28	UC	1	1
+C_1	Control	0	
+C_2	Control	0	
+C_3	Control	0	
+C_4	Control	0	
+C_5	Control	0	
+C_6	Control	0	
+C_7	Control	0	
+C_8	Control	0	
+C_9	Control	0	
+C_10	Control	0	
+C_11	Control	0	
+C_12	Control	0	
+C_13	Control	0	
+C_14	Control	0	
+C_15	Control	0	
+C_16	Control	0	
+C_17	Control	0	
+C_18	Control	0	
+C_19	Control	0	
+C_20	Control	0	
+C_21	Control	0	
+C_22	Control	0	
+C_23	Control	0	
+C_24	Control	0	
+C_25	Control	0	
+C_26	Control	0	
+C_27	Control	0	
+C_28	Control	0	
+C_29	Control	0	
+C_30	Control	0	
+C_31	Control	0	
+C_32	Control	0	
+C_33	Control	0	
+C_34	Control	0	
+C_35	Control	0	
+C_36	Control	0	
+C_37	Control	0	
+C_38	Control	0	
+C_39	Control	0	
+C_40	Control	0	
+C_41	Control	0	
+C_42	Control	0	
+C_43	Control	0	
+C_44	Control	0	
+C_45	Control	0	
+C_46	Control	0	
+C_47	Control	0	
