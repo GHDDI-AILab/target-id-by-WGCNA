@@ -14,7 +14,7 @@ ModuleTraitHeatmap(object, ...)
   preview = FALSE,
   title = "Module-Trait Relationships",
   file.prefix,
-  plot.width = 12,
+  plot.width = 8,
   plot.height = 8,
   font.size = 1.5
 )
