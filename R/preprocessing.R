@@ -276,7 +276,7 @@ QC.ProteinGroups = function(
   feature.counts[, "With gene names" := vapply(new.object, nrow, integer(1))]
   ## Check unique peptides
   for (i in 1:length(new.object)) {
-    unique_peptides = grep("Unique peptides", names(new.object[[i]]), ignore.case = TRUE)
+    unique_peptides = grep("^Unique peptides", names(new.object[[i]]), ignore.case = TRUE)
     if (length(unique_peptides) < 1) {
       warning("No column for checking unique peptides!")
     } else {
@@ -372,11 +372,15 @@ LogTransform.ExpAssayFrame = function(
   object, 
   inverse = FALSE
 ) {
-  new.object = data.table::copy(object)
-  for (i in 1:length(new.object)) {
-    new.object[[i]] = 
-      if (inverse) -log2(new.object[[i]]) else log2(new.object[[i]])
+  if (length(inverse) != 1 && length(inverse) != length(object)) {
+    stop("Invalid parameter 'inverse'!")
   }
+  transform = function(x, opposite) {
+    if (opposite) -log2(x) else log2(x)
+  }
+  new.object = data.table::copy(object)
+  new.object[1:length(new.object)] = 
+    mapply(transform, new.object, inverse, SIMPLIFY = FALSE)
   return(new.object)
 }
 
@@ -395,7 +399,7 @@ LogTransform.default = function(object, ...) {
 #' Normalize a log-transformed expression profile.
 #' 
 #' @param object An object of class ExpAssayFrame.
-#' @param method Choose the method to use.
+#' @param method (Character) Choose the method(s) to use.
 #' @return A new object of class ExpAssayFrame.
 #' @rdname Normalize
 #' @method Normalize ExpAssayFrame
@@ -409,20 +413,30 @@ Normalize.ExpAssayFrame = function(
   object, 
   method = "center.median"
 ) {
-  if (assert_length_1(method) == "center.median") {
-    normalize = function(x) {
-      x[is_missing_in_ms(x)] = NA
-      x - stats::median(x, na.rm = TRUE)
-    }
-  } else {
+  if (length(method) != 1 && length(method) != length(object)) {
+    stop("Invalid parameter 'method'!")
+  }
+  if (!all(method %in% c("center.median", "zscore"))) {
     stop("The input method for normalization was not supported!")
   }
-  new.object = data.table::copy(object)
-  for (i in 1:length(new.object)) {
-    d.f = as.data.frame(t(new.object[[i]]))
-    d.f[, colnames(d.f)] = lapply(d.f, normalize)
-    new.object[[i]] = as.data.frame(t(d.f))
+  calculate = list(
+    "center.median" = function(x) {
+      x[is.na(x) | is.infinite(x)] = NA
+      x - stats::median(x, na.rm = TRUE)
+    }, 
+    "zscore" = function(x) {
+      x[is.na(x) | is.infinite(x)] = NA
+      (x - mean(x, na.rm = TRUE)) / stats::sd(x, na.rm = TRUE)
+    }
+  )
+  normalize = function(x, method) {
+    d.f = as.data.frame(t(x))
+    d.f[, colnames(d.f)] = lapply(d.f, calculate[[method]])
+    as.data.frame(t(d.f))
   }
+  new.object = data.table::copy(object)
+  new.object[1:length(new.object)] = 
+    mapply(normalize, new.object, method, SIMPLIFY = FALSE)
   return(new.object)
 }
 

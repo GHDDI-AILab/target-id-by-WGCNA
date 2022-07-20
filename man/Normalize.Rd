@@ -17,7 +17,7 @@ Normalize(object, ...)
 
 \item{...}{further arguments to be passed to or from other methods.}
 
-\item{method}{Choose the method to use.}
+\item{method}{(Character) Choose the method(s) to use.}
 }
 \value{
 A new object of class ExpAssayFrame.

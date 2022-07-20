@@ -44,7 +44,7 @@
 #' @importFrom graphics abline par
 #' @importFrom grDevices dev.off pdf
 #' @importFrom utils capture.output head str
-#' @importFrom stats as.dist dist median setNames
+#' @importFrom stats as.dist dist median sd setNames
 #' @importFrom data.table ":=" .SD as.data.table copy data.table fread fwrite setnames
 #' @importFrom magrittr "%>%" "%T>%"
 #' @importFrom ggplot2 aes element_text geom_histogram ggplot ggsave labs theme theme_classic
