@@ -133,6 +133,134 @@ BindModuleSignificance.default = function(object, ...) {
   }
 }
 
+#' Compute gene-trait correlation and significance.
+#' 
+#' @param object A CorrelationNetwork object.
+#' @param samples A character vector specifying the rows for analysis.
+#' @param traits A character vector specifying the columns of traits for analysis.
+#' @param prefix (A length-1 character) A prefix representing the disease.
+#' @return A new CorrelationNetwork object.
+#' @export
+#' 
+GeneSignificance.CorrelationNetwork = function(
+  object, 
+  samples, 
+  traits, 
+  prefix
+) {
+  ATTR_GS = "gene-trait"
+  ATTR_NET = "network"
+  ATTR_PHENO = "phenotype"
+  if (length(object) != length(attr(object, ATTR_NET))) {
+    stop("Invalid CorrelationNetwork object in the input!")
+  }
+  if (missing(prefix)) {
+    prefix = ""
+  } else {
+    prefix = paste0(assert_length_1(prefix), ".")
+  }
+  if (missing(traits) || length(traits) < 1) {
+    traits = colnames(attr(object, ATTR_PHENO))
+  } else if (! all(traits %in% colnames(attr(object, ATTR_PHENO)))) {
+    stop("Invalid traits in the input!")
+  }
+  new.object = data.table::copy(object)
+  attr(new.object, ATTR_GS) = list()
+  for (i in 1:length(new.object)) {
+    if (missing(samples)) {
+      datGenes = new.object[[i]]
+      datTraits = attr(object, ATTR_PHENO)[rownames(datGenes), traits, drop = FALSE]
+    } else if (length(samples) > 1) {
+      datGenes = new.object[[i]][samples, ]
+      datTraits = attr(object, ATTR_PHENO)[samples, traits, drop = FALSE]
+    } else {
+      stop("The number of samples should be more than one!")
+    }
+    gene_trait_cor = WGCNA::cor(datGenes, datTraits, use = "pairwise")
+    gene_trait_pval = WGCNA::corPvalueStudent(gene_trait_cor, nSamples = nrow(datGenes))
+    colnames(gene_trait_cor) = paste0(prefix, colnames(gene_trait_cor))
+    colnames(gene_trait_pval) = paste0("p.", prefix, colnames(gene_trait_pval))
+    attr(new.object, ATTR_GS)[[i]] = list(
+      cor = as.data.frame(gene_trait_cor), 
+      pval = as.data.frame(gene_trait_pval)
+      )
+  }
+  names(attr(new.object, ATTR_GS)) = names(new.object)
+  return(new.object)
+}
+
+#' @rdname GeneSignificance
+#' @method GeneSignificance default
+#' @export
+#' 
+GeneSignificance.default = function(object, ...) {
+  if (inherits(object, "CorrelationNetwork")) {
+    GeneSignificance.CorrelationNetwork(object, ...)
+  } else {
+    stop("This method is associated with class CorrelationNetwork.")
+  }
+}
+
+#' Compute gene-module correlation and significance.
+#' 
+#' @param object A CorrelationNetwork object.
+#' @param samples A character vector specifying the rows for analysis.
+#' @param prefix (A length-1 character) A prefix representing the disease.
+#' @return A new CorrelationNetwork object.
+#' @export
+#' 
+ModuleMembership.CorrelationNetwork = function(
+  object, 
+  samples, 
+  prefix
+) {
+  ATTR_MM = "gene-module"
+  ATTR_NET = "network"
+  if (length(object) != length(attr(object, ATTR_NET))) {
+    stop("Invalid CorrelationNetwork object in the input!")
+  }
+  if (missing(prefix)) {
+    prefix = ""
+  } else {
+    prefix = paste0(assert_length_1(prefix), ".")
+  }
+  new.object = data.table::copy(object)
+  attr(new.object, ATTR_MM) = list()
+  for (i in 1:length(new.object)) {
+    if (missing(samples)) {
+      datGenes = new.object[[i]]
+      MEs = attr(object, ATTR_NET)[[i]][["moduleEigengenes"]]
+    } else if (length(samples) > 1) {
+      datGenes = new.object[[i]][samples, ]
+      MEs = attr(new.object, ATTR_NET)[[i]][["moduleEigengenes"]][samples, ]
+    } else {
+      stop("The number of samples should be more than one!")
+    }
+    gene_module_cor = WGCNA::cor(datGenes, MEs, use = "pairwise")
+    gene_module_pval = WGCNA::corPvalueStudent(gene_module_cor, nSamples = nrow(datGenes))
+    colnames(gene_module_cor) = paste0(prefix, colnames(gene_module_cor))
+    colnames(gene_module_pval) = paste0("p.", prefix, colnames(gene_module_pval))
+    attr(new.object, ATTR_MM)[[i]] = list(
+      cor = as.data.frame(gene_module_cor), 
+      pval = as.data.frame(gene_module_pval)
+      )
+  }
+  names(attr(new.object, ATTR_MM)) = names(new.object)
+  return(new.object)
+}
+
+#' @rdname ModuleMembership
+#' @method ModuleMembership default
+#' @export
+#' 
+ModuleMembership.default = function(object, ...) {
+  if (inherits(object, "CorrelationNetwork")) {
+    ModuleMembership.CorrelationNetwork(object, ...)
+  } else {
+    stop("This method is associated with class CorrelationNetwork.")
+  }
+}
+
 #' Get hub genes in the modules associated with traits of interest.
 #' 
 #' @param object A CorrelationNetwork object.
