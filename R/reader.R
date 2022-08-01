@@ -36,7 +36,7 @@ ReadExperimentalDesign = function(
     stop("Empty or invalid experimentalDesign file!")
   }
   ## Create an object
-  DT[, Experiment := as.character(Experiment)]
+  DT$Experiment = as.character(DT$Experiment)
   samples = setdiff(unique(DT$Experiment), "")
   structure(
     list(experiments = samples, 
@@ -146,11 +146,11 @@ ReadPhenotypeTable = function(
   sample_column = intersect(COLS, names(DT))
   sample_column = assert_length_1(sample_column)
   setnames(DT, sample_column, "Experiment")
-  DT[, Experiment := as.character(Experiment)]
+  DT$Experiment = as.character(DT$Experiment)
   samples = setdiff(unique(DT$Experiment), "")
   structure(
     list(experiments = samples, 
-         table = DT[Experiment %in% samples, head(.SD, 1), by = "Experiment"]), 
+         table = DT[, head(.SD, 1), by = "Experiment"]), 
     filename = normalizePath(file),
     class = c("ExperimentInfo", "ExperimentList", "list")
     )

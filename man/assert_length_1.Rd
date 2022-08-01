@@ -2,7 +2,7 @@
 % Please edit documentation in R/util.R
 \name{assert_length_1}
 \alias{assert_length_1}
-\title{Assert a length-1 vector.}
+\title{Assert a length-1 vector or list.}
 \usage{
 assert_length_1(x)
 }
@@ -10,12 +10,13 @@ assert_length_1(x)
 \item{x}{The object for checking.}
 }
 \value{
-The first element of the input.
+An object with the first element of the input.
 }
 \description{
 Execute an error if the length of the input is 0 and
 execute a warning if the length of the input is bigger
-than 1. Return the first element of the input.
+than 1. Return a new object of the same class as the
+input, with the first element of the input.
 }
 \examples{
 data.dir = "."

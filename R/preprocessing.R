@@ -147,10 +147,8 @@ AddPhenotype.ExpAssayTable = function(
   if (length(setdiff(samples, phenotype$table$Experiment)) > 0) {
     stop("The phenotypes of some samples were missing!")
   }
-  d.f = as.data.frame(phenotype$table)
-  rownames(d.f) = d.f$Experiment
-  d.f$Experiment = NULL
   new.object = data.table::copy(object)
+  d.f = as_data_frame(phenotype$table, row.names = "Experiment")
   attr(new.object, ATTR_PHENO) = d.f
   return(new.object)
 }
@@ -174,10 +172,8 @@ AddPhenotype.ExpAssayFrame = function(
   if (length(setdiff(samples, phenotype$table$Experiment)) > 0) {
     stop("The phenotypes of some samples were missing!")
   }
-  d.f = as.data.frame(phenotype$table)
-  rownames(d.f) = d.f$Experiment
-  d.f$Experiment = NULL
   new.object = data.table::copy(object)
+  d.f = as_data_frame(phenotype$table, row.names = "Experiment")
   attr(new.object, ATTR_PHENO) = d.f
   return(new.object)
 }
@@ -255,8 +251,8 @@ QC.ProteinGroups = function(
   get_genename_from_fasta_header = function(x) {
     ifelse(grepl("OS=Homo .+GN=", x),
       yes = strsplit(x, "GN=") %>%
-        lapply(., function(v) sub("\\b.*$", "", v[-1])) %>%
-        vapply(., function(v) paste(unique(v), collapse = ";"), character(1)),
+        lapply(function(v) sub("\\b.*$", "", v[-1])) %>%
+        vapply(function(v) paste(unique(v), collapse = ";"), character(1)),
       no = character(1)
       )
   }

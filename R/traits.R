@@ -106,9 +106,7 @@ BindModuleSignificance.CorrelationNetwork = function(
   }
   merge_module_trait = function(df1, df2) {
     d.f = merge(df1, df2, by = "row.names", all = TRUE)
-    rownames(d.f) = d.f[["Row.names"]]
-    d.f[["Row.names"]] = NULL
-    return(d.f)
+    as_data_frame(d.f, row.names = "Row.names")
   }
   new.object = data.table::copy(this)
   for (i in indices) {
@@ -299,7 +297,7 @@ GetRelatedHubGenes.CorrelationNetwork = function(
   }
   nModules = nrow(pval)
   get_modules = function(col) rownames(pval)[pval[[col]] < 0.05/nModules]
-  moduleColors = lapply(traits, get_modules) %>% unlist %>% sub("^ME", "", .)
+  moduleColors = lapply(traits, get_modules) %>% unlist() %>% sub("^ME", "", .)
   colorOrder = c("grey", WGCNA::standardColors(50))
   moduleLabels = match(moduleColors, colorOrder) - 1
   GetHubGenes(object, index = index, ...)[module %in% moduleLabels, ]

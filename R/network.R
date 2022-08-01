@@ -154,15 +154,15 @@ AddConnectivity.CorrelationNetwork = function(
   for (i in 1:length(new.object)) {
     network = attr(new.object, ATTR_NET)[[i]]
     module_labels = network$moduleLabels %>% 
-      data.table::as.data.table(., keep.rownames = TRUE) %>% 
-      data.table::setnames(., c(GENE, "module"))
+      data.table::as.data.table(keep.rownames = TRUE) %>% 
+      data.table::setnames(c(GENE, "module"))
   
     ## WGCNA::intramodularConnectivity() may not return the gene names 
     ## when the input includes gene names with a dash '-', like HLA-A.
     connectivity = 
       WGCNA::intramodularConnectivity(network$adjacency, network$moduleLabels) %>% 
-      data.table::as.data.table(., keep.rownames = TRUE) %>% 
-      data.table::setnames(., "rn", GENE) %>% 
+      data.table::as.data.table(keep.rownames = TRUE) %>% 
+      data.table::setnames("rn", GENE) %>% 
       .[, (GENE) := module_labels[[GENE]]] %>% 
       .[module_labels, on = GENE] %>% 
       .[order(module, -kWithin)]
@@ -261,13 +261,13 @@ GetHubGenes.CorrelationNetwork = function(
     assert_length_1(index)[[1]]
     ]]
   if (missing(top.n) || length(top.n) < 1) {
-    hub_genes = connectivity[, max_kWithin := max(kWithin)
-      ][, top_kWithin := max(kWithin), by = "module"
+    hub_genes = connectivity[, "max_kWithin" := max(kWithin)
+      ][, "top_kWithin" := max(kWithin), by = "module"
       ][module  > 0 & 
         kWithin > top_kWithin*intramodular.ratio.threshold & 
         kWithin > max_kWithin*ratio.threshold
-      ][, max_kWithin := NULL
-      ][, top_kWithin := NULL
+      ][, "max_kWithin" := NULL
+      ][, "top_kWithin" := NULL
       ][order(module, -kWithin)]
   } else {
     top.n = assert_length_1(top.n)
