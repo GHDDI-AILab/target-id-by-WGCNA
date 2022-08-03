@@ -6,7 +6,7 @@
 \usage{
 ReadProteinGroups(
   data.dir = ".",
-  column.prefix = c("Ratio H/L normalized", "LFQ intensity", "Intensity")
+  column.prefix = c("Ratio H/L normalized", "LFQ intensity")
 )
 }
 \arguments{
