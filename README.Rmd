@@ -1,6 +1,7 @@
 ---
 output: github_document
 ---
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r, include = FALSE}
@@ -17,14 +18,18 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-Target identification is an essential first step in drug discovery. This package implements convenient functions for performing target identification tasks on gene expression data using the WGCNA method. ("cn" in the package name stands for "correlation network".)
+Target identification is an essential first step in drug discovery. 
+This package implements convenient functions for performing target 
+identification tasks on gene expression data using the WGCNA method. 
+("cn" in the package name stands for "correlation network".)
 
 ## Authors
 - Chen Liang <https://github.com/dzyim>
 
 ## Installation
 
-You can install the development version of `targidcn` from [GitHub](https://github.com/GHDDI-AILab/target-id-by-WGCNA).
+You can install the development version of `targidcn` from 
+[GitHub](https://github.com/GHDDI-AILab/target-id-by-WGCNA).
 
 ```{r, eval = FALSE}
 if (!require("BiocManager", quietly = TRUE))
@@ -40,16 +45,19 @@ remotes::install_github("GHDDI-AILab/target-id-by-WGCNA")
 ```
 
 ## Input data formats
-The method can be applied to gene expression data generate by RNA-seq or Mass Spectrometry (MS).
+The method can be applied to gene expression data generate 
+by RNA-seq or Mass Spectrometry (MS).
 
 ### RNA-seq data
 (preprocessing not available so far)
 
 ### Labelled MS data
-The expression levels of proteins are stored in the columns with the prefixes `Ratio H/L` and `Ratio H/L normalized`.
+The expression levels of proteins are stored in the columns 
+with the prefixes `Ratio H/L` and `Ratio H/L normalized`.
 
 ### Label-free MS data
-The expression levels of proteins are stored in the columns with the prefixes `LFQ intensity` or `Intensity`.
+The expression levels of proteins are stored in the columns 
+with the prefixes `LFQ intensity` or similar.
 
 ## Details
 
@@ -90,6 +98,7 @@ R package `targidcn` contains:
   - `GeneSignificance()`
   - `ModuleMembership()`
   - `GetRelatedHubGenes()`
+  - `GetSignificantGenes()`
 
 ## Tutorial
 
@@ -100,7 +109,7 @@ library(targidcn) %>% suppressMessages()
 
 datadir = system.file("extdata", "MS_label-free", "MaxQuantOutput_50", package = "targidcn")
 pheno = ReadPhenotypeTable(file.path(datadir, "phenotype.txt"))
-assay = ReadProteinGroups(datadir)
+assay = ReadProteinGroups(datadir, col = "Intensity")
 assay
 ```
 
@@ -112,7 +121,7 @@ cn = assay %>%
   Reshape() %>% 
   LogTransform() %>% 
   Normalize() %>% 
-  AddNetwork(power = 6) %>% 
+  AddNetwork(power = 3) %>% 
   AddConnectivity()
 
 ```
@@ -145,7 +154,7 @@ mt2 = ModuleSignificance(cn, samples = samples2, traits = "Remission", prefix = 
 mt = BindModuleSignificance(mt1, mt2)
 ```
 
-```{r, fig.dim = c(8, 8), out.width = "60%"}
+```{r, fig.dim = c(10, 10), out.width = "60%"}
 mt %>% ModuleTraitHeatmap(preview = TRUE)
 ```
 
@@ -169,6 +178,9 @@ Gut. 2019;68(12):2142-2151. doi:10.1136/gutjnl-2018-317571
 
 
 <!-- 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this. You could also use GitHub Actions to re-render `README.Rmd` every time you push. An example workflow can be found here: <https://github.com/r-lib/actions/tree/v1/examples>.
+You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. 
+`devtools::build_readme()` is handy for this. You could also use GitHub Actions to 
+re-render `README.Rmd` every time you push. An example workflow can be found here: 
+<https://github.com/r-lib/actions/tree/v1/examples>.
 --->
 
