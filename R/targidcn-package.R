@@ -40,6 +40,7 @@
 #' - `GeneSignificance()`
 #' - `ModuleMembership()`
 #' - `GetRelatedHubGenes()`
+#' - `GetSignificantGenes()`
 #' 
 #' @importFrom graphics abline par
 #' @importFrom grDevices dev.off pdf

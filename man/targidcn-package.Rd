@@ -58,6 +58,7 @@ S3 methods:
 \item \code{GeneSignificance()}
 \item \code{ModuleMembership()}
 \item \code{GetRelatedHubGenes()}
+\item \code{GetSignificantGenes()}
 }
 }
 \author{

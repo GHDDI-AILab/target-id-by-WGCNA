@@ -356,6 +356,7 @@ Reshape.default = function(object, ...) {
 #' @param object An object of class ExpAssayFrame.
 #' @param inverse (logical) Compute log2 (FALSE) or -log2 (TRUE).
 #' @return A new object of class ExpAssayFrame.
+#' 
 #' @rdname LogTransform
 #' @method LogTransform ExpAssayFrame
 #' @export
@@ -397,6 +398,7 @@ LogTransform.default = function(object, ...) {
 #' @param object An object of class ExpAssayFrame.
 #' @param method (Character) Choose the method(s) to use.
 #' @return A new object of class ExpAssayFrame.
+#' 
 #' @rdname Normalize
 #' @method Normalize ExpAssayFrame
 #' @export

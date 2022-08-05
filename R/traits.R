@@ -10,6 +10,9 @@ NULL
 #' @param traits A character vector specifying the columns of traits for analysis.
 #' @param prefix (A length-1 character) A prefix representing the disease.
 #' @return A new CorrelationNetwork object.
+#' 
+#' @rdname ModuleSignificance
+#' @method ModuleSignificance CorrelationNetwork
 #' @export
 #' 
 ModuleSignificance.CorrelationNetwork = function(
@@ -79,6 +82,9 @@ ModuleSignificance.default = function(object, ...) {
 #' @param this A CorrelationNetwork object.
 #' @param that Another CorrelationNetwork object.
 #' @return A new CorrelationNetwork object.
+#' 
+#' @rdname BindModuleSignificance
+#' @method BindModuleSignificance CorrelationNetwork
 #' @export
 #' 
 BindModuleSignificance.CorrelationNetwork = function(
@@ -138,6 +144,9 @@ BindModuleSignificance.default = function(object, ...) {
 #' @param traits A character vector specifying the columns of traits for analysis.
 #' @param prefix (A length-1 character) A prefix representing the disease.
 #' @return A new CorrelationNetwork object.
+#' 
+#' @rdname GeneSignificance
+#' @method GeneSignificance CorrelationNetwork
 #' @export
 #' 
 GeneSignificance.CorrelationNetwork = function(
@@ -205,6 +214,9 @@ GeneSignificance.default = function(object, ...) {
 #' @param samples A character vector specifying the rows for analysis.
 #' @param prefix (A length-1 character) A prefix representing the disease.
 #' @return A new CorrelationNetwork object.
+#' 
+#' @rdname ModuleMembership
+#' @method ModuleMembership CorrelationNetwork
 #' @export
 #' 
 ModuleMembership.CorrelationNetwork = function(
@@ -267,6 +279,9 @@ ModuleMembership.default = function(object, ...) {
 #' @param index A length-1 numeric or character vector specifying the frame. (default: 1)
 #' @param ... further arguments to be passed to `GetHubGenes()`.
 #' @return A data.table with hub genes.
+#' 
+#' @rdname GetRelatedHubGenes
+#' @method GetRelatedHubGenes CorrelationNetwork
 #' @export
 #' 
 GetRelatedHubGenes.CorrelationNetwork = function(
@@ -310,6 +325,59 @@ GetRelatedHubGenes.CorrelationNetwork = function(
 GetRelatedHubGenes.default = function(object, ...) {
   if (inherits(object, "CorrelationNetwork")) {
     GetRelatedHubGenes.CorrelationNetwork(object, ...)
+  } else {
+    stop("This method is associated with class CorrelationNetwork.")
+  }
+}
+
+#' Get the genes associated with traits of interest.
+#' 
+#' @param object A CorrelationNetwork object.
+#' @param traits A character vector specifying the columns of traits for analysis.
+#' @param prefix (A length-1 character) A prefix representing the disease.
+#' @param index A length-1 numeric or character vector specifying the frame. (default: 1)
+#' @return A data.table with genes.
+#' 
+#' @rdname GetSignificantGenes
+#' @method GetSignificantGenes CorrelationNetwork
+#' @export
+#' 
+GetSignificantGenes.CorrelationNetwork = function(
+  object, 
+  traits, 
+  prefix, 
+  index = 1
+) {
+  ATTR_GS = "gene-trait"
+  ATTR_NET = "network"
+  if (length(object) != length(attr(object, ATTR_GS)) || 
+      length(object) != length(attr(object, ATTR_NET))) {
+    stop("Invalid CorrelationNetwork object was given!")
+  }
+  if (missing(prefix)) {
+    prefix = ""
+  } else {
+    prefix = paste0(assert_length_1(prefix), ".")
+  }
+  if (missing(traits) || length(traits) < 1) {
+    traits = colnames(pval)
+  } else {
+    traits = paste0("p.", prefix, traits)
+  }
+  pval = attr(object, ATTR_GS)[[
+    assert_length_1(index)[[1]]
+    ]]$pval
+  get_genes = function(col) rownames(pval)[pval[[col]] < 0.05/nrow(pval)]
+  lapply(traits, get_genes) %>% unlist()
+}
+
+#' @rdname GetSignificantGenes
+#' @method GetSignificantGenes default
+#' @export
+#' 
+GetSignificantGenes.default = function(object, ...) {
+  if (inherits(object, "CorrelationNetwork")) {
+    GetSignificantGenes.CorrelationNetwork(object, ...)
   } else {
     stop("This method is associated with class CorrelationNetwork.")
   }

@@ -2,18 +2,32 @@
 % Please edit documentation in R/generics.R, R/traits.R
 \name{GetRelatedHubGenes}
 \alias{GetRelatedHubGenes}
+\alias{GetRelatedHubGenes.CorrelationNetwork}
 \alias{GetRelatedHubGenes.default}
 \title{Get hub genes in the modules associated with traits of interest.}
 \usage{
 GetRelatedHubGenes(object, ...)
 
+\method{GetRelatedHubGenes}{CorrelationNetwork}(object, traits, prefix, index = 1, ...)
+
 \method{GetRelatedHubGenes}{default}(object, ...)
 }
 \arguments{
-\item{object}{An object.}
+\item{object}{A CorrelationNetwork object.}
 
-\item{...}{further arguments to be passed to or from other methods.}
+\item{...}{further arguments to be passed to \code{GetHubGenes()}.}
+
+\item{traits}{A character vector specifying the columns of traits for analysis.}
+
+\item{prefix}{(A length-1 character) A prefix representing the disease.}
+
+\item{index}{A length-1 numeric or character vector specifying the frame. (default: 1)}
+}
+\value{
+A data.table with hub genes.
 }
 \description{
+Get hub genes in the modules associated with traits of interest.
+
 Get hub genes in the modules associated with traits of interest.
 }

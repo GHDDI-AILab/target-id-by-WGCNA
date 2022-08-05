@@ -2,18 +2,30 @@
 % Please edit documentation in R/generics.R, R/traits.R
 \name{ModuleMembership}
 \alias{ModuleMembership}
+\alias{ModuleMembership.CorrelationNetwork}
 \alias{ModuleMembership.default}
 \title{Compute module membership of genes.}
 \usage{
 ModuleMembership(object, ...)
 
+\method{ModuleMembership}{CorrelationNetwork}(object, samples, prefix)
+
 \method{ModuleMembership}{default}(object, ...)
 }
 \arguments{
-\item{object}{An object.}
+\item{object}{A CorrelationNetwork object.}
 
 \item{...}{further arguments to be passed to or from other methods.}
+
+\item{samples}{A character vector specifying the rows for analysis.}
+
+\item{prefix}{(A length-1 character) A prefix representing the disease.}
+}
+\value{
+A new CorrelationNetwork object.
 }
 \description{
 Compute module membership of genes.
+
+Compute gene-module correlation and significance.
 }

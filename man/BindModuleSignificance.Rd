@@ -2,10 +2,13 @@
 % Please edit documentation in R/generics.R, R/traits.R
 \name{BindModuleSignificance}
 \alias{BindModuleSignificance}
+\alias{BindModuleSignificance.CorrelationNetwork}
 \alias{BindModuleSignificance.default}
 \title{Combine module-trait correlation and significance.}
 \usage{
 BindModuleSignificance(object, ...)
+
+\method{BindModuleSignificance}{CorrelationNetwork}(this, that)
 
 \method{BindModuleSignificance}{default}(object, ...)
 }
@@ -13,7 +16,15 @@ BindModuleSignificance(object, ...)
 \item{object}{An object.}
 
 \item{...}{further arguments to be passed to or from other methods.}
+
+\item{this}{A CorrelationNetwork object.}
+
+\item{that}{Another CorrelationNetwork object.}
+}
+\value{
+A new CorrelationNetwork object.
 }
 \description{
-Combine module-trait correlation and significance.
+Combine the module-trait correlation and significance results
+from two CorrelationNetwork objects.
 }

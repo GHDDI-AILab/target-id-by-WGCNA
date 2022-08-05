@@ -61,7 +61,6 @@ NULL
 #' 
 NULL
 
-#' @rdname print
 #' @method print ExperimentList
 #' @export
 #'
@@ -71,7 +70,6 @@ print.ExperimentList = function(x) {
   invisible(x)
 }
 
-#' @rdname print
 #' @method print ExpAssayTable
 #' @export
 #'
@@ -97,7 +95,6 @@ print.ExpAssayTable = function(x) {
   invisible(x)
 }
 
-#' @rdname print
 #' @method print ExpAssayFrame
 #' @export
 #'

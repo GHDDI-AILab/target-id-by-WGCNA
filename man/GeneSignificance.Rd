@@ -2,18 +2,32 @@
 % Please edit documentation in R/generics.R, R/traits.R
 \name{GeneSignificance}
 \alias{GeneSignificance}
+\alias{GeneSignificance.CorrelationNetwork}
 \alias{GeneSignificance.default}
 \title{Compute gene-trait correlation and significance.}
 \usage{
 GeneSignificance(object, ...)
 
+\method{GeneSignificance}{CorrelationNetwork}(object, samples, traits, prefix)
+
 \method{GeneSignificance}{default}(object, ...)
 }
 \arguments{
-\item{object}{An object.}
+\item{object}{A CorrelationNetwork object.}
 
 \item{...}{further arguments to be passed to or from other methods.}
+
+\item{samples}{A character vector specifying the rows for analysis.}
+
+\item{traits}{A character vector specifying the columns of traits for analysis.}
+
+\item{prefix}{(A length-1 character) A prefix representing the disease.}
+}
+\value{
+A new CorrelationNetwork object.
 }
 \description{
+Compute gene-trait correlation and significance.
+
 Compute gene-trait correlation and significance.
 }
