@@ -1,6 +1,6 @@
 Package: targidcn
 Title: Target Identification Using the WGCNA Method
-Version: 0.2.2
+Version: 0.2.2.1
 Authors@R: 
     person("Chen", "Liang", , "chen.liang@ghddi.org", role = c("aut", "cre"))
 Description: Target identification is an essential first step in drug 

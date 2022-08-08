@@ -147,7 +147,7 @@ AddConnectivity.CorrelationNetwork = function(
   GENE = "gene"
   #MODULE = "module"
   if (length(object) != length(attr(object, ATTR_NET))) {
-    stop("Invalid CorrelationNetwork object in the input!")
+    stop("Invalid CorrelationNetwork object without module detection!")
   }
   new.object = data.table::copy(object)
   attr(new.object, ATTR_CON) = list()

@@ -191,7 +191,7 @@ ModulePlot.CorrelationNetwork = function(
 ) {
   ATTR_NET = "network"
   if (length(object) != length(attr(object, ATTR_NET))) {
-    stop("Invalid CorrelationNetwork object in the input!")
+    stop("Invalid CorrelationNetwork object without module detection!")
   }
   net = attr(object, ATTR_NET)[[
     assert_length_1(index)[[1]]
@@ -271,7 +271,7 @@ ModuleTraitHeatmap.CorrelationNetwork = function(
 ) {
   ATTR_MS = "module-trait"
   if (length(object) != length(attr(object, ATTR_MS))) {
-    stop("Invalid input without module-trait correlation data!")
+    stop("Invalid CorrelationNetwork object without module-trait correlation data!")
   }
   module_signif = attr(object, ATTR_MS)[[
     assert_length_1(index)[[1]]

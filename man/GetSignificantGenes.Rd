@@ -8,7 +8,7 @@
 \usage{
 GetSignificantGenes(object, ...)
 
-\method{GetSignificantGenes}{CorrelationNetwork}(object, traits, prefix, index = 1)
+\method{GetSignificantGenes}{CorrelationNetwork}(object, traits, prefix, index = 1, geneinfo = TRUE)
 
 \method{GetSignificantGenes}{default}(object, ...)
 }
@@ -22,6 +22,8 @@ GetSignificantGenes(object, ...)
 \item{prefix}{(A length-1 character) A prefix representing the disease.}
 
 \item{index}{A length-1 numeric or character vector specifying the frame. (default: 1)}
+
+\item{geneinfo}{(A length-1 logical) Add gene annotation or not.}
 }
 \value{
 A data.table with genes.

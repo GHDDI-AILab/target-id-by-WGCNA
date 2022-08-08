@@ -25,7 +25,7 @@ ModuleSignificance.CorrelationNetwork = function(
   ATTR_NET = "network"
   ATTR_PHENO = "phenotype"
   if (length(object) != length(attr(object, ATTR_NET))) {
-    stop("Invalid CorrelationNetwork object in the input!")
+    stop("Invalid CorrelationNetwork object without module detection!")
   }
   if (missing(prefix)) {
     prefix = ""
@@ -159,7 +159,7 @@ GeneSignificance.CorrelationNetwork = function(
   ATTR_NET = "network"
   ATTR_PHENO = "phenotype"
   if (length(object) != length(attr(object, ATTR_NET))) {
-    stop("Invalid CorrelationNetwork object in the input!")
+    stop("Invalid CorrelationNetwork object without module detection!")
   }
   if (missing(prefix)) {
     prefix = ""
@@ -227,7 +227,7 @@ ModuleMembership.CorrelationNetwork = function(
   ATTR_MM = "gene-module"
   ATTR_NET = "network"
   if (length(object) != length(attr(object, ATTR_NET))) {
-    stop("Invalid CorrelationNetwork object in the input!")
+    stop("Invalid CorrelationNetwork object without module detection!")
   }
   if (missing(prefix)) {
     prefix = ""
@@ -295,7 +295,7 @@ GetRelatedHubGenes.CorrelationNetwork = function(
   ATTR_NET = "network"
   if (length(object) != length(attr(object, ATTR_MS)) || 
       length(object) != length(attr(object, ATTR_NET))) {
-    stop("Invalid CorrelationNetwork object was given!")
+    stop("Invalid CorrelationNetwork object without module-trait correlation data!")
   }
   if (missing(prefix)) {
     prefix = ""
@@ -336,6 +336,7 @@ GetRelatedHubGenes.default = function(object, ...) {
 #' @param traits A character vector specifying the columns of traits for analysis.
 #' @param prefix (A length-1 character) A prefix representing the disease.
 #' @param index A length-1 numeric or character vector specifying the frame. (default: 1)
+#' @param geneinfo (A length-1 logical) Add gene annotation or not.
 #' @return A data.table with genes.
 #' 
 #' @rdname GetSignificantGenes
@@ -346,13 +347,14 @@ GetSignificantGenes.CorrelationNetwork = function(
   object, 
   traits, 
   prefix, 
-  index = 1
+  index = 1, 
+  geneinfo = TRUE
 ) {
   ATTR_GS = "gene-trait"
   ATTR_NET = "network"
   if (length(object) != length(attr(object, ATTR_GS)) || 
       length(object) != length(attr(object, ATTR_NET))) {
-    stop("Invalid CorrelationNetwork object was given!")
+    stop("Invalid CorrelationNetwork object without gene-trait correlation data!")
   }
   if (missing(prefix)) {
     prefix = ""
@@ -368,7 +370,8 @@ GetSignificantGenes.CorrelationNetwork = function(
     assert_length_1(index)[[1]]
     ]]$pval
   get_genes = function(col) rownames(pval)[pval[[col]] < 0.05/nrow(pval)]
-  lapply(traits, get_genes) %>% unlist()
+  genes = lapply(traits, get_genes) %>% unlist() %>% data.table::data.table(gene = .)
+  if (geneinfo) get_geneinfo(genes) else genes
 }
 
 #' @rdname GetSignificantGenes
