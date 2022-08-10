@@ -46,6 +46,7 @@ assert_length_1 = function(x) {
 #' @param d.t A data.table.
 #' @param remove_dup (A length-1 logical) Remove duplicate genes or not.
 #' @return A data.table.
+#' @export
 #' @examples
 #' \dontrun{
 #' d.t = data.table::data.table(gene = "ATP5A1")
@@ -62,17 +63,56 @@ get_geneinfo = function(
   }
   ## A dict with previous and current gene names.
   GENES_DICT = c(
-    # previous / approved names
-    "AARS"   = "AARS1", 
-    "ATP5A1" = "ATP5F1A", 
-    "ATP5B"  = "ATP5F1B", 
-    "ATP5F1" = "ATP5PB", 
-    "ATP5O"  = "ATP5PO", 
-    "CSDA"   = "YBX3", 
-    "GARS"   = "GARS1", 
-    "H1F0"   = "H1-0", 
-    "PKM2"   = "PKM", 
-    "WARS"   = "WARS1"
+    ## previous / approved names
+    "AARS"      = "AARS1", 
+    "ADSS"      = "ADSS2", 
+    "ATP5A1"    = "ATP5F1A", 
+    "ATP5B"     = "ATP5F1B", 
+    "ATP5F1"    = "ATP5PB", 
+    "ATP5H"     = "ATP5PD", 
+    "ATP5O"     = "ATP5PO", 
+    "C19orf10"  = "MYDGF", 
+    "CSDA"      = "YBX3", 
+    "GARS"      = "GARS1", 
+    "H1F0"      = "H1-0", 
+    "H1FV"      = "H1-0", 
+    "H1F1"      = "H1-1", 
+    "H1F2"      = "H1-2", 
+    "H1F3"      = "H1-3", 
+    "H1F4"      = "H1-4", 
+    "H1F5"      = "H1-5", 
+    "H1FX"      = "H1-10", 
+    "HIST1H1A"  = "H1-1", 
+    "HIST1H1C"  = "H1-2", 
+    "HIST1H1D"  = "H1-3", 
+    "HIST1H1E"  = "H1-4", 
+    "HIST1H1B"  = "H1-5", 
+    "HIST1H1T"  = "H1-6", 
+    "H1FT"      = "H1-6", 
+    "H1FNT"     = "H1-7", 
+    "H1FOO"     = "H1-8", 
+    "H1-9"      = "H1-9P", 
+    "HIST1H2BA" = "H2BC1", 
+    "HIST1H2BB" = "H2BC3", 
+    "HIST1H2BC" = "H2BC4", 
+    "HIST1H2BD" = "H2BC5", 
+    "HIST1H2BE" = "H2BC6", 
+    "HIST1H2BF" = "H2BC7", 
+    "HIST1H2BG" = "H2BC8", 
+    "HIST1H2BH" = "H2BC9", 
+    "HIST1H2BI" = "H2BC10", 
+    "HIST1H2BJ" = "H2BC11", 
+    "HIST1H2BK" = "H2BC12", 
+    "HIST1H2BL" = "H2BC13", 
+    "HIST1H2BM" = "H2BC14", 
+    "HIST1H2BN" = "H2BC15", 
+    "HIST1H2BO" = "H2BC17", 
+    "KARS"      = "KARS1", 
+    "PKM2"      = "PKM", 
+    "PTRF"      = "CAVIN1", 
+    "TOMM70A"   = "TOMM70", 
+    "VARS"      = "VARS1", 
+    "WARS"      = "WARS1"
     )
   ## Check the column `gene`
   if (! "gene" %in% names(d.t)) {
