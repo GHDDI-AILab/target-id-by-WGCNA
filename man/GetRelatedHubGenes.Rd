@@ -8,7 +8,7 @@
 \usage{
 GetRelatedHubGenes(object, ...)
 
-\method{GetRelatedHubGenes}{CorrelationNetwork}(object, traits, prefix, index = 1, ...)
+\method{GetRelatedHubGenes}{CorrelationNetwork}(object, samples, traits, prefix, index = 1, ...)
 
 \method{GetRelatedHubGenes}{default}(object, ...)
 }
@@ -16,6 +16,8 @@ GetRelatedHubGenes(object, ...)
 \item{object}{A CorrelationNetwork object.}
 
 \item{...}{further arguments to be passed to \code{GetHubGenes()}.}
+
+\item{samples}{A character vector specifying the rows for analysis.}
 
 \item{traits}{A character vector specifying the columns of traits for analysis.}
 

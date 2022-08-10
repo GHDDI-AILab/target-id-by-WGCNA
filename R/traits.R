@@ -274,6 +274,7 @@ ModuleMembership.default = function(object, ...) {
 #' Get hub genes in the modules associated with traits of interest.
 #' 
 #' @param object A CorrelationNetwork object.
+#' @param samples A character vector specifying the rows for analysis.
 #' @param traits A character vector specifying the columns of traits for analysis.
 #' @param prefix (A length-1 character) A prefix representing the disease.
 #' @param index A length-1 numeric or character vector specifying the frame. (default: 1)
@@ -286,16 +287,27 @@ ModuleMembership.default = function(object, ...) {
 #' 
 GetRelatedHubGenes.CorrelationNetwork = function(
   object, 
+  samples, 
   traits, 
   prefix, 
   index = 1, 
   ...
 ) {
   ATTR_MS = "module-trait"
+  ATTR_GS = "gene-trait"
+  ATTR_MM = "gene-module"
   ATTR_NET = "network"
-  if (length(object) != length(attr(object, ATTR_MS)) || 
-      length(object) != length(attr(object, ATTR_NET))) {
-    stop("Invalid CorrelationNetwork object without module-trait correlation data!")
+  if (length(object) != length(attr(object, ATTR_NET))) {
+    stop("Invalid CorrelationNetwork object without module detection!")
+  }
+  if (length(object) != length(attr(object, ATTR_MS))) {
+    object = ModuleSignificance(object, samples, traits, prefix)
+  }
+  if (length(object) != length(attr(object, ATTR_GS))) {
+    object = GeneSignificance(object, samples, traits, prefix)
+  }
+  if (length(object) != length(attr(object, ATTR_MM))) {
+    object = ModuleMembership(object, samples, prefix)
   }
   if (missing(prefix)) {
     prefix = ""
@@ -351,9 +363,7 @@ GetSignificantGenes.CorrelationNetwork = function(
   geneinfo = TRUE
 ) {
   ATTR_GS = "gene-trait"
-  ATTR_NET = "network"
-  if (length(object) != length(attr(object, ATTR_GS)) || 
-      length(object) != length(attr(object, ATTR_NET))) {
+  if (length(object) != length(attr(object, ATTR_GS))) {
     stop("Invalid CorrelationNetwork object without gene-trait correlation data!")
   }
   if (missing(prefix)) {
@@ -366,11 +376,17 @@ GetSignificantGenes.CorrelationNetwork = function(
   } else {
     traits = paste0("p.", prefix, traits)
   }
-  pval = attr(object, ATTR_GS)[[
+  gs = attr(object, ATTR_GS)[[
     assert_length_1(index)[[1]]
-    ]]$pval
-  get_genes = function(col) rownames(pval)[pval[[col]] < 0.05/nrow(pval)]
+    ]]
+  get_genes = function(col) rownames(gs$pval)[gs$pval[[col]] < 0.05/nrow(gs$pval)]
   genes = lapply(traits, get_genes) %>% unlist() %>% data.table::data.table(gene = .)
+  genes = data.table::as.data.table(gs$pval, keep.rownames = TRUE) %>% 
+    setnames("rn", "gene") %>% 
+    .[genes, on = "gene"]
+  genes = data.table::as.data.table(gs$cor, keep.rownames = TRUE) %>% 
+    setnames("rn", "gene") %>% 
+    .[genes, on = "gene"]
   if (geneinfo) get_geneinfo(genes) else genes
 }
 

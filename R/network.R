@@ -254,12 +254,31 @@ GetHubGenes.CorrelationNetwork = function(
   geneinfo = TRUE
 ) {
   ATTR_CON = "connectivity"
+  ATTR_MS = "module-trait"
+  ATTR_GS = "gene-trait"
+  ATTR_MM = "gene-module"
   if (length(object) != length(attr(object, ATTR_CON))) {
-    object = AddConnectivity.CorrelationNetwork(object)
+    object = AddConnectivity(object)
   }
   connectivity = attr(object, ATTR_CON)[[
     assert_length_1(index)[[1]]
     ]]
+  if (length(object) == length(attr(object, ATTR_GS))) {
+    gs = attr(object, ATTR_GS)[[
+      assert_length_1(index)[[1]]
+      ]]
+    connectivity = 
+      data.table::as.data.table(gs$pval, keep.rownames = TRUE) %>% 
+      setnames("rn", "gene") %>% 
+      .[connectivity, on = "gene"]
+    connectivity = 
+      data.table::as.data.table(gs$cor, keep.rownames = TRUE) %>% 
+      setnames("rn", "gene") %>% 
+      .[connectivity, on = "gene"]
+  }
+  if (length(object) == length(attr(object, ATTR_MM))) {
+    #TODO: 
+  }
   if (missing(top.n) || length(top.n) < 1) {
     hub_genes = connectivity[, "max_kWithin" := max(kWithin)
       ][, "top_kWithin" := max(kWithin), by = "module"
